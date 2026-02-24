@@ -42,7 +42,13 @@ if ( $clisyc_progress_percentage > 100 ) {
 ?>
 <div class="wrap clisyc-guide-page">
 	<h1><?php esc_html_e( 'Client Sync Guide', 'client-sync' ); ?></h1>
-	<p class="about-text"><?php esc_html_e( 'Your setup progress and a comprehensive walkthrough of Client Sync features.', 'client-sync' ); ?></p>
+	<p class="about-text">
+		<?php esc_html_e( 'Your setup progress and a comprehensive walkthrough of Client Sync features.', 'client-sync' ); ?>
+		<a href="https://github.com/hsojhsoj/client-sync-monorepo/wiki" target="_blank" rel="noopener noreferrer">
+			<?php esc_html_e( 'View Full Documentation', 'client-sync' ); ?>
+			<span class="dashicons dashicons-external" style="text-decoration: none;"></span>
+		</a>
+	</p>
 
 	<?php // ============================================================== ?>
 	<?php // PART A: SETUP CHECKLIST                                        ?>

@@ -13,6 +13,8 @@ Manage client registrations, appointments, payments, and appointment notes from 
 
 == Description ==
 
+📖 **[Full Documentation](https://github.com/hsojhsoj/client-sync-monorepo/wiki)** — Setup guides, shortcode reference, payment configuration, and more.
+
 Client Sync transforms your WordPress site into a complete client and appointment management powerhouse. Designed for service-based businesses, clinics, consultants, and professionals, this plugin provides a robust, scalable, and flexible system to handle the entire client journey.
 
 Whether you need simple one-on-one appointment booking, multi-day resource rentals, or complex group classes, Client Sync's unique "Dimension" architecture and a single, powerful `[clisyc_booking_form]` shortcode can handle it all intelligently. The system automatically detects whether to show a time-slot calendar, a multi-day rental search, or a single property's booking calendar based on the context of the page.
@@ -61,6 +63,8 @@ Built on a high-performance architecture using custom database tables, Client Sy
 2. Search for **Client Sync**.
 3. Click **Install Now**, then **Activate**.
 4. Follow the Setup Wizard to choose a business template, create essential pages, and configure settings.
+
+For detailed setup instructions, see the [Getting Started guide](https://github.com/hsojhsoj/client-sync-monorepo/wiki/Getting-Started).
 
 == Frequently Asked Questions ==
 
