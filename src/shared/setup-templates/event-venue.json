@@ -1,0 +1,212 @@
+[
+  {
+    "template_meta": {
+      "title": "Event Venue / Theater (Seat Selection)",
+      "description": "A setup for theaters, concert halls, stadiums, or any venue where customers choose specific seats. Includes a venue with VIP and General sections, seat pricing tiers, and a sample event. Also includes two membership plans with recurring subscriptions. Requires the Pro Seat Selection module.",
+      "recommended": false,
+      "new": true
+    },
+    "options": {
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_service": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true
+          },
+          "clisyc_venue": {
+            "enabled": true,
+            "primary": false,
+            "frontend_visible": false
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_service"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_service": {
+          "singular": "Event",
+          "plural": "Events",
+          "icon": "dashicons-tickets-alt",
+          "public": true
+        }
+      },
+      "clisyc_seat_hold_ttl": "300"
+    },
+    "cpts": {
+      "clisyc_service": [
+        {
+          "post_name": "opening-night-gala",
+          "post_title": "Opening Night Gala",
+          "post_content": "Join us for the opening night performance! Select your seats when booking.",
+          "post_meta": {
+            "_clisyc_price": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#7c3aed"
+            ],
+            "_clisyc_capacity": [
+              "14"
+            ],
+            "_clisyc_booking_mode": [
+              "slot"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"5\":{\"slots\":[{\"start\":\"19:00\",\"end\":\"22:00\"}]},\"6\":{\"slots\":[{\"start\":\"14:00\",\"end\":\"17:00\"},{\"start\":\"19:00\",\"end\":\"22:00\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "saturday-matinee",
+          "post_title": "Saturday Matinee",
+          "post_content": "A family-friendly afternoon performance. All ages welcome.",
+          "post_meta": {
+            "_clisyc_price": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#059669"
+            ],
+            "_clisyc_capacity": [
+              "14"
+            ],
+            "_clisyc_booking_mode": [
+              "slot"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"6\":{\"slots\":[{\"start\":\"14:00\",\"end\":\"16:30\"}]}}}}"
+            ]
+          }
+        }
+      ],
+      "clisyc_member_plan": [
+        {
+          "post_name": "season-pass",
+          "post_title": "Season Pass",
+          "post_meta": {
+            "_clisyc_plan_price_display": ["$199/month"],
+            "_clisyc_plan_description": ["Regular event access with member pricing"],
+            "_clisyc_member_plan_access_rules": [
+              [
+                {"rule_type": "booking_limit", "service_id": 0, "limit_value": 4, "limit_period": "per_month", "discount_value": 0},
+                {"rule_type": "discount_percent", "service_id": 0, "limit_value": 0, "limit_period": "per_month", "discount_value": 20}
+              ]
+            ]
+          }
+        },
+        {
+          "post_name": "patron-circle",
+          "post_title": "Patron Circle",
+          "post_meta": {
+            "_clisyc_plan_price_display": ["$499/month"],
+            "_clisyc_plan_description": ["Unlimited events, VIP perks"],
+            "_clisyc_member_plan_access_rules": [
+              [
+                {"rule_type": "booking_limit", "service_id": 0, "limit_value": 1, "limit_period": "unlimited", "discount_value": 0},
+                {"rule_type": "discount_percent", "service_id": 0, "limit_value": 0, "limit_period": "per_month", "discount_value": 40}
+              ]
+            ]
+          }
+        }
+      ],
+      "clisyc_venue": [
+        {
+          "post_name": "main-hall",
+          "post_title": "Main Hall",
+          "post_meta": {
+            "_clisyc_venue_parsing_mode": [
+              "flat_ids"
+            ],
+            "_clisyc_venue_svg": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 220\"><text x=\"200\" y=\"15\" text-anchor=\"middle\" font-size=\"12\" fill=\"#666\">STAGE</text><rect x=\"120\" y=\"20\" width=\"160\" height=\"25\" rx=\"4\" fill=\"#e5e7eb\" /><rect id=\"vip-row1-seat1\" x=\"130\" y=\"60\" width=\"18\" height=\"18\" rx=\"3\" data-category=\"vip\" /><rect id=\"vip-row1-seat2\" x=\"155\" y=\"60\" width=\"18\" height=\"18\" rx=\"3\" data-category=\"vip\" /><rect id=\"vip-row1-seat3\" x=\"180\" y=\"60\" width=\"18\" height=\"18\" rx=\"3\" data-category=\"vip\" /><rect id=\"vip-row1-seat4\" x=\"205\" y=\"60\" width=\"18\" height=\"18\" rx=\"3\" data-category=\"vip\" /><rect id=\"vip-row1-seat5\" x=\"230\" y=\"60\" width=\"18\" height=\"18\" rx=\"3\" data-category=\"vip\" /><rect id=\"vip-row1-seat6\" x=\"255\" y=\"60\" width=\"18\" height=\"18\" rx=\"3\" data-category=\"vip\" /><rect id=\"general-row2-seat1\" x=\"105\" y=\"100\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row2-seat2\" x=\"130\" y=\"100\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row2-seat3\" x=\"155\" y=\"100\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row2-seat4\" x=\"205\" y=\"100\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row2-seat5\" x=\"230\" y=\"100\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row2-seat6\" x=\"255\" y=\"100\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row3-seat1\" x=\"80\" y=\"140\" width=\"18\" height=\"18\" rx=\"3\" /><rect id=\"general-row3-seat2\" x=\"280\" y=\"140\" width=\"18\" height=\"18\" rx=\"3\" /></svg>"
+            ],
+            "_clisyc_venue_layout": [
+              "{\"parsing_mode\":\"flat_ids\",\"total_seats\":14,\"sections\":[{\"id\":\"vip\",\"label\":\"VIP\",\"category\":\"vip\",\"svg_element_id\":\"vip\",\"rows\":[{\"id\":\"row1\",\"label\":\"Row 1\",\"svg_element_id\":\"row1\",\"seats\":[{\"id\":\"vip-row1-seat1\",\"label\":\"Seat 1\",\"svg_element_id\":\"vip-row1-seat1\",\"category\":\"vip\",\"status\":\"active\"},{\"id\":\"vip-row1-seat2\",\"label\":\"Seat 2\",\"svg_element_id\":\"vip-row1-seat2\",\"category\":\"vip\",\"status\":\"active\"},{\"id\":\"vip-row1-seat3\",\"label\":\"Seat 3\",\"svg_element_id\":\"vip-row1-seat3\",\"category\":\"vip\",\"status\":\"active\"},{\"id\":\"vip-row1-seat4\",\"label\":\"Seat 4\",\"svg_element_id\":\"vip-row1-seat4\",\"category\":\"vip\",\"status\":\"active\"},{\"id\":\"vip-row1-seat5\",\"label\":\"Seat 5\",\"svg_element_id\":\"vip-row1-seat5\",\"category\":\"vip\",\"status\":\"active\"},{\"id\":\"vip-row1-seat6\",\"label\":\"Seat 6\",\"svg_element_id\":\"vip-row1-seat6\",\"category\":\"vip\",\"status\":\"active\"}]}]},{\"id\":\"general\",\"label\":\"General\",\"category\":\"\",\"svg_element_id\":\"general\",\"rows\":[{\"id\":\"row2\",\"label\":\"Row 2\",\"svg_element_id\":\"row2\",\"seats\":[{\"id\":\"general-row2-seat1\",\"label\":\"Seat 1\",\"svg_element_id\":\"general-row2-seat1\",\"category\":\"\",\"status\":\"active\"},{\"id\":\"general-row2-seat2\",\"label\":\"Seat 2\",\"svg_element_id\":\"general-row2-seat2\",\"category\":\"\",\"status\":\"active\"},{\"id\":\"general-row2-seat3\",\"label\":\"Seat 3\",\"svg_element_id\":\"general-row2-seat3\",\"category\":\"\",\"status\":\"active\"},{\"id\":\"general-row2-seat4\",\"label\":\"Seat 4\",\"svg_element_id\":\"general-row2-seat4\",\"category\":\"\",\"status\":\"active\"},{\"id\":\"general-row2-seat5\",\"label\":\"Seat 5\",\"svg_element_id\":\"general-row2-seat5\",\"category\":\"\",\"status\":\"active\"},{\"id\":\"general-row2-seat6\",\"label\":\"Seat 6\",\"svg_element_id\":\"general-row2-seat6\",\"category\":\"\",\"status\":\"active\"}]},{\"id\":\"row3\",\"label\":\"Row 3\",\"svg_element_id\":\"row3\",\"seats\":[{\"id\":\"general-row3-seat1\",\"label\":\"Seat 1\",\"svg_element_id\":\"general-row3-seat1\",\"category\":\"\",\"status\":\"active\"},{\"id\":\"general-row3-seat2\",\"label\":\"Seat 2\",\"svg_element_id\":\"general-row3-seat2\",\"category\":\"\",\"status\":\"active\"}]}]}]}"
+            ],
+            "_clisyc_seat_pricing_tiers": [
+              "[{\"category\":\"vip\",\"label\":\"VIP Front Row\",\"price\":7500},{\"category\":\"\",\"label\":\"General Admission\",\"price\":3500}]"
+            ],
+            "_clisyc_venue_overview_svg": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 260\"><rect x=\"120\" y=\"10\" width=\"160\" height=\"35\" rx=\"18\" fill=\"#e2e8f0\" stroke=\"#94a3b8\" stroke-width=\"1.5\"/><text x=\"200\" y=\"33\" text-anchor=\"middle\" fill=\"#64748b\" font-size=\"14\" font-family=\"Arial, Helvetica, sans-serif\" font-weight=\"600\">STAGE</text><rect id=\"vip\" x=\"100\" y=\"60\" width=\"200\" height=\"70\" rx=\"10\" fill=\"#ede9fe\" stroke=\"#a5b4fc\" stroke-width=\"2\" data-category=\"vip\"/><text x=\"200\" y=\"95\" text-anchor=\"middle\" fill=\"#5b21b6\" font-size=\"16\" font-family=\"Arial, Helvetica, sans-serif\" font-weight=\"600\" pointer-events=\"none\">VIP</text><text x=\"200\" y=\"115\" text-anchor=\"middle\" fill=\"#7c3aed\" font-size=\"11\" font-family=\"Arial, Helvetica, sans-serif\" pointer-events=\"none\">Front Row \u2014 6 seats</text><rect id=\"general\" x=\"70\" y=\"145\" width=\"260\" height=\"70\" rx=\"10\" fill=\"#d1fae5\" stroke=\"#86efac\" stroke-width=\"2\"/><text x=\"200\" y=\"180\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"16\" font-family=\"Arial, Helvetica, sans-serif\" font-weight=\"600\" pointer-events=\"none\">GENERAL</text><text x=\"200\" y=\"200\" text-anchor=\"middle\" fill=\"#047857\" font-size=\"11\" font-family=\"Arial, Helvetica, sans-serif\" pointer-events=\"none\">Rows 2\u20133 \u2014 8 seats</text><text x=\"200\" y=\"245\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"10\" font-family=\"Arial, Helvetica, sans-serif\" font-style=\"italic\">Click a section to select seats</text></svg>"
+            ]
+          }
+        }
+      ]
+    },
+    "pages": [
+      {
+        "post_name": "membership-plans",
+        "post_title": "Membership Plans",
+        "post_content": "[clisyc_membership_plans columns=\"2\"]"
+      }
+    ],
+    "venue_links": [
+      {
+        "service_slug": "opening-night-gala",
+        "venue_slug": "main-hall"
+      },
+      {
+        "service_slug": "saturday-matinee",
+        "venue_slug": "main-hall"
+      }
+    ],
+    "relationships": [],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your seats have been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Event: {appointment_service_name}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Please arrive at least 15 minutes before the show. Enjoy the performance!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Event Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming event.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Event: {appointment_service_name}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Doors open 30 minutes before showtime. See you there!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your reservation for {appointment_service_name} on {appointment_date_formatted} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Your seats have been released. If this was a mistake, please rebook at {site_url}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your ticket purchase!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Event: {appointment_service_name} — {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Ticket Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New ticket booking from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Event: {appointment_service_name}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

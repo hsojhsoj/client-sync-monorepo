@@ -1,0 +1,1396 @@
+/**
+ * File: src/assets/src/hybrid-booking/style.css
+ * Styles for the Hybrid Booking Form.
+ * Combines multi-select filtering (from faceted) with grid visualization (from compact).
+ */
+
+/* Import the styles from the compact grid component to ensure the grid layout works. */
+@import '../compact-timeslot-grid/style.css';
+
+/* Import the styles from the faceted filter component for a consistent filter panel. */
+@import '../faceted-booking/style.css';
+
+
+/* ==========================================================================
+   UNIFIED MODAL STYLES
+   ========================================================================== */
+
+/* TEXT SIZE SCALE - Applied via class on modal overlay: .clisyc-text-{size} 
+   Using px values to ensure consistent sizing regardless of theme's root font-size */
+:root {
+    --clisyc-modal-title-size: 24px;
+    --clisyc-modal-text-size: 17px;
+    --clisyc-modal-date-size: 18px;
+    --clisyc-modal-button-size: 17px;
+}
+
+.clisyc-modal-overlay.clisyc-text-small {
+    --clisyc-modal-title-size: 20px;
+    --clisyc-modal-text-size: 15px;
+    --clisyc-modal-date-size: 16px;
+    --clisyc-modal-button-size: 15px;
+}
+
+.clisyc-modal-overlay.clisyc-text-medium {
+    --clisyc-modal-title-size: 24px;
+    --clisyc-modal-text-size: 17px;
+    --clisyc-modal-date-size: 18px;
+    --clisyc-modal-button-size: 17px;
+}
+
+.clisyc-modal-overlay.clisyc-text-large {
+    --clisyc-modal-title-size: 30px;
+    --clisyc-modal-text-size: 20px;
+    --clisyc-modal-date-size: 22px;
+    --clisyc-modal-button-size: 19px;
+}
+
+.clisyc-modal-overlay.clisyc-text-x-large {
+    --clisyc-modal-title-size: 36px;
+    --clisyc-modal-text-size: 24px;
+    --clisyc-modal-date-size: 26px;
+    --clisyc-modal-button-size: 22px;
+}
+
+/* MODAL OVERLAY */
+.clisyc-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important;
+    padding: 1rem !important;
+    animation: clisycModalOverlayFadeIn 0.2s ease-out !important;
+}
+
+@keyframes clisycModalOverlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* MODAL CONTENT CONTAINER */
+.clisyc-modal-overlay .clisyc-modal-content {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+    max-width: 420px !important;
+    width: 100% !important;
+    padding: 2rem !important;
+    text-align: center !important;
+    animation: clisycModalContentSlideIn 0.3s ease-out !important;
+    color: #1f2937 !important;
+}
+
+@keyframes clisycModalContentSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* MODAL ICON */
+.clisyc-modal-overlay .clisyc-modal-icon {
+    width: 56px !important;
+    height: 56px !important;
+    margin: 0 auto 1.25rem !important;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-icon .dashicons {
+    font-size: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    color: inherit !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-icon svg {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+/* MODAL TYPOGRAPHY */
+.clisyc-modal-overlay .clisyc-modal-content h2,
+.clisyc-modal-overlay .clisyc-modal-content h3,
+.clisyc-modal-overlay .clisyc-modal-title {
+    margin: 0 0 0.75rem !important;
+    font-size: var(--clisyc-modal-title-size, 24px) !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.3 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-content p,
+.clisyc-modal-overlay .clisyc-modal-message {
+    margin: 0 0 1.5rem !important;
+    font-size: var(--clisyc-modal-text-size, 17px) !important;
+    color: #6b7280 !important;
+    line-height: 1.6 !important;
+}
+
+/* HIGHLIGHTED DATE DISPLAY */
+.clisyc-modal-overlay .clisyc-modal-date {
+    display: block !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+    padding: 0.75rem 1rem !important;
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    font-size: var(--clisyc-modal-date-size, 18px) !important;
+}
+
+/* MODAL BUTTONS */
+.clisyc-modal-overlay .clisyc-modal-ok-button,
+.clisyc-modal-overlay .clisyc-modal-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    padding: 0.875rem 1.5rem !important;
+    font-size: var(--clisyc-modal-button-size, 17px) !important;
+    font-weight: 600 !important;
+    color: var(--clisyc-accent-normal-text, #ffffff) !important;
+    background: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:hover,
+.clisyc-modal-overlay .clisyc-modal-button:hover {
+    background: var(--clisyc-accent-hover-bg, #2563eb) !important;
+    color: var(--clisyc-accent-hover-text, #ffffff) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:active,
+.clisyc-modal-overlay .clisyc-modal-button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:focus,
+.clisyc-modal-overlay .clisyc-modal-button:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* SECONDARY BUTTON */
+.clisyc-modal-overlay .clisyc-modal-button--secondary {
+    background: transparent !important;
+    color: #6b7280 !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    margin-top: 0.75rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-button--secondary:hover {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+    border-color: #9ca3af !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* BUTTON CONTAINER */
+.clisyc-modal-overlay .clisyc-modal-buttons {
+    display: flex !important;
+    gap: 0.75rem !important;
+    margin-top: 0.5rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-ok-button,
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button {
+    flex: 1 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button--secondary {
+    margin-top: 0 !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons a.clisyc-modal-ok-button {
+    text-decoration: none !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .clisyc-modal-overlay {
+        padding: 0.75rem !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-content {
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-icon {
+        width: 48px !important;
+        height: 48px !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-icon .dashicons,
+    .clisyc-modal-overlay .clisyc-modal-icon svg {
+        font-size: 24px !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .clisyc-modal-overlay .clisyc-modal-buttons {
+        flex-direction: column !important;
+    }
+    
+    .clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button--secondary {
+        width: 100% !important;
+    }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-modal-overlay,
+    .clisyc-modal-overlay .clisyc-modal-content {
+        animation: none !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-ok-button:hover,
+    .clisyc-modal-overlay .clisyc-modal-button:hover {
+        transform: none !important;
+    }
+}
+
+/* ========================================
+   MAIN LAYOUT - HYBRID SPECIFIC
+   ======================================== */
+.clisyc-hybrid-booking-app {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: var(--clisyc-font-size-base, 14px);
+    line-height: 1.5;
+    color: #1f2937;
+}
+
+.clisyc-hybrid-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 14px;
+}
+
+.clisyc-hybrid-main-content {
+    background: #ffffff;
+}
+
+/* ========================================
+   GRID HEADER & NAVIGATION
+   ======================================== */
+.clisyc-hybrid-grid-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 1px;
+}
+
+.clisyc-hybrid-nav-button {
+    padding: 10px 16px;
+    background: var(--clisyc-accent-normal-bg, #ffffff);
+    border: 1px solid var(--clisyc-accent-normal-border, #d1d5db);
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 500;
+    color: var(--clisyc-accent-normal-text, #374151);
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.clisyc-hybrid-nav-button:hover,
+.clisyc-hybrid-nav-button:focus {
+    background-color: var(--clisyc-accent-hover-bg, #f9fafb);
+    color: var(--clisyc-accent-hover-text, #1f2937);
+    border-color: var(--clisyc-accent-hover-border, #9ca3af);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    outline: none;
+}
+
+.clisyc-hybrid-nav-button:focus {
+    box-shadow: 0 0 0 2px var(--clisyc-accent-hover-bg, #e5e7eb);
+}
+
+.clisyc-hybrid-nav-button:active {
+    transform: translateY(1px);
+    filter: brightness(0.95);
+}
+
+.clisyc-hybrid-date-range-display {
+    font-size: var(--clisyc-font-size-lg, 16px);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.clisyc-hybrid-range-text {
+    display: inline-block;
+}
+
+/* ========================================
+   SELECTED SLOT DISPLAY
+   ======================================== */
+#clisyc_hybrid_selected_slot_display {
+    display: none;
+    padding: 12px 24px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    margin: 0 24px 16px;
+    align-items: center;
+    gap: 8px;
+}
+
+#clisyc_hybrid_selected_slot_display.clisyc-hybrid-slot-selected {
+    display: flex;
+}
+
+.clisyc-hybrid-slot-label {
+    font-weight: 600;
+    color: #166534;
+}
+
+.clisyc-hybrid-slot-value {
+    color: #166534;
+    font-weight: 500;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+.clisyc-hybrid-grid-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    gap: 16px;
+}
+
+.clisyc-hybrid-spinner {
+    width: 32px;
+    height: 32px;
+    border: 4px solid rgba(59, 130, 246, 0.2);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: clisyc-hybrid-spinner-spin 0.8s linear infinite;
+}
+
+@keyframes clisyc-hybrid-spinner-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   LEGEND
+   ======================================== */
+.clisyc-hybrid-legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 20px 24px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.clisyc-hybrid-legend-item {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 500;
+}
+
+.clisyc-hybrid-legend-item.clisyc-legend-unavailable {
+    background-color: var(--clisyc-unavailable-bg, #e5e7eb);
+    color: var(--clisyc-unavailable-text, #4b5563);
+}
+
+/* Updated to match the new button style */
+.clisyc-hybrid-legend-item.clisyc-legend-available {
+    background-color: var(--clisyc-available-bg, #ffffff) !important;
+    color: var(--clisyc-available-text, #374151) !important;
+    border: 1px solid var(--clisyc-available-border, #d1d5db) !important;
+}
+
+/* ========================================
+   CONFIRMATION MODAL
+   ======================================== */
+.clisyc-hybrid-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clisyc-hybrid-modal-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.clisyc-hybrid-modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #1f2937;
+}
+
+.clisyc-confirmation-details {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: var(--clisyc-font-size-base, 14px);
+}
+
+.clisyc-confirmation-details p {
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+.clisyc-confirmation-details hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 10px 0;
+}
+
+.clisyc-confirmation-details strong {
+    color: #374151;
+}
+
+/* Widen the modal when seat selection is present */
+.clisyc-hybrid-modal-content:has(.clisyc-seat-map) {
+    max-width: 640px;
+}
+
+/* Seat map inside the hybrid confirmation modal (not when expanded fullscreen) */
+.clisyc-hybrid-modal-content .clisyc-seat-map:not(.clisyc-seat-map--expanded) {
+    padding: 16px 0;
+    border-bottom: 1px solid #e5e7eb;
+    margin: 0 -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.clisyc-custom-fields-placeholder {
+    margin-bottom: 20px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-hybrid-modal-close {
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    background: var(--clisyc-accent-normal-bg, #f3f4f6);
+    color: var(--clisyc-accent-normal-text, #374151);
+    border: 1px solid var(--clisyc-accent-normal-border, #d1d5db);
+}
+
+.clisyc-hybrid-booking-app .clisyc-hybrid-modal-close:hover,
+.clisyc-hybrid-booking-app .clisyc-hybrid-modal-close:focus {
+    background-color: var(--clisyc-accent-hover-bg, #f9fafb);
+    color: var(--clisyc-accent-hover-text, #1f2937);
+    border-color: var(--clisyc-accent-hover-border, #d1d5db);
+    outline: none;
+}
+
+.clisyc-submit-button {
+    width: 100%;
+}
+
+/* --- Modal Slot Selection Buttons --- */
+.clisyc-hybrid-booking-app .clisyc-compact-modal-slots-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 10px !important;
+    margin: 20px 0 !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button {
+    width: 100% !important;
+    text-align: left !important;
+    padding: 10px 12px !important;
+    background: var(--clisyc-available-bg, #ffffff) !important;
+    border: 1px solid var(--clisyc-available-border, #d1d5db) !important;
+    border-radius: 8px !important;
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+    font-weight: 600 !important;
+    color: var(--clisyc-available-text, #374151) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button:hover:not(:disabled) {
+    background-color: var(--clisyc-available-hover-bg, #f9fafb) !important;
+    border-color: var(--clisyc-available-hover-border, #9ca3af) !important;
+    color: var(--clisyc-available-hover-text, #1f2937) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px var(--clisyc-available-hover-bg, #e5e7eb) !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button.clisyc-compact-slot-selected {
+    background: var(--clisyc-selected-bg, #3b82f6) !important;
+    border-color: var(--clisyc-selected-border, #1d4ed8) !important;
+    color: var(--clisyc-selected-text, #ffffff) !important;
+    box-shadow: 0 0 0 2px var(--clisyc-selected-bg, #3b82f6), 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button:disabled {
+    background-color: #f3f4f6 !important;
+    border-color: #e5e7eb !important;
+    color: #9ca3af !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button .clisyc-compact-slot-dots {
+    display: flex !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button .clisyc-compact-slot-dot {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button .clisyc-compact-filter-label-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    line-height: 1.3 !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button .clisyc-compact-filter-label-text,
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button.clisyc-compact-slot-selected .clisyc-compact-filter-label-text {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+    font-weight: 600 !important;
+    color: inherit !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button .clisyc-compact-filter-duration,
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button.clisyc-compact-slot-selected .clisyc-compact-filter-duration {
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+    font-weight: 400 !important;
+    opacity: 0.7 !important;
+    color: inherit !important;
+}
+
+.clisyc-hybrid-booking-app .clisyc-compact-time-slot-button.clisyc-compact-slot-selected .clisyc-compact-slot-dot {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* ========================================
+   HYBRID-SPECIFIC OVERRIDES FOR COMPACT GRID
+   ======================================== */
+
+/* Fix: Override the compact grid's day header for proper alignment */
+.clisyc-hybrid-booking-app .clisyc-compact-grid-day-header {
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+    padding: 0 4px !important;
+    box-sizing: border-box !important;
+}
+
+/* --- Main Time Slot Buttons --- */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-item {
+    position: absolute !important;
+    left: 4px !important;
+    right: 4px !important;
+    border-radius: 10px !important;
+    padding: 4px 6px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    line-height: 1.3 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease-in-out !important;
+    text-align: left !important;
+    cursor: pointer !important;
+}
+
+/* Available slots - Initial state matches nav buttons */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available {
+    background: var(--clisyc-available-bg, #ffffff) !important;
+    border: 1px solid var(--clisyc-available-border, #d1d5db) !important;
+    color: var(--clisyc-available-text, #374151) !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available:hover {
+    background-color: var(--clisyc-available-hover-bg, #f9fafb) !important;
+    border-color: var(--clisyc-available-hover-border, #9ca3af) !important;
+    color: var(--clisyc-available-hover-text, #1f2937) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px var(--clisyc-available-hover-bg, #e5e7eb) !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available.clisyc-compact-slot-selected {
+    background: var(--clisyc-selected-bg, #3b82f6) !important;
+    border: 2px solid var(--clisyc-selected-border, #1d4ed8) !important;
+    color: var(--clisyc-selected-text, #ffffff) !important;
+    box-shadow: 0 0 0 2px var(--clisyc-selected-bg, #3b82f6), 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Unavailable slots */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-unavailable {
+    background-color: var(--clisyc-unavailable-bg, #f3f4f6) !important;
+    background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 4px, transparent 4px, transparent 8px) !important;
+    border: 1px solid #e5e7eb !important;
+    color: var(--clisyc-unavailable-text, #9ca3af) !important;
+    cursor: not-allowed !important;
+}
+
+/* Blocked slots - use blocked color settings */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-blocked {
+    background-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+    background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08) 4px, transparent 4px, transparent 8px) !important;
+    border: 2px solid var(--clisyc-blocked-text, #374151) !important;
+    color: var(--clisyc-blocked-text, #374151) !important;
+    cursor: not-allowed !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-blocked .clisyc-compact-slot-time {
+    color: var(--clisyc-blocked-text, #374151) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-unavailable .clisyc-compact-slot-time {
+    text-decoration: line-through !important;
+}
+
+/* --- Slot Button Inner Content --- */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available .clisyc-compact-slot-time,
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available .clisyc-compact-slot-details {
+    color: inherit !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available.clisyc-compact-slot-selected .clisyc-compact-slot-time,
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available.clisyc-compact-slot-selected .clisyc-compact-more-indicator {
+    color: var(--clisyc-selected-text, #ffffff) !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available .clisyc-compact-more-badge {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: inherit !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available:hover .clisyc-compact-more-badge {
+    background: rgba(0, 0, 0, 0.6) !important;
+    color: #ffffff !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available.clisyc-compact-slot-selected .clisyc-compact-more-badge {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available .clisyc-compact-slot-dots {
+    opacity: 1 !important;
+}
+
+/* ========================================
+   COLORED CHECKBOX STYLING (iOS Style)
+   ======================================== */
+.clisyc-hybrid-booking-app .clisyc-filter-option-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-checkbox-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-right: 10px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-option-label input[type="checkbox"]:checked + .clisyc-filter-checkbox-indicator::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 3px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-option-label {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    margin-bottom: 4px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-option-label:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-option-text {
+    font-size: var(--clisyc-font-size-base, 14px);
+    color: #374151;
+    font-weight: 500;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-group {
+    margin-bottom: 24px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-group-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 12px;
+}
+
+.clisyc-hybrid-booking-app .clisyc-filter-options-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================
+   DIAGNOSTIC MODE - Remove after fixing
+   ======================================== */
+.clisyc-debug .clisyc-compact-time-gutter {
+    background: rgba(255, 0, 0, 0.1) !important;
+    border: 2px solid red !important;
+}
+
+.clisyc-debug .clisyc-compact-grid-day-header {
+    background: rgba(0, 255, 0, 0.2) !important;
+    border: 2px solid green !important;
+    position: relative !important;
+}
+
+.clisyc-debug .clisyc-compact-grid-day-header::after {
+    content: 'Height: ' attr(data-height) 'px' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    font-size: 10px !important;
+    background: yellow !important;
+    padding: 2px !important;
+    color: black !important;
+    z-index: 999 !important;
+}
+
+.clisyc-debug .clisyc-compact-grid-day-slots {
+    background: rgba(0, 0, 255, 0.05) !important;
+    border: 2px solid blue !important;
+}
+
+.clisyc-debug .clisyc-compact-time-label {
+    background: rgba(255, 255, 0, 0.1) !important;
+    border-left: 2px solid orange !important;
+}
+
+.clisyc-debug .clisyc-compact-slot-item {
+    outline: 2px dashed purple !important;
+}
+
+.clisyc-debug .clisyc-compact-time-gutter::before {
+    content: 'Time Gutter - Padding Top: 40px' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    background: red !important;
+    color: white !important;
+    font-size: 9px !important;
+    padding: 2px 4px !important;
+    z-index: 999 !important;
+}
+
+.clisyc-debug .clisyc-compact-grid-day-slots::before {
+    content: 'Slot Container' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    background: blue !important;
+    color: white !important;
+    font-size: 9px !important;
+    padding: 2px 4px !important;
+    z-index: 998 !important;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (max-width: 1024px) {
+    .clisyc-hybrid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .clisyc-hybrid-grid-header {
+        padding: 16px 16px 0;
+    }
+    
+    .clisyc-hybrid-nav-button {
+        font-size: var(--clisyc-font-size-sm, 13px);
+        padding: 8px 12px;
+    }
+    
+    .clisyc-hybrid-date-range-display {
+        font-size: var(--clisyc-font-size-base, 14px);
+    }
+    
+    #clisyc_hybrid_selected_slot_display {
+        margin: 0 16px 16px;
+    }
+    
+    .clisyc-hybrid-legend {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* For narrow modals, stack slot buttons vertically */
+    .clisyc-hybrid-booking-app .clisyc-compact-modal-slots-list {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Reduce the size of the + icon in the more badge */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available .clisyc-compact-more-badge .dashicons {
+    font-size: 12px !important;
+    width: 12px !important;
+    height: 12px !important;
+    line-height: 1 !important;
+}
+
+/* Add space between time and the +N badge, push badge to right */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-available .clisyc-compact-more-badge {
+    margin-left: auto !important;
+}
+
+/* Ensure the flex container properly spaces the time and badge */
+.clisyc-hybrid-booking-app button.clisyc-compact-slot-item .clisyc-compact-slot-inner > div:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+/* 
+ * Booked Slot Styling for CompactTimeSlotGrid
+ * Add this CSS to your theme or plugin stylesheet
+ */
+
+/* Booked slot - unclickable, grayed out */
+.clisyc-compact-slot-booked {
+    background-color: #f0f0f0 !important;
+    border: 1px solid #d0d0d0 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    pointer-events: none; /* Prevents clicking */
+    position: absolute;
+    width: 100%;
+}
+
+.clisyc-compact-slot-booked .clisyc-compact-slot-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.clisyc-compact-slot-booked .clisyc-compact-slot-time {
+    color: #666 !important;
+    text-decoration: line-through;
+}
+
+.clisyc-compact-booked-label {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Optional: Hover effect (even though it's not clickable) */
+.clisyc-compact-slot-booked:hover {
+    background-color: #f0f0f0 !important;
+    transform: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+/* 
+ * Blocked Slot Styling for CompactTimeSlotGrid
+ * Add this CSS to your theme or plugin stylesheet
+ */
+
+/* Booked slot - customer bookings (gray theme) */
+.clisyc-compact-slot-booked {
+    position: absolute;
+    width: 100%;
+    background-color: #f0f0f0 !important;
+    border: 1px solid #d0d0d0 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.clisyc-compact-slot-booked .clisyc-compact-slot-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.clisyc-compact-slot-booked .clisyc-compact-slot-time {
+    color: #666 !important;
+    text-decoration: line-through;
+}
+
+.clisyc-compact-slot-booked:hover {
+    background-color: #f0f0f0 !important;
+    transform: none !important;
+}
+
+/* Blocked slot - admin-created blocks (uses blocked color settings) */
+.clisyc-compact-slot-blocked {
+    position: absolute;
+    width: 100%;
+    background-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+    background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08) 4px, transparent 4px, transparent 8px);
+    border: 2px solid var(--clisyc-blocked-text, #374151) !important;
+    cursor: not-allowed !important;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.clisyc-compact-slot-blocked .clisyc-compact-slot-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.clisyc-compact-slot-blocked .clisyc-compact-slot-time {
+    color: var(--clisyc-blocked-text, #374151) !important;
+    font-weight: 600;
+}
+
+.clisyc-compact-slot-blocked .clisyc-compact-booked-label {
+    color: var(--clisyc-blocked-text, #374151) !important;
+}
+
+.clisyc-compact-slot-blocked:hover {
+    background-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+    transform: none !important;
+}
+
+/* Shared label styling */
+.clisyc-compact-booked-label {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Alternative: Red theme for blocked slots (if you prefer red over orange) */
+/*
+.clisyc-compact-slot-blocked {
+    background-color: #ffebee !important;
+    border: 1px solid #ef5350 !important;
+}
+
+.clisyc-compact-slot-blocked .clisyc-compact-slot-time {
+    color: #c62828 !important;
+}
+
+.clisyc-compact-slot-blocked .clisyc-compact-booked-label {
+    color: #c62828 !important;
+}
+*/
+
+/* Smart Start Date Modal Overlay */
+.clisyc-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.clisyc-modal-content {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.clisyc-modal-content h2 {
+    margin-top: 0;
+}
+
+.clisyc-modal-ok-button {
+    margin-top: 1rem;
+    padding: 0.75rem 2rem;
+    background-color: #1f2937;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: var(--clisyc-font-size-md, 15px);
+}
+
+.clisyc-modal-ok-button:hover {
+    background-color: #374151;
+}
+
+
+/**
+ * CSS ADDITIONS for Hybrid Booking Shortcode Features
+ * Add these styles to: src/assets/src/hybrid-booking/style.css
+ * 
+ * New features:
+ * - show_filters="false" support
+ * - show_booked="true" support  
+ * - Slot counts next to filters
+ * - Total slots counter
+ * - Improved reset button
+ */
+
+/* ========================================
+   NO FILTERS LAYOUT
+   ======================================== */
+.clisyc-hybrid-layout.clisyc-hybrid-no-filters {
+    grid-template-columns: 1fr;
+}
+
+/* ========================================
+   TOTAL SLOTS COUNTER
+   ======================================== */
+.clisyc-total-slots-container {
+    padding: 12px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.clisyc-total-slots-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.clisyc-total-slots-number {
+    font-size: var(--clisyc-font-size-2xl, 24px);
+    font-weight: 700;
+    color: #0369a1;
+    line-height: 1;
+}
+
+.clisyc-total-slots-label {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    color: #0c4a6e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* ========================================
+   RESET BUTTON IMPROVEMENTS
+   ======================================== */
+.clisyc-reset-all-container {
+    margin-bottom: 16px;
+}
+
+.clisyc-reset-all-filters-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 14px;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clisyc-reset-all-filters-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.clisyc-reset-all-filters-btn:not(:disabled):hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.clisyc-reset-all-filters-btn.clisyc-has-selections {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.clisyc-reset-all-filters-btn.clisyc-has-selections:hover {
+    background: #fee2e2;
+    border-color: #f87171;
+}
+
+.clisyc-reset-all-filters-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.clisyc-active-filter-count {
+    margin-left: 4px;
+    font-weight: 600;
+}
+
+/* ========================================
+   FILTER GROUP IMPROVEMENTS
+   ======================================== */
+.clisyc-filter-group-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clisyc-filter-group-title {
+    flex: 1;
+}
+
+.clisyc-filter-group-selected-count {
+    background: #3b82f6;
+    color: white;
+    font-size: var(--clisyc-font-size-xs, 11px);
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ========================================
+   SLOT COUNT BADGES
+   ======================================== */
+.clisyc-filter-slot-count {
+    margin-left: auto;
+    background: #e5e7eb;
+    color: #374151;
+    font-size: var(--clisyc-font-size-xs, 11px);
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.clisyc-filter-slot-count.clisyc-count-zero {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+.clisyc-filter-option-label.clisyc-option-selected .clisyc-filter-slot-count {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* ========================================
+   BOOKED APPOINTMENTS STYLING (showBooked)
+   ======================================== */
+.clisyc-compact-slot-customer-booked {
+    position: absolute;
+    width: 100%;
+    background-color: #fef3c7 !important;
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(251, 191, 36, 0.1),
+        rgba(251, 191, 36, 0.1) 4px,
+        transparent 4px,
+        transparent 8px
+    ) !important;
+    border: 1px solid #f59e0b !important;
+    border-left: 3px solid #f59e0b !important;
+    border-radius: 4px;
+    cursor: default;
+    opacity: 0.85;
+    pointer-events: none;
+    padding: 4px 6px;
+    box-sizing: border-box;
+}
+
+.clisyc-compact-slot-customer-booked .clisyc-compact-slot-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.clisyc-compact-slot-customer-booked .clisyc-compact-slot-time {
+    color: #92400e !important;
+    font-weight: 600;
+    font-size: var(--clisyc-font-size-xs, 11px);
+}
+
+.clisyc-compact-slot-customer-booked .clisyc-compact-booked-label {
+    color: #b45309 !important;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* ========================================
+   LEGEND - BOOKED ITEM
+   ======================================== */
+.clisyc-hybrid-legend-item.clisyc-legend-booked {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #f59e0b;
+}
+
+/* ========================================
+   FILTER OPTION SELECTED STATE
+   ======================================== */
+.clisyc-filter-option-label.clisyc-option-selected {
+    background-color: rgba(59, 130, 246, 0.08);
+    border-radius: 6px;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (max-width: 768px) {
+    .clisyc-total-slots-container {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .clisyc-total-slots-number {
+        font-size: var(--clisyc-font-size-xl, 20px);
+    }
+    
+    .clisyc-reset-all-filters-btn {
+        padding: 8px 12px;
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+    
+    .clisyc-filter-slot-count {
+        font-size: 10px;
+        padding: 1px 6px;
+    }
+}
+
+
+/* Modal styles are now defined at the top of this file */

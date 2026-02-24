@@ -1,0 +1,808 @@
+/**
+ * File: src/assets/css/clisyc-booking-confirmation.css
+ * Styles for the [clisyc_booking_confirmation] shortcode.
+ *
+ * Uses CSS variables from the plugin's settings system:
+ * - --clisyc-available-bg/text (success green)
+ * - --clisyc-accent-bg/text (buttons)
+ * - --clisyc-icon-bg/text (icons)
+ * - --clisyc-font-size-* (typography scale)
+ */
+
+/* ==========================================================================
+   Base Container
+   ========================================================================== */
+
+.clisyc-booking-confirmation {
+    --confirmation-success-bg: var(--clisyc-available-bg, #d1fae5);
+    --confirmation-success-text: var(--clisyc-available-text, #065f46);
+    --confirmation-accent-bg: var(--clisyc-accent-bg, #3b82f6);
+    --confirmation-accent-text: var(--clisyc-accent-text, #ffffff);
+    --confirmation-accent-hover: var(--clisyc-accent-hover-bg, #2563eb);
+    --confirmation-icon-bg: var(--clisyc-icon-bg, #f3f4f6);
+    --confirmation-icon-text: var(--clisyc-icon-text, #4b5563);
+    --confirmation-pending-bg: #fef3c7;
+    --confirmation-pending-text: #92400e;
+    --confirmation-card-bg: #ffffff;
+    --confirmation-card-border: #e5e7eb;
+    --confirmation-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --confirmation-radius: 12px;
+    --confirmation-radius-sm: 8px;
+
+    position: relative;
+    max-width: 560px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-family: inherit;
+    font-size: var(--clisyc-font-size-base, 14px);
+    line-height: 1.6;
+    /* Softer, more subtle background - mostly white with hint of green */
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 40%);
+    border: 1px solid #d1fae5;
+    border-radius: var(--confirmation-radius);
+    overflow: hidden;
+}
+
+/* Animation on load */
+.clisyc-booking-confirmation {
+    animation: confirmationFadeIn 0.6s ease-out;
+}
+
+@keyframes confirmationFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   Confetti Animation
+   ========================================================================== */
+
+.clisyc-confetti {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.clisyc-confetti__piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -20px;
+    opacity: 0;
+    animation: confettiFall 3s ease-in-out forwards;
+}
+
+/* Confetti shapes and colors */
+.clisyc-confetti__piece:nth-child(odd) {
+    background: var(--confirmation-success-text);
+    border-radius: 50%;
+}
+
+.clisyc-confetti__piece:nth-child(even) {
+    background: var(--confirmation-accent-bg);
+    border-radius: 2px;
+    transform: rotate(45deg);
+}
+
+.clisyc-confetti__piece:nth-child(3n) {
+    background: #fbbf24;
+    width: 8px;
+    height: 8px;
+}
+
+.clisyc-confetti__piece:nth-child(4n) {
+    background: #f472b6;
+    width: 6px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.clisyc-confetti__piece:nth-child(5n) {
+    background: #a78bfa;
+}
+
+/* Position confetti pieces randomly across width */
+.clisyc-confetti__piece:nth-child(1) { left: 5%; animation-delay: 0s; }
+.clisyc-confetti__piece:nth-child(2) { left: 10%; animation-delay: 0.1s; }
+.clisyc-confetti__piece:nth-child(3) { left: 15%; animation-delay: 0.2s; }
+.clisyc-confetti__piece:nth-child(4) { left: 20%; animation-delay: 0.15s; }
+.clisyc-confetti__piece:nth-child(5) { left: 25%; animation-delay: 0.3s; }
+.clisyc-confetti__piece:nth-child(6) { left: 30%; animation-delay: 0.05s; }
+.clisyc-confetti__piece:nth-child(7) { left: 35%; animation-delay: 0.25s; }
+.clisyc-confetti__piece:nth-child(8) { left: 40%; animation-delay: 0.1s; }
+.clisyc-confetti__piece:nth-child(9) { left: 45%; animation-delay: 0.35s; }
+.clisyc-confetti__piece:nth-child(10) { left: 50%; animation-delay: 0.2s; }
+.clisyc-confetti__piece:nth-child(11) { left: 55%; animation-delay: 0.4s; }
+.clisyc-confetti__piece:nth-child(12) { left: 60%; animation-delay: 0.15s; }
+.clisyc-confetti__piece:nth-child(13) { left: 65%; animation-delay: 0.3s; }
+.clisyc-confetti__piece:nth-child(14) { left: 70%; animation-delay: 0.05s; }
+.clisyc-confetti__piece:nth-child(15) { left: 75%; animation-delay: 0.45s; }
+.clisyc-confetti__piece:nth-child(16) { left: 80%; animation-delay: 0.25s; }
+.clisyc-confetti__piece:nth-child(17) { left: 85%; animation-delay: 0.1s; }
+.clisyc-confetti__piece:nth-child(18) { left: 90%; animation-delay: 0.35s; }
+.clisyc-confetti__piece:nth-child(19) { left: 95%; animation-delay: 0.2s; }
+.clisyc-confetti__piece:nth-child(20) { left: 8%; animation-delay: 0.5s; }
+.clisyc-confetti__piece:nth-child(21) { left: 18%; animation-delay: 0.55s; }
+.clisyc-confetti__piece:nth-child(22) { left: 28%; animation-delay: 0.6s; }
+.clisyc-confetti__piece:nth-child(23) { left: 38%; animation-delay: 0.65s; }
+.clisyc-confetti__piece:nth-child(24) { left: 48%; animation-delay: 0.7s; }
+.clisyc-confetti__piece:nth-child(25) { left: 58%; animation-delay: 0.75s; }
+.clisyc-confetti__piece:nth-child(26) { left: 68%; animation-delay: 0.8s; }
+.clisyc-confetti__piece:nth-child(27) { left: 78%; animation-delay: 0.85s; }
+.clisyc-confetti__piece:nth-child(28) { left: 88%; animation-delay: 0.9s; }
+.clisyc-confetti__piece:nth-child(29) { left: 3%; animation-delay: 0.95s; }
+.clisyc-confetti__piece:nth-child(30) { left: 13%; animation-delay: 1s; }
+.clisyc-confetti__piece:nth-child(n+31) { left: calc(3% + (100% / 20) * (var(--n, 1))); animation-delay: calc(0.05s * var(--n, 1)); }
+
+/* Stagger remaining pieces */
+.clisyc-confetti__piece:nth-child(31) { --n: 1; }
+.clisyc-confetti__piece:nth-child(32) { --n: 2; }
+.clisyc-confetti__piece:nth-child(33) { --n: 3; }
+.clisyc-confetti__piece:nth-child(34) { --n: 4; }
+.clisyc-confetti__piece:nth-child(35) { --n: 5; }
+.clisyc-confetti__piece:nth-child(36) { --n: 6; }
+.clisyc-confetti__piece:nth-child(37) { --n: 7; }
+.clisyc-confetti__piece:nth-child(38) { --n: 8; }
+.clisyc-confetti__piece:nth-child(39) { --n: 9; }
+.clisyc-confetti__piece:nth-child(40) { --n: 10; }
+.clisyc-confetti__piece:nth-child(41) { --n: 11; }
+.clisyc-confetti__piece:nth-child(42) { --n: 12; }
+.clisyc-confetti__piece:nth-child(43) { --n: 13; }
+.clisyc-confetti__piece:nth-child(44) { --n: 14; }
+.clisyc-confetti__piece:nth-child(45) { --n: 15; }
+.clisyc-confetti__piece:nth-child(46) { --n: 16; }
+.clisyc-confetti__piece:nth-child(47) { --n: 17; }
+.clisyc-confetti__piece:nth-child(48) { --n: 18; }
+.clisyc-confetti__piece:nth-child(49) { --n: 19; }
+.clisyc-confetti__piece:nth-child(50) { --n: 20; }
+
+@keyframes confettiFall {
+    0% {
+        opacity: 1;
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        top: 100%;
+        transform: translateX(calc(-50px + 100px * var(--n, 0.5))) rotate(720deg);
+    }
+}
+
+/* ==========================================================================
+   Header Section
+   ========================================================================== */
+
+.clisyc-confirmation__header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Animated Checkmark Icon */
+.clisyc-confirmation__icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    background: var(--confirmation-success-text);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(6, 95, 70, 0.3);
+}
+
+.clisyc-confirmation__icon--pending {
+    background: var(--confirmation-pending-text);
+    box-shadow: 0 4px 14px rgba(146, 64, 14, 0.3);
+}
+
+.clisyc-confirmation__checkmark {
+    width: 40px;
+    height: 40px;
+    stroke: #ffffff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.clisyc-confirmation__checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: checkmarkCircle 0.6s ease-in-out forwards;
+    animation-delay: 0.3s;
+}
+
+.clisyc-confirmation__checkmark-check {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkmarkCheck 0.3s ease-in-out forwards;
+    animation-delay: 0.8s;
+}
+
+@keyframes checkmarkCircle {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes checkmarkCheck {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Title & Message - Using neutral colors for better readability */
+.clisyc-confirmation__title {
+    margin: 0 0 0.5rem;
+    font-size: var(--clisyc-font-size-2xl, 24px);
+    font-weight: 700;
+    color: #1f2937; /* Neutral dark gray, matches appointment cards */
+    letter-spacing: -0.025em;
+}
+
+.clisyc-confirmation__message {
+    margin: 0;
+    font-size: var(--clisyc-font-size-md, 15px);
+    color: #6b7280; /* Medium gray for secondary text */
+}
+
+/* ==========================================================================
+   Appointment Card
+   ========================================================================== */
+
+.clisyc-confirmation__card {
+    position: relative;
+    z-index: 1;
+    background: var(--confirmation-card-bg);
+    border-radius: var(--confirmation-radius);
+    box-shadow: var(--confirmation-card-shadow);
+    overflow: hidden;
+    animation: cardSlideUp 0.5s ease-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: backwards;
+}
+
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Header */
+.clisyc-confirmation__card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--confirmation-card-border);
+}
+
+.clisyc-confirmation__card-title {
+    margin: 0;
+    font-size: var(--clisyc-font-size-lg, 17px);
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.4;
+}
+
+/* Status Badge */
+.clisyc-confirmation__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    font-size: var(--clisyc-font-size-xs, 12px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    border-radius: 9999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.clisyc-confirmation__status .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.clisyc-confirmation__status--confirmed {
+    background: var(--confirmation-success-bg);
+    color: var(--confirmation-success-text);
+}
+
+.clisyc-confirmation__status--pending,
+.clisyc-confirmation__status--pending-payment {
+    background: var(--confirmation-pending-bg);
+    color: var(--confirmation-pending-text);
+}
+
+.clisyc-confirmation__status--cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.clisyc-confirmation__status--completed {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.clisyc-confirmation__status--default {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+/* ==========================================================================
+   Date/Time Section
+   ========================================================================== */
+
+.clisyc-confirmation__datetime {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--confirmation-card-border);
+}
+
+.clisyc-confirmation__datetime-item {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 1rem 1.5rem;
+    background: #fafafa;
+}
+
+.clisyc-confirmation__datetime-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--confirmation-icon-bg);
+    border-radius: var(--confirmation-radius-sm);
+    color: var(--confirmation-icon-text); /* Neutral icon color */
+    flex-shrink: 0;
+}
+
+.clisyc-confirmation__datetime-icon .dashicons {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.clisyc-confirmation__datetime-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.clisyc-confirmation__datetime-label {
+    font-size: var(--clisyc-font-size-xs, 12px);
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.clisyc-confirmation__datetime-value {
+    font-size: var(--clisyc-font-size-md, 15px);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* ==========================================================================
+   Details Section
+   ========================================================================== */
+
+.clisyc-confirmation__details {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--confirmation-card-border);
+}
+
+.clisyc-confirmation__details-heading {
+    margin: 0 0 1rem;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.clisyc-confirmation__details-list {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.clisyc-confirmation__details-item {
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.clisyc-confirmation__details-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Dimension icons in the confirmation details list */
+.clisyc-confirmation__details-item .clisyc-dim-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--clisyc-icon-bg, #1F2938);
+    color: var(--clisyc-icon-text, #ffffff);
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.clisyc-confirmation__details-item .clisyc-dim-icon .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 1;
+}
+
+.clisyc-confirmation__details-label {
+    margin: 0;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.clisyc-confirmation__details-value {
+    margin: 0;
+    margin-left: auto;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 600;
+    color: #1f2937;
+    text-align: right;
+}
+
+/* ==========================================================================
+   Calendar Links
+   ========================================================================== */
+
+.clisyc-confirmation__calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: #f9fafb;
+    border-top: 1px solid var(--confirmation-card-border);
+}
+
+.clisyc-confirmation__calendar-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.clisyc-confirmation__calendar-label .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.clisyc-confirmation__calendar-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.clisyc-confirmation__calendar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    font-size: var(--clisyc-font-size-xs, 12px);
+    font-weight: 500;
+    color: #374151;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.clisyc-confirmation__calendar-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: #1f2937;
+    text-decoration: none;
+}
+
+.clisyc-confirmation__calendar-btn--google:hover {
+    background: #fef3f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+.clisyc-confirmation__calendar-btn--outlook:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+.clisyc-confirmation__calendar-btn--ical:hover {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #16a34a;
+}
+
+/* ==========================================================================
+   Action Buttons
+   ========================================================================== */
+
+.clisyc-confirmation__actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.clisyc-confirmation__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--confirmation-radius-sm);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.clisyc-confirmation__btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.clisyc-confirmation__btn--primary {
+    background: var(--confirmation-accent-bg);
+    color: var(--confirmation-accent-text);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.clisyc-confirmation__btn--primary:hover {
+    background: var(--confirmation-accent-hover);
+    color: var(--confirmation-accent-text);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.clisyc-confirmation__btn--secondary {
+    background: transparent;
+    color: #374151;
+    border: 2px solid #d1d5db;
+}
+
+.clisyc-confirmation__btn--secondary:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: #1f2937;
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   Style Variants
+   ========================================================================== */
+
+/* Banner Style - More compact */
+.clisyc-confirmation--banner {
+    max-width: 100%;
+    padding: 1.5rem;
+    border-radius: var(--confirmation-radius-sm);
+}
+
+.clisyc-confirmation--banner .clisyc-confirmation__header {
+    margin-bottom: 1rem;
+}
+
+.clisyc-confirmation--banner .clisyc-confirmation__icon {
+    width: 56px;
+    height: 56px;
+}
+
+.clisyc-confirmation--banner .clisyc-confirmation__checkmark {
+    width: 32px;
+    height: 32px;
+}
+
+.clisyc-confirmation--banner .clisyc-confirmation__title {
+    font-size: var(--clisyc-font-size-xl, 20px);
+}
+
+.clisyc-confirmation--banner .clisyc-confirmation__actions {
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* Minimal Style - Super clean */
+.clisyc-confirmation--minimal {
+    background: transparent;
+    padding: 1rem;
+}
+
+.clisyc-confirmation--minimal .clisyc-confetti {
+    display: none;
+}
+
+.clisyc-confirmation--minimal .clisyc-confirmation__icon {
+    width: 48px;
+    height: 48px;
+    box-shadow: none;
+}
+
+.clisyc-confirmation--minimal .clisyc-confirmation__checkmark {
+    width: 28px;
+    height: 28px;
+}
+
+.clisyc-confirmation--minimal .clisyc-confirmation__card {
+    box-shadow: none;
+    border: 1px solid var(--confirmation-card-border);
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 600px) {
+    .clisyc-booking-confirmation {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .clisyc-confirmation__icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .clisyc-confirmation__checkmark {
+        width: 34px;
+        height: 34px;
+    }
+
+    .clisyc-confirmation__title {
+        font-size: var(--clisyc-font-size-xl, 20px);
+    }
+
+    .clisyc-confirmation__card-header {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .clisyc-confirmation__status {
+        align-self: flex-start;
+    }
+
+    .clisyc-confirmation__datetime {
+        grid-template-columns: 1fr;
+    }
+
+    .clisyc-confirmation__datetime-item {
+        padding: 0.875rem 1.25rem;
+    }
+
+    .clisyc-confirmation__details {
+        padding: 1rem 1.25rem;
+    }
+
+    .clisyc-confirmation__details-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .clisyc-confirmation__details-value {
+        text-align: left;
+    }
+
+    .clisyc-confirmation__calendar {
+        padding: 1rem 1.25rem;
+    }
+
+    .clisyc-confirmation__calendar-buttons {
+        flex-direction: column;
+    }
+
+    .clisyc-confirmation__calendar-btn {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .clisyc-booking-confirmation {
+        background: #ffffff !important;
+        box-shadow: none !important;
+        border: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        max-width: 100%;
+    }
+
+    .clisyc-confetti {
+        display: none !important;
+    }
+
+    .clisyc-confirmation__icon {
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .clisyc-confirmation__card {
+        box-shadow: none;
+        border: 1px solid #d1d5db;
+    }
+
+    .clisyc-confirmation__calendar,
+    .clisyc-confirmation__actions {
+        display: none !important;
+    }
+
+    .clisyc-confirmation__status {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-booking-confirmation,
+    .clisyc-confirmation__card,
+    .clisyc-confirmation__checkmark-circle,
+    .clisyc-confirmation__checkmark-check,
+    .clisyc-confetti__piece {
+        animation: none;
+    }
+
+    .clisyc-confirmation__checkmark-circle,
+    .clisyc-confirmation__checkmark-check {
+        stroke-dashoffset: 0;
+    }
+
+    .clisyc-confirmation__btn:hover {
+        transform: none;
+    }
+}

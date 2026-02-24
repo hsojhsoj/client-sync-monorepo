@@ -1,0 +1,574 @@
+/**
+ * File: src/assets/src/shared/_modal.css
+ * 
+ * Unified modal styles shared across all Client Sync booking interfaces.
+ * Import this file in any shortcode's style.css that needs modal functionality.
+ * 
+ * Usage:
+ *   @import '../shared/_modal.css';
+ * 
+ * Supported shortcodes:
+ *   - [clisyc_booking_form]
+ *   - [clisyc_hybrid_booking]
+ *   - [clisyc_dimensions_faceted_booking]
+ * 
+ * CSS Variables (customizable via Appearance settings):
+ *   --clisyc-accent-bg: Primary button background
+ *   --clisyc-accent-hover-bg: Primary button hover background
+ *   --clisyc-accent-text: Primary button text color
+ *   --clisyc-text-size-base: Base text size from Calendar Text Size setting
+ */
+
+/* ==========================================================================
+   TEXT SIZE SCALE
+   Maps the text_size setting to actual sizes
+   Applied via class on modal overlay: .clisyc-text-{size}
+   ========================================================================== */
+
+:root {
+    /* Default (medium) */
+    --clisyc-modal-title-size: 1.375rem;
+    --clisyc-modal-text-size: 0.9375rem;
+    --clisyc-modal-date-size: 1rem;
+    --clisyc-modal-button-size: 0.9375rem;
+}
+
+/* Small text size */
+.clisyc-modal-overlay.clisyc-text-small {
+    --clisyc-modal-title-size: 1.125rem;
+    --clisyc-modal-text-size: 0.8125rem;
+    --clisyc-modal-date-size: 0.875rem;
+    --clisyc-modal-button-size: 0.8125rem;
+}
+
+/* Medium text size (default) */
+.clisyc-modal-overlay.clisyc-text-medium {
+    --clisyc-modal-title-size: 1.375rem;
+    --clisyc-modal-text-size: 0.9375rem;
+    --clisyc-modal-date-size: 1rem;
+    --clisyc-modal-button-size: 0.9375rem;
+}
+
+/* Large text size */
+.clisyc-modal-overlay.clisyc-text-large {
+    --clisyc-modal-title-size: 1.625rem;
+    --clisyc-modal-text-size: 1.125rem;
+    --clisyc-modal-date-size: 1.1875rem;
+    --clisyc-modal-button-size: 1.0625rem;
+}
+
+/* Extra Large text size */
+.clisyc-modal-overlay.clisyc-text-x-large {
+    --clisyc-modal-title-size: 1.875rem;
+    --clisyc-modal-text-size: 1.3125rem;
+    --clisyc-modal-date-size: 1.375rem;
+    --clisyc-modal-button-size: 1.1875rem;
+}
+
+/* ==========================================================================
+   MODAL OVERLAY
+   ========================================================================== */
+
+.clisyc-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important;
+    padding: 1rem !important;
+    animation: clisycModalOverlayFadeIn 0.2s ease-out !important;
+}
+
+@keyframes clisycModalOverlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Body scroll lock when modal is open */
+body.clisyc-modal-open {
+    overflow: hidden !important;
+}
+
+/* ==========================================================================
+   MODAL CONTENT CONTAINER
+   ========================================================================== */
+
+.clisyc-modal-overlay .clisyc-modal-content {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+    max-width: 420px !important;
+    width: 100% !important;
+    padding: 2rem !important;
+    text-align: center !important;
+    animation: clisycModalContentSlideIn 0.3s ease-out !important;
+    color: #1f2937 !important;
+}
+
+@keyframes clisycModalContentSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ==========================================================================
+   MODAL ICON
+   ========================================================================== */
+
+.clisyc-modal-overlay .clisyc-modal-icon {
+    width: 56px !important;
+    height: 56px !important;
+    margin: 0 auto 1.25rem !important;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-icon .dashicons {
+    font-size: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    color: inherit !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-icon svg {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+/* Success icon variant */
+.clisyc-modal-overlay .clisyc-modal-icon--success {
+    background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%) !important;
+    color: #059669 !important;
+}
+
+/* Warning icon variant */
+.clisyc-modal-overlay .clisyc-modal-icon--warning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%) !important;
+    color: #d97706 !important;
+}
+
+/* Error icon variant */
+.clisyc-modal-overlay .clisyc-modal-icon--error {
+    background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%) !important;
+    color: #dc2626 !important;
+}
+
+/* ==========================================================================
+   MODAL TYPOGRAPHY
+   ========================================================================== */
+
+/* Modal Title */
+.clisyc-modal-overlay .clisyc-modal-content h2,
+.clisyc-modal-overlay .clisyc-modal-content h3,
+.clisyc-modal-overlay .clisyc-modal-title {
+    margin: 0 0 0.75rem !important;
+    font-size: var(--clisyc-modal-title-size, 1.375rem) !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.3 !important;
+}
+
+/* Modal Message/Description */
+.clisyc-modal-overlay .clisyc-modal-content p,
+.clisyc-modal-overlay .clisyc-modal-message {
+    margin: 0 0 1.5rem !important;
+    font-size: var(--clisyc-modal-text-size, 0.9375rem) !important;
+    color: #6b7280 !important;
+    line-height: 1.6 !important;
+}
+
+/* Highlighted date display */
+.clisyc-modal-overlay .clisyc-modal-date {
+    display: block !important;
+    margin-top: 0.75rem !important;
+    padding: 0.75rem 1rem !important;
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    font-size: var(--clisyc-modal-date-size, 1rem) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-date .dashicons {
+    margin-right: 0.5rem !important;
+    color: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+    vertical-align: middle !important;
+}
+
+/* ==========================================================================
+   MODAL BUTTONS
+   ========================================================================== */
+
+/* Primary Button */
+.clisyc-modal-overlay .clisyc-modal-ok-button,
+.clisyc-modal-overlay .clisyc-modal-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    padding: 0.875rem 1.5rem !important;
+    font-size: var(--clisyc-modal-button-size, 0.9375rem) !important;
+    font-weight: 600 !important;
+    color: var(--clisyc-accent-normal-text, #ffffff) !important;
+    background: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:hover,
+.clisyc-modal-overlay .clisyc-modal-button:hover {
+    background: var(--clisyc-accent-hover-bg, #2563eb) !important;
+    color: var(--clisyc-accent-hover-text, #ffffff) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:active,
+.clisyc-modal-overlay .clisyc-modal-button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:focus,
+.clisyc-modal-overlay .clisyc-modal-button:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Button with icon (dashicons) */
+.clisyc-modal-overlay .clisyc-modal-ok-button .dashicons,
+.clisyc-modal-overlay .clisyc-modal-button .dashicons {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+}
+
+/* Secondary/Cancel Button */
+.clisyc-modal-overlay .clisyc-modal-button--secondary {
+    background: transparent !important;
+    color: #6b7280 !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    margin-top: 0.75rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-button--secondary:hover {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+    border-color: #9ca3af !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-button--secondary:focus {
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.2) !important;
+}
+
+/* ==========================================================================
+   MODAL BUTTON CONTAINER (for multiple buttons)
+   ========================================================================== */
+
+.clisyc-modal-overlay .clisyc-modal-buttons {
+    display: flex !important;
+    gap: 0.75rem !important;
+    margin-top: 0.5rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-ok-button,
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button {
+    flex: 1 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button--secondary {
+    margin-top: 0 !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+/* When Contact Us is an anchor link */
+.clisyc-modal-overlay .clisyc-modal-buttons a.clisyc-modal-ok-button {
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons a.clisyc-modal-ok-button:hover {
+    text-decoration: none !important;
+}
+
+/* Stack buttons on mobile */
+@media (max-width: 400px) {
+    .clisyc-modal-overlay .clisyc-modal-buttons {
+        flex-direction: column !important;
+    }
+    
+    .clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button--secondary {
+        width: 100% !important;
+    }
+}
+
+/* ==========================================================================
+   MODAL DETAILS BOX (for booking confirmations)
+   ========================================================================== */
+
+.clisyc-modal-overlay .clisyc-modal-details,
+.clisyc-modal-overlay .clisyc-confirmation-details {
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    margin: 1.25rem 0 !important;
+    font-size: var(--clisyc-modal-text-size, 0.875rem) !important;
+    text-align: left !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-details p,
+.clisyc-modal-overlay .clisyc-confirmation-details p {
+    margin: 0 0 0.5rem 0 !important;
+    line-height: 1.5 !important;
+    color: #374151 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-details p:last-child,
+.clisyc-modal-overlay .clisyc-confirmation-details p:last-child {
+    margin-bottom: 0 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-details hr,
+.clisyc-modal-overlay .clisyc-confirmation-details hr {
+    border: none !important;
+    border-top: 1px solid #e5e7eb !important;
+    margin: 0.75rem 0 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-details strong,
+.clisyc-modal-overlay .clisyc-confirmation-details strong {
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   MODAL CLOSE BUTTON (X button in corner)
+   ========================================================================== */
+
+.clisyc-modal-overlay .clisyc-modal-close-x {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #9ca3af !important;
+    transition: all 0.15s ease !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-close-x:hover {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-close-x:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-close-x .dashicons {
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* Modal content needs relative positioning for absolute close button */
+.clisyc-modal-overlay .clisyc-modal-content--with-close {
+    position: relative !important;
+    padding-top: 2.5rem !important;
+}
+
+/* ==========================================================================
+   MODAL FORM ELEMENTS
+   ========================================================================== */
+
+.clisyc-modal-overlay .clisyc-modal-content input[type="text"],
+.clisyc-modal-overlay .clisyc-modal-content input[type="email"],
+.clisyc-modal-overlay .clisyc-modal-content input[type="tel"],
+.clisyc-modal-overlay .clisyc-modal-content textarea,
+.clisyc-modal-overlay .clisyc-modal-content select {
+    width: 100% !important;
+    padding: 0.75rem 1rem !important;
+    font-size: var(--clisyc-modal-text-size, 0.9375rem) !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-content input:focus,
+.clisyc-modal-overlay .clisyc-modal-content textarea:focus,
+.clisyc-modal-overlay .clisyc-modal-content select:focus {
+    outline: none !important;
+    border-color: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-content label {
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+    font-size: var(--clisyc-modal-text-size, 0.875rem) !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+    text-align: left !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    .clisyc-modal-overlay {
+        padding: 0.75rem !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-content {
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-icon {
+        width: 48px !important;
+        height: 48px !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-icon .dashicons,
+    .clisyc-modal-overlay .clisyc-modal-icon svg {
+        font-size: 24px !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+}
+
+/* ==========================================================================
+   REDUCED MOTION SUPPORT
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-modal-overlay,
+    .clisyc-modal-overlay .clisyc-modal-content {
+        animation: none !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-ok-button:hover,
+    .clisyc-modal-overlay .clisyc-modal-button:hover {
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   LEGACY CLASS SUPPORT
+   For backward compatibility with existing implementations
+   ========================================================================== */
+
+/* Hybrid booking modal classes - map to unified styles */
+.clisyc-hybrid-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem !important;
+    animation: clisycModalOverlayFadeIn 0.2s ease-out !important;
+}
+
+.clisyc-hybrid-modal-content {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+    max-width: 420px !important;
+    width: 100% !important;
+    padding: 2rem !important;
+    animation: clisycModalContentSlideIn 0.3s ease-out !important;
+}
+
+.clisyc-hybrid-modal-content h3 {
+    margin: 0 0 1rem !important;
+    font-size: var(--clisyc-modal-title-size, 1.25rem) !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+}
+
+.clisyc-hybrid-modal-close {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 0.75rem !important;
+    padding: 0.75rem 1rem !important;
+    background: transparent !important;
+    color: #6b7280 !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 10px !important;
+    font-size: var(--clisyc-modal-button-size, 0.9375rem) !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    text-align: center !important;
+}
+
+.clisyc-hybrid-modal-close:hover {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+    border-color: #9ca3af !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-hybrid-modal-overlay,
+    .clisyc-hybrid-modal-content {
+        animation: none !important;
+    }
+}

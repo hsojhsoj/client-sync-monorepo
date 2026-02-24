@@ -1,0 +1,726 @@
+/**
+ * File: src/assets/src/style.css -> client-sync/assets/src/style.css
+ * Node Editor Styles
+ *
+ * Contains all the CSS styles for the React-based visual node editor. This
+ * includes styling for the dimension nodes, post nodes, modals, toolbars, and
+ * the icon picker.
+ */
+#clisyc-node-editor-root .react-flow__panel {
+	display: none;
+}
+
+#clisyc-node-editor-root .clisyc-dimension-node {
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 10px 15px;
+	width: 200px;
+	text-align: center;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#clisyc-node-editor-root .clisyc-dimension-node.primary {
+	border-color: #007cba;
+	border-width: 2px;
+	box-shadow: 0 0 5px rgba(0,124,186,0.3);
+}
+
+.clisyc-node-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 5px;
+	margin-bottom: 4px;
+}
+
+.clisyc-node-icon {
+	color: #787c82;
+	font-size: 18px;
+	line-height: 1;
+}
+
+.clisyc-node-primary-star {
+	color: #f0b849;
+	font-size: 16px;
+	line-height: 1;
+}
+
+#clisyc-node-editor-root .clisyc-dimension-node .clisyc-node-label {
+	font-weight: 600;
+	font-size: 14px;
+	color: #1d2327;
+	text-decoration: none;
+	flex-grow: 1;
+	text-align: center;
+}
+#clisyc-node-editor-root .clisyc-dimension-node .clisyc-node-label:hover {
+	color: #007cba;
+}
+
+#clisyc-node-editor-root .clisyc-dimension-node .clisyc-node-slug {
+	font-family: monospace;
+	font-size: 11px;
+	color: #787c82;
+}
+
+#clisyc-node-editor-root .react-flow__handle {
+	background: #787c82;
+	width: 8px;
+	height: 8px;
+	border: 2px solid #fff;
+	box-shadow: 0 0 0 1px #787c82;
+}
+
+.clisyc-node-editor-container {
+	display: flex;
+	height: 100%;
+	position: relative;
+}
+
+.clisyc-node-editor-wrapper {
+	flex-grow: 1;
+	position: relative;
+}
+
+/* START: UPDATED TOOLBAR STYLES */
+.clisyc_node-toolbar {
+	display: flex;
+	justify-content: space-between; /* This separates the main group and the save button */
+	align-items: center;
+	gap: 10px;
+	background: #f0f0f1;
+	padding: 8px 12px;
+	border: 1px solid #c3c4c7;
+	border-bottom: 1px solid #dcdcde;
+	margin-bottom: -1px; /* Overlap with React Flow canvas for a seamless look */
+	position: relative; /* Ensure it's on top of the canvas */
+	z-index: 10;
+}
+
+.clisyc_toolbar_group {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+/* END: UPDATED TOOLBAR STYLES */
+
+.clisyc-toast-notice {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    z-index: 9999;
+    animation: clisyc-toast-fade-in-out 3s ease-in-out forwards;
+}
+
+@keyframes clisyc-toast-fade-in-out {
+    0% { opacity: 0; transform: translateY(20px); }
+    15% { opacity: 1; transform: translateY(0); }
+    85% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* Modal Styles */
+.clisyc-node-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.6);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.clisyc-node-modal {
+	background: #f6f7f7;
+	padding: 20px 30px;
+	border-radius: 4px;
+	width: 100%;
+	max-width: 500px;
+	box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.clisyc-node-modal h2 {
+	margin-top: 0;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 15px;
+	margin-bottom: 15px;
+}
+.clisyc-node-modal .form-field {
+	margin-bottom: 15px;
+}
+.clisyc-node-modal .form-field label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+.clisyc-node-modal .form-field input[type="text"] {
+	width: 100%;
+}
+.clisyc-node-modal .form-field .description, .clisyc-node-modal p {
+	font-size: 13px;
+	color: #50575e;
+	margin-top: 5px;
+}
+.clisyc-node-modal-actions {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #ddd;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+.clisyc-node-modal-error {
+	color: #d63638;
+	background: #fbeaea;
+	border: 1px solid #f1a899;
+	padding: 10px;
+	margin-bottom: 15px;
+	border-radius: 3px;
+}
+
+/* Dropdown Menu Styles */
+.clisyc_add-dimension-dropdown {
+	position: relative;
+	display: inline-block;
+}
+.clisyc_add-dimension-menu {
+	position: absolute;
+	top: 100%;
+	/* CHANGED: Position from the left instead of the right */
+	left: 0;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	min-width: 200px;
+	z-index: 1001;
+	padding: 5px 0;
+	margin-top: 4px;
+}
+.clisyc_add-dimension-header {
+	padding: 5px 10px;
+	font-size: 11px;
+	font-weight: 600;
+	color: #787c82;
+	text-transform: uppercase;
+}
+.clisyc_add-dimension-item {
+	padding: 8px 12px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.clisyc_add-dimension-item:hover {
+	background-color: #f0f0f1;
+}
+.clisyc_add-dimension-item.disabled {
+	color: #a7aaad;
+	cursor: default;
+	background: transparent;
+}
+.clisyc_add-dimension-separator {
+	height: 1px;
+	background: #ddd;
+	margin: 5px 0;
+}
+
+/* Filter Order Modal List Styles */
+.clisyc-filter-order-modal-list {
+	list-style: none;
+	margin: 20px 0;
+	padding: 0;
+	max-height: 40vh;
+	overflow-y: auto;
+	border: 1px solid #ddd;
+	background: #fff;
+}
+
+.clisyc-filter-order-modal-item {
+	background: #fff;
+	border-bottom: 1px solid #eee;
+	padding: 8px 12px;
+	display: flex;
+	align-items: center;
+	cursor: grab;
+	user-select: none;
+}
+
+.clisyc-filter-order-modal-item:last-child {
+	border-bottom: none;
+}
+
+.clisyc-filter-order-modal-item.is-dragging {
+	opacity: 0.5;
+	background: #e0f2fe;
+}
+.clisyc-filter-order-modal-item.drag-over {
+	border-top: 2px solid #007cba;
+}
+.clisyc-drag-handle {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0 .001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z' fill='%2350575e'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: center;
+	opacity: 0.6;
+}
+
+/* --- NEW: Icon Picker Modal Styles --- */
+#clisyc-icon-picker-modal { padding: 1em; }
+.clisyc-icon-picker-controls { margin-bottom: 1em; }
+.clisyc-icon-picker-search { width: 100%; }
+.clisyc-icon-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+}
+.clisyc-icon-picker-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+.clisyc-icon-picker-item:hover,
+.clisyc-icon-picker-item:focus {
+    background: #f0f0f1;
+    border-color: #c3c4c7;
+    outline: none;
+}
+.clisyc-icon-picker-item .dashicons {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 5px;
+}
+.clisyc-icon-picker-label {
+    font-size: 11px;
+    color: #787c82;
+    word-break: break-all;
+}
+
+.clisyc-icon-picker-modal-overlay {
+    z-index: 1001; /* Higher z-index to appear on top */
+}
+
+/* --- NEW: Child Post Node Styles --- */
+.clisyc-post-node {
+    background: #f7f7f7;
+    border-color: #ddd;
+    border-radius: 4px;
+    padding: 5px 15px;
+    font-size: 12px;
+    color: #444;
+    text-align: center;
+    width: auto;
+    min-width: 120px;
+}
+
+.clisyc-post-node .react-flow__handle {
+    width: 6px;
+    height: 6px;
+    background: #bbb;
+}
+
+/* --- Modify Dimension Node --- */
+.clisyc-node-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px;
+    color: #999;
+}
+.clisyc-node-button:hover {
+    color: #2271b1;
+}
+.clisyc-node-button.remove {
+    font-weight: bold;
+    font-size: 20px;
+}
+.clisyc-node-button.remove:hover {
+    color: #d63638;
+}
+
+.clisyc-node-button.expand-toggle .dashicons {
+    font-size: 20px;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+/* new button in dimensions*/
+.clisyc-node-button.organize-children .dashicons {
+    font-size: 20px;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.clisyc-booking-story-container {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #c3c4c7;
+    border-top: none; /* The editor above has the top border */
+    font-size: 14px;
+    line-height: 1.6;
+    color: #3c434a;
+}
+
+.clisyc-booking-story-container h4 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #1d2327;
+}
+
+.clisyc-booking-story-container ol {
+    margin-left: 20px;
+    padding-left: 10px;
+}
+
+.clisyc-booking-story-container li {
+    margin-bottom: 8px;
+}
+
+.clisyc-booking-story-container .clisyc-story-warning {
+    color: #d63638;
+    border-left: 3px solid #d63638;
+    padding-left: 10px;
+}
+
+/* Tooltip for Edges (Lines) */
+.react-flow__edge-tooltip {
+    background: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.react-flow__edge:hover .react-flow__edge-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* --- Tooltip Styles for Handles --- */
+
+.clisyc-handle-tooltip {
+    position: absolute;
+    background: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* Positioning based on handle position */
+.clisyc-handle-tooltip-top {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 10px;
+}
+
+.clisyc-handle-tooltip-bottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+}
+
+.clisyc-handle-tooltip-left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 10px;
+}
+
+.clisyc-handle-tooltip-right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+}
+
+/* Make the actual handle dot transparent since the wrapper provides the visual */
+.clisyc-handle-with-tooltip-wrapper .react-flow__handle {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+}
+
+/* --- NEW: Style for Selected Edges --- */
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: #d63638;
+    stroke-width: 3;
+}
+
+/* Loading Spinner and Progress Bar */
+.clisyc-loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 18px;
+    color: #007cba;  /* WP admin blue */
+}
+
+.clisyc-loading-spinner .dashicons {
+    /*font-size: 40px;*/
+    animation: spin 2s linear infinite;
+    transform-origin: center;
+}
+
+.clisyc-loading-spinner progress {
+    width: 200px;
+    height: 10px;
+    margin-top: 10px;
+    appearance: none;
+}
+
+.clisyc-loading-spinner progress::-webkit-progress-bar {
+    background-color: #f3f3f3;
+    border-radius: 5px;
+}
+
+.clisyc-loading-spinner progress::-webkit-progress-value {
+    background-color: #007cba;
+    border-radius: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Add these new styles to assets/src/style.css */
+
+.clisyc-post-node {
+    background: #ffffff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    text-align: center;
+    width: 180px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.clisyc-post-node-parent-label {
+    font-size: 11px;
+    color: #787c82;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.clisyc-post-node-label {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.clisyc-post-node .react-flow__handle {
+    width: 10px;
+    height: 10px;
+    background: #787c82;
+}
+
+/* Make sure this is also in the file */
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+/* ... add to the end of assets/src/style.css ... */
+
+.clisyc-post-node-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.clisyc-post-node-parent-label {
+    font-size: 11px;
+    color: #787c82;
+    text-transform: uppercase;
+}
+
+.clisyc-post-node .clisyc-node-icon {
+    font-size: 14px;
+    color: #787c82;
+}
+
+/* Add these new styles to assets/src/style.css */
+
+/* Style for selected edges */
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: #d63638; /* A distinct red color for selection */
+    stroke-width: 2.5px;
+}
+
+/* Styles for the new buttons inside nodes */
+.clisyc-post-node-actions {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    gap: 4px;
+}
+
+.clisyc-node-action-button {
+    background: #f0f0f1;
+    border: 1px solid #c3c4c7;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background-color 0.2s;
+}
+
+.clisyc-node-action-button:hover {
+    background-color: #e0e0e0;
+    border-color: #999;
+}
+
+.clisyc-node-action-button .dashicons {
+    font-size: 14px;
+    line-height: 1;
+    color: #50575e;
+}
+
+/* Add this to assets/src/style.css */
+
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: #d63638 !important;
+    stroke-width: 2.5px !important;
+}
+
+.clisyc-post-node {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    text-align: center;
+    width: 180px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Hide top handle on first dimension (Services) */
+.clisyc-post-node[data-filterorder="1"] .clisyc-target-handle {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Hide bottom handle on last dimension (Rooms) */
+.clisyc-post-node .clisyc-source-handle {
+    /* Show by default */
+}
+
+/* Hide bottom handle when it's the last filter order */
+.clisyc-post-node[data-filterorder="3"][data-totalfilters="3"] .clisyc-source-handle {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Add Node Modal Styles */
+.clisyc-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.clisyc-modal-content {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.clisyc-modal-content h2 {
+    margin: 0;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+}
+
+.clisyc-modal-body {
+    padding: 20px;
+}
+
+.clisyc-modal-body p {
+    margin: 0 0 15px 0;
+}
+
+.clisyc-modal-body label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.clisyc-modal-body input[type="text"],
+.clisyc-modal-body select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.clisyc-modal-body input[type="text"]:focus,
+.clisyc-modal-body select:focus {
+    outline: none;
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+.clisyc-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+}
+
+.clisyc-modal-footer .button {
+    margin-left: 10px;
+}

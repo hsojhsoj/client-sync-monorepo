@@ -1,0 +1,211 @@
+/**
+ * File: src/assets/css/clisyc-membership-plans.css
+ * Styles for the [clisyc_membership_plans] frontend shortcode pricing cards.
+ */
+
+/* ── Grid Layout ── */
+.clisyc-plans-grid {
+	display: grid;
+	gap: 24px;
+	grid-template-columns: repeat(3, 1fr);
+	max-width: 1200px;
+	margin: 0 auto;
+}
+.clisyc-plans-grid--2 .clisyc-plans-grid { grid-template-columns: repeat(2, 1fr); }
+.clisyc-plans-grid--4 .clisyc-plans-grid { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 960px) {
+	.clisyc-plans-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+	.clisyc-plans-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Card ── */
+.clisyc-plan-card {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 32px 24px 24px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	transition: box-shadow 0.2s, transform 0.2s;
+}
+.clisyc-plan-card:hover {
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	transform: translateY(-2px);
+}
+
+/* Highlighted / Recommended card */
+.clisyc-plan-card--highlighted {
+	border-color: #3b82f6;
+	border-width: 2px;
+	box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+}
+
+/* Current plan card */
+.clisyc-plan-card--current {
+	border-color: #10b981;
+	border-width: 2px;
+	background: #f0fdf4;
+}
+
+/* ── Badge ── */
+.clisyc-plan-badge {
+	position: absolute;
+	top: -12px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 4px 16px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+}
+.clisyc-plan-badge--current {
+	background: #d1fae5;
+	color: #065f46;
+}
+.clisyc-plan-badge--recommended {
+	background: #dbeafe;
+	color: #1e40af;
+}
+.clisyc-plan-badge--trial {
+	background: #fef3c7;
+	color: #92400e;
+}
+
+/* ── Title ── */
+.clisyc-plan-title {
+	margin: 8px 0 4px;
+	font-size: 20px;
+	font-weight: 700;
+	text-align: center;
+	color: #1e293b;
+}
+
+/* ── Price ── */
+.clisyc-plan-price {
+	text-align: center;
+	font-size: 28px;
+	font-weight: 800;
+	color: #0f172a;
+	margin-bottom: 4px;
+}
+
+/* ── Description ── */
+.clisyc-plan-description {
+	text-align: center;
+	color: #64748b;
+	font-size: 14px;
+	margin: 0 0 16px;
+}
+
+/* ── Benefits List ── */
+.clisyc-plan-benefits {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 24px;
+	flex: 1;
+}
+.clisyc-plan-benefits li {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 6px 0;
+	font-size: 14px;
+	color: #334155;
+	border-bottom: 1px solid #f1f5f9;
+}
+.clisyc-plan-benefits li:last-child {
+	border-bottom: none;
+}
+.clisyc-plan-benefits .dashicons {
+	color: #10b981;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+/* ── Action Button ── */
+.clisyc-plan-action {
+	margin-top: auto;
+	text-align: center;
+}
+.clisyc-plan-btn {
+	display: inline-block;
+	width: 100%;
+	padding: 12px 24px;
+	border-radius: 8px;
+	font-size: 15px;
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	border: none;
+	transition: background 0.15s, transform 0.1s;
+	box-sizing: border-box;
+}
+
+/* Subscribe (primary CTA) */
+.clisyc-plan-btn--subscribe {
+	background: #3b82f6;
+	color: #fff;
+}
+.clisyc-plan-btn--subscribe:hover {
+	background: #2563eb;
+	transform: translateY(-1px);
+}
+.clisyc-plan-btn--subscribe:active {
+	transform: translateY(0);
+}
+.clisyc-plan-btn--subscribe:disabled {
+	background: #93c5fd;
+	cursor: not-allowed;
+	transform: none;
+}
+
+/* Login */
+.clisyc-plan-btn--login {
+	background: #f1f5f9;
+	color: #475569;
+}
+.clisyc-plan-btn--login:hover {
+	background: #e2e8f0;
+	color: #1e293b;
+}
+
+/* Current plan (non-interactive) */
+.clisyc-plan-btn--current {
+	background: #d1fae5;
+	color: #065f46;
+	cursor: default;
+}
+.clisyc-plan-btn--current .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+	margin-right: 4px;
+}
+
+/* Unavailable / Coming Soon */
+.clisyc-plan-btn--unavailable {
+	background: #f8fafc;
+	color: #94a3b8;
+	cursor: default;
+	border: 1px solid #e2e8f0;
+}
+
+/* ── No Plans Message ── */
+.clisyc-no-plans {
+	text-align: center;
+	color: #64748b;
+	padding: 40px 20px;
+	font-size: 15px;
+}

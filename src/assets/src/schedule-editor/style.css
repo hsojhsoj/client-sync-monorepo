@@ -1,0 +1,28 @@
+/**
+ * File: src/assets/src/schedule-editor/style.css
+ * Styles for the new React-based Schedule Editor.
+ */
+.clisyc-delete-event-btn {
+    position: absolute;
+    top: 1px;
+    right: 2px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #a00;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    border: none;
+    background: none;
+    padding: 0 4px;
+    line-height: 1;
+}
+.fc-event:hover .clisyc-delete-event-btn {
+    opacity: 1;
+    color: #d63638;
+}
+.fc-event.clisyc-standard-slot {
+    background-color: #466f8c !important;
+    border-color: #315b7a !important;
+    color: #fff !important;
+    cursor: move;
+}

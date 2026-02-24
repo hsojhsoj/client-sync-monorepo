@@ -1,0 +1,162 @@
+##
+# CI Pipeline — Client Sync Monorepo
+#
+# Runs on every push and pull request:
+#   1. Jest unit tests (JavaScript / React components)
+#   2. PHP build validation (syntax check + Composer install)
+#   3. ESLint / Prettier (JS code quality)
+#   4. Webpack build verification
+#
+# PHPUnit is excluded from CI because it requires a live WordPress + MySQL
+# test environment. Run locally with: composer test
+#
+# Playwright E2E tests run on a separate nightly schedule (see e2e-nightly.yml)
+# because they hit the live test site and take several minutes.
+##
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── JavaScript Tests & Build ────────────────────────────────
+  js-tests:
+    name: Jest & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest unit tests
+        run: npm run test:js -- --ci --coverage
+
+      - name: Verify webpack build
+        run: npm run build
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage
+          path: coverage/
+          retention-days: 14
+
+  # ── JavaScript Linting ──────────────────────────────────────
+  js-lint:
+    name: ESLint & Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npx wp-scripts lint-js src/assets/src/ --max-warnings 0
+
+      - name: Check Prettier formatting
+        run: npx wp-scripts format src/assets/src/ --check
+        continue-on-error: true
+
+  # ── PHP Validation ──────────────────────────────────────────
+  php-validate:
+    name: PHP Syntax & Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          extensions: openssl, mbstring, json, xml
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: PHP syntax check
+        run: find src/ -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  # ── PHP Code Standards (PHPCS) ─────────────────────────────
+  phpcs:
+    name: PHPCS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2, cs2pr
+          extensions: openssl, mbstring, json, xml
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPCS
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist --report=checkstyle src/ | cs2pr
+        continue-on-error: true
+
+  # ── PHPUnit Tests ──────────────────────────────────────────
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          extensions: openssl, mbstring, json, xml, mysqli
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install WP Test Framework
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
+        env:
+          WP_TESTS_DB_HOST: 127.0.0.1:3306
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --colors=always

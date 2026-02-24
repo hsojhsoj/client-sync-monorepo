@@ -1,0 +1,55 @@
+/**
+ * File: src/assets/src/manage-slots/style.css -> (compiled)
+ * Stylesheet for the React-based "Manage Time Slots" admin interface.
+ *
+ * This file contains all the necessary CSS for the FullCalendar instance,
+ * loading overlays, and modal dialogs used within the React application.
+ *
+ * @package    ClientSync
+ * @subpackage ClientSync/Assets/JS/ManageSlots
+ */
+
+ @import '../shared/_modal.css';
+
+/* Styles for the React Manage Slots app */
+#clisyc-manage-slots-calendar-container {
+    margin-top: 1em;
+    position: relative; /* For loading overlay */
+}
+
+#clisyc-manage-slots-calendar-container .fc {
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+}
+
+.clisyc-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clisyc-loading-overlay .spinner {
+    visibility: visible;
+}
+
+/* Modal Styles (jQuery UI Dialog is used for consistency) */
+.clisyc-slot-modal .clisyc-dialog-field {
+    margin-bottom: 1em;
+}
+.clisyc-slot-modal .clisyc-dialog-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.clisyc-slot-modal .clisyc-dialog-field select {
+    width: 100%;
+}

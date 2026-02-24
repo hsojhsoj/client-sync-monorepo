@@ -1,0 +1,10 @@
+/** 
+ * File: /client-sync-monorepo/src/assets/src/timeline-viewer/style.css 
+ * Purpose: React component styles for Timeline Viewer
+ * Used on: Frontend + Backend
+ * Build: Compiled with webpack into React bundle
+**/
+
+@import '../../css/clisyc-timeline.css';
+
+/* Additional React-specific styles if needed */

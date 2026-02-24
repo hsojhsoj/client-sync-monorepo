@@ -1,0 +1,53 @@
+/**
+ * File: src/assets/src/shared/empty-state.css
+ * Empty state placeholder styles for Client Sync React apps.
+ *
+ * @package ClientSync
+ */
+
+.clisyc-empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 48px 24px;
+	text-align: center;
+	min-height: 200px;
+}
+
+.clisyc-empty-state-icon {
+	color: #94a3b8;
+	margin-bottom: 16px;
+	opacity: 0.6;
+}
+
+.clisyc-empty-state-icon svg {
+	width: 48px;
+	height: 48px;
+}
+
+.clisyc-empty-state-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: #334155;
+	margin: 0 0 8px 0;
+}
+
+.clisyc-empty-state-message {
+	font-size: 14px;
+	color: #64748b;
+	margin: 0 0 16px 0;
+	max-width: 360px;
+	line-height: 1.5;
+}
+
+.clisyc-empty-state-action {
+	margin-top: 8px;
+}
+
+.clisyc-empty-state-action .button,
+.clisyc-empty-state-action a {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}

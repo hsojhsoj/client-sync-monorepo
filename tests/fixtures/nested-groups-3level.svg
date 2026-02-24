@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- 3-level: section > row > seat -->
+  <g id="orchestra" data-category="premium">
+    <g id="orch-row-a">
+      <circle id="orch-a1" cx="20" cy="20" r="8" />
+      <circle id="orch-a2" cx="45" cy="20" r="8" />
+      <circle id="orch-a3" cx="70" cy="20" r="8" />
+    </g>
+    <g id="orch-row-b">
+      <circle id="orch-b1" cx="20" cy="50" r="8" />
+      <circle id="orch-b2" cx="45" cy="50" r="8" />
+    </g>
+  </g>
+
+  <g id="balcony" data-category="standard">
+    <g id="balc-row-a">
+      <rect id="balc-a1" x="200" y="10" width="16" height="16" />
+      <rect id="balc-a2" x="225" y="10" width="16" height="16" />
+    </g>
+    <g id="balc-row-b">
+      <rect id="balc-b1" x="200" y="40" width="16" height="16" />
+      <rect id="balc-b2" x="225" y="40" width="16" height="16" />
+      <rect id="balc-b3" x="250" y="40" width="16" height="16" />
+    </g>
+  </g>
+
+  <g id="mezzanine">
+    <g id="mezz-row-a">
+      <ellipse id="mezz-a1" cx="20" cy="200" rx="8" ry="8" />
+      <ellipse id="mezz-a2" cx="45" cy="200" rx="8" ry="8" />
+    </g>
+  </g>
+</svg>

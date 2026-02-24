@@ -1,0 +1,784 @@
+/**
+ * File: src/assets/src/faceted-booking/style.css
+ * Stylesheet for the Faceted Search Booking Form application.
+ *
+ * FEATURES STYLED:
+ * - Filter option count badges
+ * - Total available counter
+ * - Timezone display with clock
+ * - Show booked toggle switch
+ * - Booked slot styling
+ * - Empty states
+ * - Guest registration form (NEW)
+ *
+ * @package    ClientSync
+ * @subpackage ClientSync/Assets/CSS
+ */
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
+@import '../shared/_modal.css';
+
+.clisyc-faceted-booking-app .clisyc-faceted-search-layout { 
+    display: grid; 
+    grid-template-columns: 280px 1fr; 
+    gap: 24px; 
+}
+
+.clisyc-faceted-booking-app .clisyc-availability-filters-container { 
+    background: #f9fafb; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 12px; 
+    padding: 20px; 
+    position: relative; 
+}
+
+/* ==========================================================================
+   Filter Total Count Header
+   ========================================================================== */
+
+.clisyc-filter-total-count {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 12px 16px;
+    margin: -20px -20px 16px -20px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 12px 12px 0 0;
+    color: white;
+}
+
+.clisyc-filter-total-count .clisyc-total-number {
+    font-size: var(--clisyc-font-size-2xl, 24px);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.clisyc-filter-total-count .clisyc-total-label {
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* ==========================================================================
+   Filter Groups
+   ========================================================================== */
+
+.clisyc-faceted-booking-app .clisyc-filter-group { 
+    margin-bottom: 24px; 
+}
+
+.clisyc-faceted-booking-app .clisyc-filter-group-label { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    margin: 0 0 12px; 
+    font-size: var(--clisyc-font-size-base, 14px); 
+    font-weight: 600; 
+    color: #374151; 
+}
+
+.clisyc-faceted-booking-app .clisyc-filter-options-list { 
+    display: flex; 
+    flex-direction: column; 
+}
+
+/* ==========================================================================
+   Filter Options with Count Badges
+   ========================================================================== */
+
+.clisyc-faceted-booking-app .clisyc-filter-option-label {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    margin-bottom: 4px;
+}
+
+.clisyc-faceted-booking-app .clisyc-filter-option-label:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Empty/disabled filter option */
+.clisyc-faceted-booking-app .clisyc-filter-option-label.clisyc-filter-option-empty {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.clisyc-faceted-booking-app .clisyc-filter-option-label.clisyc-filter-option-empty:hover {
+    background-color: transparent;
+}
+
+/* Hide native checkbox */
+.clisyc-faceted-booking-app .clisyc-filter-option-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+/* Colored checkbox indicator */
+.clisyc-faceted-booking-app .clisyc-filter-checkbox-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-right: 10px;
+}
+
+/* Checkmark when checked */
+.clisyc-faceted-booking-app .clisyc-filter-option-label input[type="checkbox"]:checked + .clisyc-filter-checkbox-indicator::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 3px;
+}
+
+/* Option text */
+.clisyc-faceted-booking-app .clisyc-filter-option-text {
+    font-size: var(--clisyc-font-size-base, 14px);
+    color: #374151;
+    font-weight: 500;
+    flex: 1;
+}
+
+/* Count badge */
+.clisyc-faceted-booking-app .clisyc-filter-count-badge {
+    font-size: var(--clisyc-font-size-xs, 12px);
+    font-weight: 600;
+    color: #6b7280;
+    background: #e5e7eb;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 24px;
+    text-align: center;
+    margin-left: auto;
+}
+
+.clisyc-faceted-booking-app .clisyc-filter-count-badge.clisyc-count-zero {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+/* Reset button */
+.clisyc-faceted-booking-app .clisyc-reset-all-container { 
+    margin-bottom: 15px; 
+}
+
+.clisyc-faceted-booking-app .clisyc-reset-all-filters-btn { 
+    background: none; 
+    border: none; 
+    color: #3b82f6; 
+    cursor: pointer; 
+    font-size: var(--clisyc-font-size-sm, 13px); 
+    font-weight: 600; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 4px; 
+    padding: 0; 
+}
+
+.clisyc-faceted-booking-app .clisyc-reset-all-filters-btn .dashicons { 
+    font-size: 16px; 
+}
+
+/* ==========================================================================
+   Time Slot Grid Header
+   ========================================================================== */
+
+.clisyc-timeslot-grid-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.clisyc-timeslot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.clisyc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.clisyc-slots-count {
+    font-size: var(--clisyc-font-size-base, 14px);
+    color: #374151;
+}
+
+.clisyc-slots-count strong {
+    font-size: var(--clisyc-font-size-lg, 18px);
+    color: #3b82f6;
+}
+
+.clisyc-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Timezone Display
+   ========================================================================== */
+
+.clisyc-timezone-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #6b7280;
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+}
+
+.clisyc-timezone-display .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: #9ca3af;
+}
+
+.clisyc-current-time {
+    font-weight: 600;
+    color: #374151;
+}
+
+.clisyc-timezone-abbr {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+/* ==========================================================================
+   Show Booked Toggle Switch
+   ========================================================================== */
+
+.clisyc-booked-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #6b7280;
+    user-select: none;
+}
+
+.clisyc-booked-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.clisyc-toggle-slider {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: #d1d5db;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.clisyc-toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.clisyc-booked-toggle input:checked + .clisyc-toggle-slider {
+    background: #3b82f6;
+}
+
+.clisyc-booked-toggle input:checked + .clisyc-toggle-slider::after {
+    transform: translateX(16px);
+}
+
+.clisyc-toggle-label {
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   Time Slot Grid
+   ========================================================================== */
+
+.clisyc-faceted-timeslot-grid .clisyc-date-group { 
+    margin-bottom: 24px; 
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-date-header { 
+    padding-bottom: 8px; 
+    border-bottom: 2px solid #e5e7eb; 
+    margin-bottom: 12px;
+    font-size: var(--clisyc-font-size-md, 15px);
+    font-weight: 600;
+    color: #374151;
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slots-container { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button { 
+    background: #fff; 
+    border: 1px solid #d1d5db; 
+    color: #374151; 
+    padding: 10px 16px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    min-width: 100px;
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button:hover:not(:disabled) { 
+    background-color: var(--clisyc-available-bg, #dbeafe); 
+    border-color: var(--clisyc-available-bg, #3b82f6); 
+    color: var(--clisyc-available-text, #1e3a8a); 
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button-time { 
+    font-weight: 600; 
+    font-size: var(--clisyc-font-size-base, 14px); 
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button-details { 
+    font-size: var(--clisyc-font-size-xs, 11px); 
+    color: #6b7280; 
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button:hover:not(:disabled) .clisyc-slot-button-details { 
+    color: var(--clisyc-available-text, #1e3a8a); 
+    opacity: 0.8; 
+}
+
+/* ==========================================================================
+   Booked Slot Styling
+   ========================================================================== */
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button.clisyc-slot-booked {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.clisyc-faceted-timeslot-grid .clisyc-slot-button.clisyc-slot-booked:hover {
+    transform: none;
+    box-shadow: none;
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+
+.clisyc-booked-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+/* ==========================================================================
+   Color Indicator Dots
+   ========================================================================== */
+
+.clisyc-slot-color-indicators {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.clisyc-slot-color-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-slot-button:hover:not(:disabled) .clisyc-slot-color-dot {
+    width: 10px;
+    height: 10px;
+    border-width: 1.5px;
+}
+
+/* ==========================================================================
+   Loading & Empty States
+   ========================================================================== */
+
+.clisyc-faceted-booking-app .clisyc-filters-loading::after { 
+    content: ''; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    width: 32px; 
+    height: 32px; 
+    margin: -16px 0 0 -16px; 
+    border: 4px solid rgba(59, 130, 246, 0.2); 
+    border-top-color: #3b82f6; 
+    border-radius: 50%; 
+    animation: clisyc-spinner-spin 0.8s linear infinite; 
+    z-index: 20; 
+}
+
+.clisyc-faceted-booking-app .clisyc-compact-grid-loading { 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    padding: 80px 20px; 
+    gap: 16px; 
+}
+
+.clisyc-faceted-booking-app .clisyc-compact-spinner { 
+    width: 32px; 
+    height: 32px; 
+    border: 4px solid rgba(59, 130, 246, 0.2); 
+    border-top-color: #3b82f6; 
+    border-radius: 50%; 
+    animation: clisyc-spinner-spin 0.8s linear infinite; 
+}
+
+@keyframes clisyc-spinner-spin { 
+    to { transform: rotate(360deg); } 
+}
+
+/* Empty State */
+.clisyc-faceted-booking-app .clisyc-empty-state { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px; 
+    text-align: center; 
+    background: #f9fafb; 
+    border-radius: 8px;
+    min-height: 200px;
+}
+
+.clisyc-faceted-booking-app .clisyc-empty-state p {
+    margin: 0;
+    color: #374151;
+    font-size: var(--clisyc-font-size-md, 15px);
+    line-height: 1.5;
+}
+
+.clisyc-faceted-booking-app .clisyc-empty-state p:first-of-type {
+    font-weight: 500;
+}
+
+.clisyc-faceted-booking-app .clisyc-empty-state .clisyc-empty-state-hint {
+    margin-top: 8px;
+    color: #6b7280;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 400;
+}
+
+.clisyc-faceted-booking-app .clisyc-empty-state .dashicons {
+    display: block;
+    width: 32px;
+    height: 32px;
+}
+
+/* Placeholder state */
+.clisyc-booking-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    padding: 2rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 2px dashed #e5e7eb;
+    text-align: center;
+}
+
+.clisyc-booking-placeholder p {
+    margin: 0;
+    font-size: var(--clisyc-font-size-md, 15px);
+    color: #6b7280;
+}
+
+/* ==========================================================================
+   Confirmation Modal
+   ========================================================================== */
+
+.clisyc-compact-modal-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: rgba(0,0,0,0.5); 
+    z-index: 10000; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    padding: 20px;
+}
+
+.clisyc-compact-modal-content { 
+    background: #fff; 
+    padding: 24px; 
+    border-radius: 12px; 
+    max-width: 480px; 
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.clisyc-compact-modal-content h3 { 
+    margin: 0 0 16px 0;
+    font-size: var(--clisyc-font-size-lg, 18px);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.clisyc-confirmation-details { 
+    background: #f9fafb; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 8px; 
+    padding: 15px; 
+    margin-bottom: 20px; 
+    font-size: var(--clisyc-font-size-base, 14px); 
+}
+
+.clisyc-confirmation-details p { 
+    margin: 0 0 10px 0; 
+    line-height: 1.5; 
+}
+
+.clisyc-confirmation-details p:last-child {
+    margin-bottom: 0;
+}
+
+.clisyc-confirmation-details hr { 
+    border: none; 
+    border-top: 1px solid #e5e7eb; 
+    margin: 10px 0; 
+}
+
+.clisyc-confirmation-details strong { 
+    color: #374151; 
+}
+
+/* ==========================================================================
+   Guest Registration Form (NEW)
+   ========================================================================== */
+
+.clisyc-guest-registration-section {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 20px;
+    margin-bottom: 20px;
+}
+
+.clisyc-guest-registration-section h4 {
+    margin: 0 0 8px 0;
+    font-size: var(--clisyc-font-size-lg, 16px);
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.clisyc-guest-info {
+    margin: 0 0 16px 0;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #6b7280;
+}
+
+.clisyc-form-errors {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.clisyc-error-message {
+    margin: 0;
+    padding: 4px 0;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #991b1b;
+}
+
+.clisyc-error-message:first-child {
+    padding-top: 0;
+}
+
+.clisyc-error-message:last-child {
+    padding-bottom: 0;
+}
+
+.clisyc-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.clisyc-form-field {
+    margin-bottom: 16px;
+}
+
+.clisyc-form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 500;
+    color: #374151;
+}
+
+.clisyc-form-field label .required {
+    color: #dc2626;
+}
+
+.clisyc-form-field input[type="text"],
+.clisyc-form-field input[type="email"],
+.clisyc-form-field input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.clisyc-form-field input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.clisyc-field-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: var(--clisyc-font-size-xs, 12px);
+    color: #9ca3af;
+}
+
+/* ==========================================================================
+   Modal Actions
+   ========================================================================== */
+
+.clisyc-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.clisyc-modal-actions .clisyc-submit-button {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: var(--clisyc-font-size-md, 15px);
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.clisyc-compact-modal-close { 
+    display: block; 
+    width: 100%; 
+    text-align: center; 
+    background: #f3f4f6; 
+    color: #374151; 
+    border: 1px solid #d1d5db; 
+    padding: 10px; 
+    border-radius: 6px; 
+    cursor: pointer;
+    font-size: var(--clisyc-font-size-base, 14px);
+    transition: background-color 0.2s;
+}
+
+.clisyc-compact-modal-close:hover {
+    background: #e5e7eb;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .clisyc-faceted-booking-app .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .clisyc-timeslot-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .clisyc-header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .clisyc-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-header-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .clisyc-faceted-timeslot-grid .clisyc-slot-button {
+        min-width: 80px;
+        padding: 8px 12px;
+    }
+    
+    .clisyc-compact-modal-content {
+        padding: 16px;
+    }
+}

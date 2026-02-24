@@ -1,0 +1,689 @@
+/**
+ * File: src/assets/src/booking-form/date-range.css
+ * Styles for date-range booking mode calendar and UI elements.
+ * 
+ * TYPOGRAPHY FIXED: All font sizes now use CSS variables
+ * to respect Settings → Appearance → Text Size
+ */
+
+/* ==========================================================================
+   DATE RANGE MODE - LAYOUT
+   ========================================================================== */
+
+.clisyc-booking-form-app.clisyc-date-range-mode .clisyc-faceted-search-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .clisyc-booking-form-app.clisyc-date-range-mode .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   DATE RANGE MODE - FILTER PANEL
+   ========================================================================== */
+
+.clisyc-date-range-filters {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.clisyc-date-range-filters .clisyc-filter-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-date-range-filters .clisyc-filter-title {
+    font-size: var(--clisyc-font-size-lg, 18px);
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+/* Radio button styling for date range mode */
+.clisyc-date-range-filters .clisyc-radio-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.clisyc-date-range-filters .clisyc-radio-option {
+    position: relative;
+}
+
+.clisyc-date-range-filters .clisyc-radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.clisyc-date-range-filters .clisyc-radio-option label {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clisyc-date-range-filters .clisyc-radio-option label:hover {
+    border-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.clisyc-date-range-filters .clisyc-radio-option.clisyc-option-selected label {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.clisyc-date-range-filters .clisyc-option-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.clisyc-date-range-filters .clisyc-option-label {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: var(--clisyc-font-size-base, 14px);
+}
+
+.clisyc-date-range-filters .clisyc-option-price {
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #059669;
+    font-weight: 500;
+}
+
+.clisyc-date-range-filters .clisyc-option-description {
+    font-size: var(--clisyc-font-size-xs, 12px);
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.clisyc-date-range-filters .clisyc-filter-color-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.clisyc-date-range-filters .clisyc-filter-info {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-xs, 12px);
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clisyc-date-range-filters .clisyc-filter-info .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #94a3b8;
+}
+
+/* ==========================================================================
+   DATE RANGE CALENDAR
+   ========================================================================== */
+
+.clisyc-date-range-calendar {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-date-range-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-date-range-title {
+    font-size: var(--clisyc-font-size-lg, 18px);
+    font-weight: 500;
+    color: #374151;
+    margin: 0;
+}
+
+.clisyc-date-range-title strong {
+    color: #1e293b;
+}
+
+.clisyc-price-per-night {
+    font-size: var(--clisyc-font-size-md, 15px);
+    font-weight: 600;
+    color: #059669;
+    background: #ecfdf5;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+/* Legend */
+.clisyc-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #64748b;
+}
+
+.clisyc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clisyc-legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-legend-available {
+    background-color: #d1fae5;
+    border-color: #059669;
+}
+
+.clisyc-legend-booked {
+    background-color: #fee2e2;
+    border-color: #dc2626;
+}
+
+.clisyc-legend-selected {
+    background-color: #bbf7d0;
+    border-color: #16a34a;
+}
+
+/* Instructions */
+.clisyc-date-range-instructions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #475569;
+    margin-bottom: 1rem;
+}
+
+.clisyc-date-range-instructions .dashicons {
+    color: #3b82f6;
+}
+
+.clisyc-min-stay-note {
+    color: #64748b;
+    font-size: var(--clisyc-font-size-xs, 12px);
+}
+
+/* Error message */
+.clisyc-date-range-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    margin-bottom: 1rem;
+}
+
+.clisyc-date-range-error .dashicons {
+    flex-shrink: 0;
+}
+
+/* Calendar container */
+.clisyc-calendar-container {
+    position: relative;
+}
+
+/* Loading overlay */
+.clisyc-date-range-calendar .clisyc-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 48px;
+    gap: 0.75rem;
+    z-index: 10;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    color: #64748b;
+}
+
+/* ==========================================================================
+   FULLCALENDAR OVERRIDES FOR DATE RANGE MODE
+   ========================================================================== */
+
+.clisyc-date-range-calendar .fc {
+    font-family: inherit;
+}
+
+.clisyc-date-range-calendar .fc-theme-standard td,
+.clisyc-date-range-calendar .fc-theme-standard th {
+    border-color: #e2e8f0;
+}
+
+.clisyc-date-range-calendar .fc-theme-standard .fc-scrollgrid {
+    border-color: #e2e8f0;
+}
+
+.clisyc-date-range-calendar .fc .fc-daygrid-day {
+    min-height: 80px;
+    transition: background-color 0.15s ease;
+}
+
+.clisyc-date-range-calendar .fc .fc-daygrid-day-number {
+    font-size: var(--clisyc-font-size-base, 14px);
+    padding: 8px;
+    color: #374151;
+}
+
+/* Available dates */
+.clisyc-date-range-calendar .fc .clisyc-date-available {
+    background-color: #f0fdf4;
+    cursor: pointer;
+}
+
+.clisyc-date-range-calendar .fc .clisyc-date-available:hover {
+    background-color: #d1fae5;
+}
+
+.clisyc-date-range-calendar .fc .clisyc-date-available .fc-daygrid-day-number {
+    color: #166534;
+    font-weight: 500;
+}
+
+/* Unavailable/booked dates */
+.clisyc-date-range-calendar .fc .clisyc-date-unavailable {
+    background-color: #fef2f2;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.clisyc-date-range-calendar .fc .clisyc-date-unavailable .fc-daygrid-day-number {
+    color: #991b1b;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.clisyc-date-range-calendar .clisyc-booked-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: #ef4444;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Past dates */
+.clisyc-date-range-calendar .fc .clisyc-date-past {
+    background-color: #f8fafc;
+}
+
+.clisyc-date-range-calendar .fc .clisyc-date-past .fc-daygrid-day-number {
+    color: #94a3b8;
+}
+
+/* Selected range highlight */
+.clisyc-date-range-calendar .fc .fc-highlight {
+    background-color: #bbf7d0 !important;
+    opacity: 1;
+}
+
+/* Today indicator */
+.clisyc-date-range-calendar .fc .fc-day-today {
+    background-color: #fef3c7 !important;
+}
+
+.clisyc-date-range-calendar .fc .fc-day-today .fc-daygrid-day-number {
+    background: #f59e0b;
+    color: #fff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* Header toolbar */
+.clisyc-date-range-calendar .fc .fc-toolbar {
+    margin-bottom: 1rem;
+}
+
+.clisyc-date-range-calendar .fc .fc-toolbar-title {
+    font-size: var(--clisyc-font-size-lg, 18px);
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.clisyc-date-range-calendar .fc .fc-button {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    color: #374151;
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.clisyc-date-range-calendar .fc .fc-button:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.clisyc-date-range-calendar .fc .fc-button-active,
+.clisyc-date-range-calendar .fc .fc-button:active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+/* ==========================================================================
+   SELECTED RANGE SUMMARY
+   ========================================================================== */
+
+.clisyc-selected-range-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 2px solid #3b82f6;
+    border-radius: 12px;
+}
+
+.clisyc-range-details {
+    flex: 1;
+}
+
+.clisyc-range-dates {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.clisyc-range-date {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.clisyc-range-label {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.clisyc-range-value {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: var(--clisyc-font-size-base, 14px);
+}
+
+.clisyc-range-arrow {
+    color: #64748b;
+    font-size: 1.25rem;
+}
+
+.clisyc-range-nights {
+    font-size: var(--clisyc-font-size-base, 14px);
+    color: #475569;
+}
+
+.clisyc-range-nights strong {
+    color: #1e293b;
+    font-size: var(--clisyc-font-size-lg, 16px);
+}
+
+.clisyc-range-total {
+    margin-top: 0.5rem;
+    font-size: var(--clisyc-font-size-md, 15px);
+    color: #059669;
+}
+
+.clisyc-range-total strong {
+    font-size: var(--clisyc-font-size-xl, 20px);
+}
+
+.clisyc-clear-selection-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    color: #64748b;
+    font-size: var(--clisyc-font-size-xs, 12px);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.clisyc-clear-selection-btn:hover {
+    background: #f8fafc;
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+.clisyc-clear-selection-btn .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* ==========================================================================
+   BOOK NOW CTA
+   ========================================================================== */
+
+/* ── Timezone Bar ── */
+.clisyc-date-range-tz-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    background: var(--clisyc-bg-subtle, #f8f9fa);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--clisyc-text-secondary, #6c757d);
+}
+.clisyc-date-range-tz-bar .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.clisyc-date-range-booking-cta {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.clisyc-date-range-book-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: var(--clisyc-font-size-lg, 16px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+}
+
+.clisyc-date-range-book-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+.clisyc-date-range-book-btn .clisyc-btn-price {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: var(--clisyc-font-size-base, 14px);
+}
+
+/* ==========================================================================
+   BOOKING MODAL - DATE RANGE MODE
+   ========================================================================== */
+
+.clisyc-date-range-summary {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.clisyc-summary-item-name {
+    font-size: var(--clisyc-font-size-xl, 20px);
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.clisyc-date-range-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.clisyc-date-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border-radius: 8px;
+    min-width: 140px;
+}
+
+.clisyc-date-label {
+    font-size: 10px; /* Intentionally small - decorative label */
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.clisyc-date-value {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: var(--clisyc-font-size-sm, 13px);
+}
+
+.clisyc-date-arrow {
+    color: #94a3b8;
+    font-size: 1.25rem;
+}
+
+.clisyc-stay-summary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.clisyc-nights-count {
+    font-size: var(--clisyc-font-size-md, 15px);
+    color: #475569;
+}
+
+.clisyc-total-price {
+    font-size: var(--clisyc-font-size-lg, 16px);
+    color: #059669;
+}
+
+.clisyc-total-price strong {
+    font-size: var(--clisyc-font-size-xl, 20px);
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .clisyc-date-range-calendar {
+        padding: 1rem;
+    }
+    
+    .clisyc-date-range-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .clisyc-calendar-legend {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .clisyc-range-dates {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .clisyc-range-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .clisyc-selected-range-summary {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .clisyc-date-range-details {
+        flex-direction: column;
+    }
+    
+    .clisyc-date-block {
+        width: 100%;
+    }
+}

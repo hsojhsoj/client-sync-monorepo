@@ -1,0 +1,631 @@
+/**
+ * File: src/assets/css/clisyc-fullscreen-layout.css
+ * Full-screen admin layout styles for Client Sync.
+ * All rules scoped under .clisyc-fullscreen body class so they
+ * only affect Client Sync admin pages — never other WP admin screens.
+ *
+ * @package ClientSync
+ */
+
+/* ══════════════════════════════════════════════════════════
+   1. HIDE WORDPRESS ADMIN CHROME
+   ══════════════════════════════════════════════════════════ */
+
+.clisyc-fullscreen #adminmenuwrap,
+.clisyc-fullscreen #adminmenuback,
+.clisyc-fullscreen #adminmenumain,
+.clisyc-fullscreen #wpadminbar,
+.clisyc-fullscreen #wpfooter,
+.clisyc-fullscreen #screen-meta-links {
+	display: none !important;
+}
+
+.clisyc-fullscreen #wpcontent {
+	margin-left: 240px;
+	padding-left: 0;
+	overflow-x: hidden;
+}
+
+html.wp-toolbar.clisyc-fullscreen,
+.clisyc-fullscreen.wp-toolbar {
+	padding-top: 0 !important;
+}
+
+/* Prevent horizontal overflow */
+.clisyc-fullscreen #wpbody {
+	box-sizing: border-box;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   2. CUSTOM TOP HEADER BAR
+   ══════════════════════════════════════════════════════════ */
+
+#clisyc-admin-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 56px;
+	background: #1d2327;
+	color: #f0f0f1;
+	display: flex;
+	align-items: center;
+	z-index: 9990;
+	padding: 0 20px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	box-sizing: border-box;
+}
+
+/* ── Brand Section ─────────────────────────────────────── */
+
+.clisyc-header-brand {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-right: 24px;
+	flex-shrink: 0;
+}
+
+.clisyc-header-brand .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	color: #72aee6;
+}
+
+.clisyc-header-brand-name {
+	font-size: 16px;
+	font-weight: 600;
+	letter-spacing: 0.3px;
+	white-space: nowrap;
+}
+
+/* ── Page Title ────────────────────────────────────────── */
+
+.clisyc-header-title {
+	font-size: 14px;
+	font-weight: 400;
+	color: #a7aaad;
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-left: 16px;
+	border-left: 1px solid #3c4349;
+}
+
+/* ── Hamburger Toggle (hidden on desktop) ──────────────── */
+
+.clisyc-header-toggle {
+	display: none;
+	background: none;
+	border: none;
+	color: #f0f0f1;
+	cursor: pointer;
+	padding: 4px 8px;
+	margin-left: auto;
+}
+
+.clisyc-header-toggle .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+}
+
+/* ── Right Section ─────────────────────────────────────── */
+
+.clisyc-header-right {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-left: auto;
+	flex-shrink: 0;
+}
+
+.clisyc-header-wp-link {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	color: #a7aaad;
+	text-decoration: none;
+	font-size: 13px;
+	padding: 4px 10px;
+	border-radius: 3px;
+	transition: background-color 0.15s, color 0.15s;
+	white-space: nowrap;
+}
+
+.clisyc-header-wp-link:hover {
+	color: #f0f0f1;
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.clisyc-header-wp-link .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.clisyc-header-user {
+	display: flex;
+	align-items: center;
+}
+
+.clisyc-header-user img {
+	border-radius: 50%;
+	display: block;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   2b. HELP BUTTON & PANEL
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Help Button in Header ────────────────────────────── */
+
+.clisyc-header-help-btn {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	background: none;
+	border: 1px solid #3c4349;
+	color: #a7aaad;
+	font-size: 13px;
+	padding: 4px 12px;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+	white-space: nowrap;
+	font-family: inherit;
+}
+
+.clisyc-header-help-btn:hover,
+.clisyc-header-help-btn[aria-expanded="true"] {
+	color: #f0f0f1;
+	background: rgba(255, 255, 255, 0.08);
+	border-color: #72aee6;
+}
+
+.clisyc-header-help-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* ── Help Panel (slides down below header) ────────────── */
+
+.clisyc-help-panel {
+	position: fixed;
+	top: 56px;
+	left: 240px;
+	right: 0;
+	max-height: 0;
+	overflow: hidden;
+	background: #f0f0f1;
+	z-index: 9988;
+	transition: max-height 0.3s ease, box-shadow 0.3s ease;
+	box-shadow: none;
+}
+
+.clisyc-help-panel.clisyc-help-panel-open {
+	max-height: 400px;
+	overflow-y: auto;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.clisyc-help-panel-inner {
+	display: flex;
+	padding: 0;
+	min-height: 120px;
+}
+
+/* ── Help Tabs (left column) ──────────────────────────── */
+
+.clisyc-help-tabs {
+	flex: 0 0 160px;
+	background: #e2e4e7;
+	border-right: 1px solid #c3c4c7;
+	padding: 12px 0;
+}
+
+.clisyc-help-tab-btn {
+	display: block;
+	width: 100%;
+	padding: 8px 16px;
+	background: none;
+	border: none;
+	border-left: 3px solid transparent;
+	text-align: left;
+	font-size: 13px;
+	color: #50575e;
+	cursor: pointer;
+	transition: background-color 0.12s, color 0.12s;
+	font-family: inherit;
+	line-height: 1.4;
+}
+
+.clisyc-help-tab-btn:hover {
+	background: #d5d7da;
+	color: #1d2327;
+}
+
+.clisyc-help-tab-btn.clisyc-help-tab-active {
+	background: #f0f0f1;
+	color: #1d2327;
+	border-left-color: #0073aa;
+	font-weight: 600;
+}
+
+/* ── Help Tab Content (center) ────────────────────────── */
+
+.clisyc-help-tab-panels {
+	flex: 1;
+	padding: 16px 20px;
+	overflow-y: auto;
+}
+
+.clisyc-help-tab-panel {
+	display: none;
+}
+
+.clisyc-help-tab-panel.clisyc-help-tab-panel-active {
+	display: block;
+}
+
+.clisyc-help-tab-panel h3 {
+	margin: 0 0 8px 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.clisyc-help-tab-panel p {
+	margin: 0 0 10px 0;
+	font-size: 13px;
+	line-height: 1.6;
+	color: #50575e;
+}
+
+.clisyc-help-tab-panel ul {
+	margin: 0 0 10px 18px;
+	padding: 0;
+}
+
+.clisyc-help-tab-panel li {
+	font-size: 13px;
+	line-height: 1.6;
+	color: #50575e;
+	margin-bottom: 4px;
+}
+
+.clisyc-help-tab-panel strong {
+	color: #1d2327;
+}
+
+/* ── Help Sidebar (right column) ──────────────────────── */
+
+.clisyc-help-sidebar {
+	flex: 0 0 160px;
+	padding: 16px 16px;
+	border-left: 1px solid #c3c4c7;
+	background: #e8eaec;
+}
+
+.clisyc-help-sidebar p {
+	margin: 0 0 8px 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #50575e;
+}
+
+.clisyc-help-sidebar strong {
+	color: #1d2327;
+}
+
+.clisyc-help-sidebar a {
+	color: #0073aa;
+	text-decoration: none;
+}
+
+.clisyc-help-sidebar a:hover {
+	color: #006799;
+	text-decoration: underline;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   3. CUSTOM LEFT SIDEBAR
+   ══════════════════════════════════════════════════════════ */
+
+#clisyc-admin-sidebar {
+	position: fixed;
+	top: 56px;
+	left: 0;
+	bottom: 0;
+	width: 240px;
+	background: #23282d;
+	overflow-y: auto;
+	overflow-x: hidden;
+	z-index: 9989;
+	box-shadow: 1px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+/* ── Scrollbar Styling ─────────────────────────────────── */
+
+#clisyc-admin-sidebar::-webkit-scrollbar {
+	width: 6px;
+}
+
+#clisyc-admin-sidebar::-webkit-scrollbar-track {
+	background: #23282d;
+}
+
+#clisyc-admin-sidebar::-webkit-scrollbar-thumb {
+	background: #3c4349;
+	border-radius: 3px;
+}
+
+/* ── Menu List ─────────────────────────────────────────── */
+
+.clisyc-sidebar-menu {
+	list-style: none;
+	margin: 0;
+	padding: 8px 0;
+}
+
+/* ── Menu Items ────────────────────────────────────────── */
+
+.clisyc-sidebar-item a {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 16px;
+	color: #c3c4c7;
+	text-decoration: none;
+	font-size: 13px;
+	line-height: 1.4;
+	transition: background-color 0.12s, color 0.12s;
+	border-left: 3px solid transparent;
+}
+
+.clisyc-sidebar-item a:hover {
+	background: #32373c;
+	color: #f0f0f1;
+}
+
+.clisyc-sidebar-item a:focus {
+	box-shadow: none;
+	outline: 1px dotted rgba(255, 255, 255, 0.3);
+	outline-offset: -1px;
+}
+
+/* ── Active Menu Item ──────────────────────────────────── */
+
+.clisyc-sidebar-item-active a {
+	background: #0073aa;
+	color: #fff;
+	border-left-color: #72aee6;
+}
+
+.clisyc-sidebar-item-active a:hover {
+	background: #006799;
+	color: #fff;
+}
+
+/* ── Menu Item Icons ───────────────────────────────────── */
+
+.clisyc-sidebar-item a .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+	flex-shrink: 0;
+	opacity: 0.85;
+}
+
+.clisyc-sidebar-item-active a .dashicons {
+	opacity: 1;
+}
+
+/* Support for FontAwesome icons injected by Menu_Manager */
+.clisyc-sidebar-item a span[class*="fa-"] {
+	font-size: 14px;
+	width: 18px;
+	text-align: center;
+	flex-shrink: 0;
+	opacity: 0.85;
+}
+
+/* ── Separator ─────────────────────────────────────────── */
+
+.clisyc-sidebar-separator {
+	list-style: none;
+	margin: 4px 0;
+	padding: 0 16px;
+}
+
+.clisyc-sidebar-separator hr {
+	border: none;
+	border-top: 1px solid #3c4349;
+	margin: 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   4. CONTENT AREA ADJUSTMENTS
+   ══════════════════════════════════════════════════════════ */
+
+.clisyc-fullscreen #wpbody-content {
+	padding: 16px 20px 20px 20px;
+	box-sizing: border-box;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.clisyc-fullscreen .wrap {
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* Ensure WordPress notices render correctly under the header */
+.clisyc-fullscreen #wpbody-content > .notice,
+.clisyc-fullscreen #wpbody-content > .updated,
+.clisyc-fullscreen #wpbody-content > .update-nag,
+.clisyc-fullscreen #wpbody-content > .error {
+	margin-top: 10px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   4b. GUTENBERG / BLOCK EDITOR PAGES (CPT single edit)
+   The block editor renders its own fixed-position layout
+   that must be offset to account for our sidebar + header.
+   ══════════════════════════════════════════════════════════ */
+
+/* Reset the content padding for Gutenberg — it manages its own spacing */
+.clisyc-fullscreen.block-editor-page #wpbody-content {
+	padding: 0;
+}
+
+/* The main block-editor skeleton needs to be pushed right and down */
+.clisyc-fullscreen .interface-interface-skeleton {
+	left: 240px !important;
+	top: 56px !important;
+}
+
+/* The editor's own top bar */
+.clisyc-fullscreen .edit-post-header,
+.clisyc-fullscreen .editor-header {
+	left: 240px !important;
+	top: 56px !important;
+}
+
+/* WP post-title / editor region when not using block editor (classic editor metaboxes) */
+.clisyc-fullscreen.post-php #post-body,
+.clisyc-fullscreen.post-new-php #post-body {
+	margin-right: 0;
+}
+
+/* CPT list tables (edit.php) — ensure content fits well */
+.clisyc-fullscreen .wp-list-table {
+	margin-top: 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   5. MOBILE / RESPONSIVE
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 960px) {
+
+	/* Sidebar slides off-screen */
+	#clisyc-admin-sidebar {
+		transform: translateX(-240px);
+		transition: transform 0.25s ease;
+	}
+
+	#clisyc-admin-sidebar.clisyc-sidebar-open {
+		transform: translateX(0);
+		box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+	}
+
+	/* Content takes full width */
+	.clisyc-fullscreen #wpcontent {
+		margin-left: 0 !important;
+	}
+
+	/* Reset Gutenberg offsets on mobile */
+	.clisyc-fullscreen .interface-interface-skeleton {
+		left: 0 !important;
+	}
+
+	.clisyc-fullscreen .edit-post-header,
+	.clisyc-fullscreen .editor-header {
+		left: 0 !important;
+	}
+
+	/* Show hamburger toggle */
+	.clisyc-header-toggle {
+		display: flex;
+		align-items: center;
+	}
+
+	/* Help panel responsive */
+	.clisyc-help-panel {
+		left: 0;
+	}
+
+	.clisyc-help-panel-inner {
+		flex-direction: column;
+	}
+
+	.clisyc-help-tabs {
+		flex: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		padding: 8px 12px;
+		border-right: none;
+		border-bottom: 1px solid #c3c4c7;
+	}
+
+	.clisyc-help-tab-btn {
+		width: auto;
+		padding: 6px 12px;
+		border-left: none;
+		border-radius: 3px;
+	}
+
+	.clisyc-help-tab-btn.clisyc-help-tab-active {
+		border-left-color: transparent;
+		background: #0073aa;
+		color: #fff;
+	}
+
+	.clisyc-help-sidebar {
+		flex: none;
+		border-left: none;
+		border-top: 1px solid #c3c4c7;
+	}
+
+	/* Hide help text label on mobile, show icon only */
+	.clisyc-header-help-btn .clisyc-help-btn-label {
+		display: none;
+	}
+
+	.clisyc-header-help-btn {
+		padding: 4px 8px;
+	}
+
+	/* Adjust header layout */
+	.clisyc-header-title {
+		display: none;
+	}
+
+	.clisyc-header-brand-name {
+		font-size: 14px;
+	}
+
+	/* Overlay behind open sidebar */
+	#clisyc-sidebar-overlay {
+		display: none;
+		position: fixed;
+		top: 56px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.4);
+		z-index: 9988;
+	}
+
+	#clisyc-sidebar-overlay.clisyc-overlay-visible {
+		display: block;
+	}
+}
+
+@media (min-width: 961px) {
+	#clisyc-sidebar-overlay {
+		display: none !important;
+	}
+}

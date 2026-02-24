@@ -1,0 +1,440 @@
+/**
+ * File: src/assets/css/clisyc-search-results.css
+ * Styles for the [clisyc_search_results] shortcode and archive pages.
+ * 
+ * Uses CSS variables from the color system for consistency.
+ * 
+ * @package ClientSync
+ */
+
+/* ==========================================================================
+   CSS Variables - Fallbacks for standalone use
+   ========================================================================== */
+
+.clisyc-archive-wrapper {
+    --clisyc-card-bg: #ffffff;
+    --clisyc-card-border: #e5e7eb;
+    --clisyc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --clisyc-card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1), 0 6px 10px rgba(0, 0, 0, 0.08);
+    --clisyc-text-primary: #1f2937;
+    --clisyc-text-secondary: #6b7280;
+    --clisyc-text-muted: #9ca3af;
+    --clisyc-divider: #f3f4f6;
+    --clisyc-tag-bg: #f3f4f6;
+    --clisyc-tag-text: #4b5563;
+    --clisyc-radius-sm: 6px;
+    --clisyc-radius-md: 10px;
+    --clisyc-radius-lg: 14px;
+}
+
+/* ==========================================================================
+   Archive Header & Search Form Container
+   ========================================================================== */
+
+.clisyc-archive-header {
+    margin-bottom: 2rem;
+}
+
+.clisyc-archive-header .page-title {
+    font-size: var(--clisyc-font-size-2xl, 1.875rem);
+    font-weight: 700;
+    color: var(--clisyc-text-primary);
+    margin: 1.5rem 0 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--clisyc-divider);
+}
+
+/* ==========================================================================
+   Results Container - Grid Layout
+   ========================================================================== */
+
+.clisyc-archive-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.clisyc-availability-results-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+/* Single column on smaller screens */
+@media (max-width: 720px) {
+    .clisyc-availability-results-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   Result Card - Main Container
+   ========================================================================== */
+
+.clisyc-result-card {
+    background: var(--clisyc-card-bg);
+    border: 1px solid var(--clisyc-card-border);
+    border-radius: var(--clisyc-radius-lg);
+    box-shadow: var(--clisyc-card-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.clisyc-result-card:hover {
+    box-shadow: var(--clisyc-card-shadow-hover);
+    transform: translateY(-3px);
+    border-color: var(--clisyc-accent-bg, #3b82f6);
+}
+
+/* ==========================================================================
+   Card Image
+   ========================================================================== */
+
+.clisyc-result-card__image {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+.clisyc-result-card__image a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.clisyc-result-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.clisyc-result-card:hover .clisyc-result-card__image img {
+    transform: scale(1.05);
+}
+
+/* Placeholder when no image */
+.clisyc-result-card__image:empty::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+}
+
+/* ==========================================================================
+   Card Content Area
+   ========================================================================== */
+
+.clisyc-result-card__content {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* ==========================================================================
+   Card Header & Title
+   ========================================================================== */
+
+.clisyc-result-card__header {
+    margin-bottom: 0.75rem;
+}
+
+.clisyc-result-card__title {
+    font-size: var(--clisyc-font-size-lg, 1.25rem);
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0;
+    color: var(--clisyc-text-primary);
+}
+
+.clisyc-result-card__title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.clisyc-result-card__title a:hover {
+    color: var(--clisyc-accent-bg, #3b82f6);
+}
+
+/* ==========================================================================
+   Card Attributes - Tag/Pill Style
+   ========================================================================== */
+
+.clisyc-result-card__attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+}
+
+.clisyc-result-card__attributes li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--clisyc-tag-bg);
+    color: var(--clisyc-tag-text);
+    border-radius: 100px;
+    font-size: var(--clisyc-font-size-sm, 0.8125rem);
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.clisyc-result-card__attributes li .dashicons {
+    font-size: var(--clisyc-font-size-sm, 14px);
+    width: 1em;
+    height: 1em;
+    color: var(--clisyc-icon-text, #6b7280);
+    flex-shrink: 0;
+}
+
+/* Icon-only pill (for certain attribute types) */
+.clisyc-result-card__attributes li.icon-only {
+    padding: 0.35rem 0.5rem;
+}
+
+/* ==========================================================================
+   Card Description / Excerpt
+   ========================================================================== */
+
+.clisyc-result-card__description {
+    color: var(--clisyc-text-secondary);
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+    
+    /* Clamp to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.clisyc-result-card__description p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Card Actions / Button
+   ========================================================================== */
+
+.clisyc-result-card__actions {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--clisyc-divider);
+}
+
+.clisyc-result-card__actions .button,
+.clisyc-result-card__actions a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--clisyc-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Primary button styling - uses accent colors */
+.clisyc-result-card__actions .button-primary,
+.clisyc-result-card__actions a.button-primary {
+    background: var(--clisyc-accent-bg, #3b82f6);
+    color: var(--clisyc-accent-text, #ffffff);
+    border: 2px solid var(--clisyc-accent-bg, #3b82f6);
+}
+
+.clisyc-result-card__actions .button-primary:hover,
+.clisyc-result-card__actions a.button-primary:hover {
+    background: var(--clisyc-accent-hover-bg, #2563eb);
+    border-color: var(--clisyc-accent-hover-bg, #2563eb);
+    color: var(--clisyc-accent-hover-text, #ffffff);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+}
+
+/* Secondary/outline button */
+.clisyc-result-card__actions .button-secondary,
+.clisyc-result-card__actions a.button-secondary {
+    background: transparent;
+    color: var(--clisyc-accent-bg, #3b82f6);
+    border: 2px solid var(--clisyc-accent-bg, #3b82f6);
+}
+
+.clisyc-result-card__actions .button-secondary:hover,
+.clisyc-result-card__actions a.button-secondary:hover {
+    background: var(--clisyc-accent-bg, #3b82f6);
+    color: var(--clisyc-accent-text, #ffffff);
+}
+
+/* ==========================================================================
+   No Results Message
+   ========================================================================== */
+
+.clisyc-no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--clisyc-card-bg);
+    border: 1px solid var(--clisyc-card-border);
+    border-radius: var(--clisyc-radius-lg);
+}
+
+.clisyc-no-results p {
+    color: var(--clisyc-text-secondary);
+    font-size: var(--clisyc-font-size-md, 1.0625rem);
+    margin: 0;
+}
+
+.clisyc-no-results::before {
+    content: '🔍';
+    display: block;
+    font-size: var(--clisyc-font-size-2xl, 2.5rem);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* ==========================================================================
+   Pagination
+   ========================================================================== */
+
+.clisyc-archive-wrapper .nav-links,
+.clisyc-archive-wrapper .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--clisyc-divider);
+}
+
+.clisyc-archive-wrapper .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: var(--clisyc-font-size-sm, 0.875rem);
+    font-weight: 500;
+    color: var(--clisyc-text-secondary);
+    background: var(--clisyc-card-bg);
+    border: 1px solid var(--clisyc-card-border);
+    border-radius: var(--clisyc-radius-sm);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.clisyc-archive-wrapper .page-numbers:hover {
+    color: var(--clisyc-accent-bg, #3b82f6);
+    border-color: var(--clisyc-accent-bg, #3b82f6);
+    background: #f0f7ff;
+}
+
+.clisyc-archive-wrapper .page-numbers.current {
+    background: var(--clisyc-accent-bg, #3b82f6);
+    color: var(--clisyc-accent-text, #ffffff);
+    border-color: var(--clisyc-accent-bg, #3b82f6);
+}
+
+.clisyc-archive-wrapper .page-numbers.dots {
+    border: none;
+    background: transparent;
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    .clisyc-result-card__content {
+        padding: 1rem 1.25rem 1.25rem;
+    }
+    
+    .clisyc-result-card__title {
+        font-size: var(--clisyc-font-size-md, 1.125rem);
+    }
+    
+    .clisyc-result-card__attributes li {
+        font-size: var(--clisyc-font-size-xs, 0.75rem);
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .clisyc-result-card__description {
+        font-size: var(--clisyc-font-size-sm, 0.875rem);
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* ==========================================================================
+   Dark Mode Support
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .clisyc-archive-wrapper {
+        --clisyc-card-bg: #1f2937;
+        --clisyc-card-border: #374151;
+        --clisyc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+        --clisyc-card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.4);
+        --clisyc-text-primary: #f3f4f6;
+        --clisyc-text-secondary: #9ca3af;
+        --clisyc-divider: #374151;
+        --clisyc-tag-bg: #374151;
+        --clisyc-tag-text: #d1d5db;
+    }
+    
+    .clisyc-archive-wrapper .page-numbers:hover {
+        background: #2d3748;
+    }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+    .clisyc-result-card {
+        border-width: 2px;
+    }
+    
+    .clisyc-result-card__title a:hover {
+        text-decoration: underline;
+    }
+    
+    .clisyc-result-card__attributes li {
+        border: 1px solid currentColor;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .clisyc-result-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+    
+    .clisyc-result-card__actions {
+        display: none;
+    }
+}

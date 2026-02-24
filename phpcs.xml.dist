@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<ruleset name="Client Sync Coding Standards">
+	<description>PHP_CodeSniffer configuration for the Client Sync plugin.</description>
+
+	<!-- Scan plugin source files only -->
+	<file>./src/shared/includes/</file>
+	<file>./src/free/</file>
+	<file>./src/pro/</file>
+
+	<!-- Exclude vendor and build artifacts -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+	<exclude-pattern>*/tmp/*</exclude-pattern>
+	<exclude-pattern>*/assets/dist/*</exclude-pattern>
+
+	<!-- Show progress and use colors -->
+	<arg value="sp"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+
+	<!-- WordPress Coding Standards (core rules) -->
+	<rule ref="WordPress-Core">
+		<!-- Allow short array syntax -->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+		<!-- Allow short ternaries -->
+		<exclude name="WordPress.PHP.DisallowShortTernary"/>
+	</rule>
+
+	<!-- WordPress Extra (security, performance) -->
+	<rule ref="WordPress-Extra">
+		<!-- We handle nonce verification at the top of each handler method -->
+		<exclude name="WordPress.Security.NonceVerification.Missing"/>
+	</rule>
+
+	<!-- WordPress Security Rules -->
+	<rule ref="WordPress.Security"/>
+
+	<!-- WordPress Database Rules -->
+	<rule ref="WordPress.DB"/>
+
+	<!-- Minimum supported PHP version -->
+	<config name="minimum_supported_wp_version" value="6.0"/>
+	<config name="testVersion" value="8.1-"/>
+
+	<!-- Text domain for i18n -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="client-sync"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         >
+
+    <php>
+        <env name="WP_TESTS_DIR" value="tmp/wordpress-tests-lib" />
+        <env name="WP_CORE_DIR" value="tmp/wordpress/" />
+        <!-- START: THE FINAL FIX -->
+        <!-- This line explicitly tells the WP test suite where to find the config file. -->
+        <env name="WP_TESTS_CONFIG_PATH" value="wp-tests-config.php" />
+        <!-- END: THE FINAL FIX -->
+    </php>
+
+    <coverage>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory>src/free</directory>
+            <directory>src/pro</directory>
+            <directory>src/assets/vendor</directory>
+        </exclude>
+        <report>
+            <clover outputFile="tests/coverage/clover.xml"/>
+            <html outputDirectory="tests/coverage/html"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="Client Sync Unit Tests">
+            <directory suffix="Test.php">./tests/unit/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

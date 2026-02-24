@@ -1,0 +1,169 @@
+/**
+ * File: src/assets/src/shared/skeleton-loader.css
+ * Skeleton loading placeholder styles for Client Sync React apps.
+ *
+ * @package ClientSync
+ */
+
+/* ── Pulse animation ──────────────────────────────────── */
+
+@keyframes clisyc-skeleton-shimmer {
+	0%   { background-position: -400px 0; }
+	100% { background-position: 400px 0; }
+}
+
+.clisyc-skeleton-pulse {
+	background: linear-gradient(
+		90deg,
+		#e2e8f0 25%,
+		#f1f5f9 50%,
+		#e2e8f0 75%
+	);
+	background-size: 800px 100%;
+	animation: clisyc-skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Card skeleton ────────────────────────────────────── */
+
+.clisyc-skeleton-card {
+	padding: 20px;
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	margin-bottom: 16px;
+}
+
+/* ── Table skeleton ───────────────────────────────────── */
+
+.clisyc-skeleton-table {
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.clisyc-skeleton-table-header {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+	gap: 16px;
+	padding: 14px 16px;
+	background: #f8fafc;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-skeleton-table-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+	gap: 16px;
+	padding: 12px 16px;
+	border-bottom: 1px solid #f1f5f9;
+}
+
+.clisyc-skeleton-table-row:last-child {
+	border-bottom: none;
+}
+
+/* ── Calendar skeleton ────────────────────────────────── */
+
+.clisyc-skeleton-calendar {
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.clisyc-skeleton-calendar-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 16px;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-skeleton-calendar-header {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 8px;
+	padding: 10px 12px;
+	background: #f8fafc;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-skeleton-calendar-row {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 0;
+	border-bottom: 1px solid #f1f5f9;
+}
+
+.clisyc-skeleton-calendar-row:last-child {
+	border-bottom: none;
+}
+
+.clisyc-skeleton-calendar-cell {
+	padding: 8px 6px;
+	min-height: 60px;
+	border-right: 1px solid #f1f5f9;
+}
+
+.clisyc-skeleton-calendar-cell:last-child {
+	border-right: none;
+}
+
+/* ── Timeline skeleton ────────────────────────────────── */
+
+.clisyc-skeleton-timeline {
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.clisyc-skeleton-timeline-header {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	padding: 12px 16px;
+	background: #f8fafc;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-skeleton-timeline-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 10px 16px;
+	border-bottom: 1px solid #f1f5f9;
+}
+
+.clisyc-skeleton-timeline-row:last-child {
+	border-bottom: none;
+}
+
+.clisyc-skeleton-timeline-blocks {
+	flex: 1;
+	position: relative;
+	height: 28px;
+}
+
+/* ── Filters skeleton ─────────────────────────────────── */
+
+.clisyc-skeleton-filters {
+	display: flex;
+	gap: 16px;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+.clisyc-skeleton-filter-group {
+	flex: 1;
+	min-width: 140px;
+}
+
+/* ── Dark mode support (for admin sidebar context) ────── */
+
+.clisyc-fullscreen .clisyc-skeleton-pulse {
+	background: linear-gradient(
+		90deg,
+		#e2e8f0 25%,
+		#f1f5f9 50%,
+		#e2e8f0 75%
+	);
+	background-size: 800px 100%;
+}

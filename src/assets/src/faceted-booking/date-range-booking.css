@@ -1,0 +1,337 @@
+/**
+ * File: src/assets/src/faceted-booking/date-range-booking.css
+ * Styles for the DateRangeBooking component.
+ *
+ * Note: This should be imported into the main style.css or bundled separately.
+ *
+ * @package    ClientSync
+ * @subpackage ClientSync/Assets/CSS
+ */
+
+/* ==========================================================================
+   Date Range Booking Container
+   ========================================================================== */
+
+.clisyc-date-range-booking {
+    padding: 1.5rem;
+    background: var(--clisyc-card-bg, #ffffff);
+    border-radius: var(--clisyc-radius-lg, 12px);
+    border: 1px solid var(--clisyc-card-border, #e5e7eb);
+}
+
+.clisyc-date-range-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--clisyc-divider, #f3f4f6);
+}
+
+.clisyc-date-range-header h3 {
+    margin: 0 0 0.5rem;
+    font-size: var(--clisyc-font-size-xl, 1.25rem);
+    font-weight: 600;
+    color: var(--clisyc-text-primary, #1f2937);
+}
+
+.clisyc-stay-requirement {
+    margin: 0;
+    font-size: var(--clisyc-font-size-sm, 0.875rem);
+    color: var(--clisyc-text-secondary, #6b7280);
+}
+
+/* ==========================================================================
+   Date Picker Container
+   ========================================================================== */
+
+.clisyc-date-picker-container {
+    margin-bottom: 1.5rem;
+}
+
+.clisyc-date-picker-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    font-weight: 500;
+    color: var(--clisyc-text-primary, #1f2937);
+}
+
+.clisyc-date-range-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    border: 1px solid var(--clisyc-card-border, #e5e7eb);
+    border-radius: var(--clisyc-radius-md, 8px);
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clisyc-date-range-input:hover {
+    border-color: var(--clisyc-accent-bg, #3b82f6);
+}
+
+.clisyc-date-range-input:focus {
+    outline: none;
+    border-color: var(--clisyc-accent-bg, #3b82f6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ==========================================================================
+   Validation Error
+   ========================================================================== */
+
+.clisyc-validation-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--clisyc-radius-md, 8px);
+    color: #991b1b;
+    font-size: var(--clisyc-font-size-sm, 0.875rem);
+}
+
+.clisyc-validation-error .dashicons {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+}
+
+/* ==========================================================================
+   Selected Dates Summary
+   ========================================================================== */
+
+.clisyc-selected-dates-summary {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background: var(--clisyc-available-bg, #d1fae5);
+    border-radius: var(--clisyc-radius-md, 8px);
+}
+
+.clisyc-date-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.clisyc-date-label {
+    font-size: var(--clisyc-font-size-sm, 0.875rem);
+    color: var(--clisyc-available-text, #065f46);
+}
+
+.clisyc-date-value {
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    font-weight: 600;
+    color: var(--clisyc-available-text, #065f46);
+}
+
+.clisyc-nights-total {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(6, 95, 70, 0.2);
+}
+
+.clisyc-nights-total .clisyc-date-value {
+    font-size: var(--clisyc-font-size-lg, 1.125rem);
+}
+
+/* ==========================================================================
+   Book Now Button
+   ========================================================================== */
+
+.clisyc-date-range-booking .clisyc-submit-button {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    font-weight: 600;
+}
+
+.clisyc-date-range-booking .clisyc-submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Calendar Legend
+   ========================================================================== */
+
+.clisyc-calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--clisyc-divider, #f3f4f6);
+}
+
+.clisyc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--clisyc-font-size-sm, 0.8125rem);
+    color: var(--clisyc-text-secondary, #6b7280);
+}
+
+.clisyc-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.clisyc-legend-available .clisyc-legend-dot {
+    background: var(--clisyc-available-bg, #d1fae5);
+    border: 1px solid var(--clisyc-available-text, #065f46);
+}
+
+.clisyc-legend-booked .clisyc-legend-dot {
+    background: var(--clisyc-booked-bg, #fee2e2);
+    border: 1px solid var(--clisyc-booked-text, #991b1b);
+}
+
+/* ==========================================================================
+   Loading Indicator
+   ========================================================================== */
+
+.clisyc-loading-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    color: var(--clisyc-text-secondary, #6b7280);
+}
+
+/* ==========================================================================
+   Placeholder (No Selection)
+   ========================================================================== */
+
+.clisyc-booking-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    padding: 2rem;
+    background: var(--clisyc-card-bg, #ffffff);
+    border-radius: var(--clisyc-radius-lg, 12px);
+    border: 2px dashed var(--clisyc-card-border, #e5e7eb);
+    text-align: center;
+}
+
+.clisyc-booking-placeholder p {
+    margin: 0;
+    font-size: var(--clisyc-font-size-base, 0.9375rem);
+    color: var(--clisyc-text-secondary, #6b7280);
+}
+
+/* ==========================================================================
+   Confirmation Modal - Date Range Specific
+   ========================================================================== */
+
+.clisyc-confirmation-dates {
+    text-align: left;
+}
+
+.clisyc-confirmation-dates p {
+    margin: 0.5rem 0;
+}
+
+.clisyc-nights-highlight {
+    margin-top: 1rem !important;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--clisyc-divider, #f3f4f6);
+    font-size: var(--clisyc-font-size-lg, 1.125rem);
+    text-align: center;
+}
+
+.clisyc-nights-highlight strong {
+    font-size: var(--clisyc-font-size-xl, 1.5rem);
+    color: var(--clisyc-accent-bg, #3b82f6);
+}
+
+/* ==========================================================================
+   Litepicker Customization
+   ========================================================================== */
+
+.litepicker {
+    font-family: inherit;
+    font-size: var(--clisyc-font-size-base, 14px);
+}
+
+.litepicker .container__months {
+    border-radius: var(--clisyc-radius-lg, 12px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.litepicker .container__months .month-item-header {
+    padding: 0.75rem;
+    font-weight: 600;
+    color: var(--clisyc-text-primary, #1f2937);
+}
+
+.litepicker .container__days .day-item {
+    border-radius: var(--clisyc-radius-sm, 6px);
+    transition: all 0.15s ease;
+}
+
+.litepicker .container__days .day-item:hover {
+    background: var(--clisyc-available-bg, #d1fae5);
+    color: var(--clisyc-available-text, #065f46);
+}
+
+.litepicker .container__days .day-item.is-locked {
+    background: var(--clisyc-booked-bg, #fee2e2);
+    color: var(--clisyc-booked-text, #991b1b);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.litepicker .container__days .day-item.is-locked:hover {
+    background: var(--clisyc-booked-bg, #fee2e2);
+    cursor: not-allowed;
+}
+
+.litepicker .container__days .day-item.is-start-date,
+.litepicker .container__days .day-item.is-end-date {
+    background: var(--clisyc-accent-bg, #3b82f6);
+    color: var(--clisyc-accent-text, #ffffff);
+}
+
+.litepicker .container__days .day-item.is-in-range {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--clisyc-accent-bg, #3b82f6);
+}
+
+.litepicker .container__tooltip {
+    background: var(--clisyc-text-primary, #1f2937);
+    border-radius: var(--clisyc-radius-sm, 6px);
+    font-size: var(--clisyc-font-size-sm, 0.8125rem);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .litepicker .container__months {
+        flex-direction: column;
+    }
+
+    .clisyc-calendar-legend {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-date-range-booking {
+        padding: 1rem;
+    }
+
+    .clisyc-date-range-header h3 {
+        font-size: var(--clisyc-font-size-lg, 1.125rem);
+    }
+}

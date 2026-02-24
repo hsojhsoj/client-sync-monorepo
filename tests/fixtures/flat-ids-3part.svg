@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <!-- Section: VIP (2 rows, 3 seats each) -->
+  <rect id="vip-row1-seat1" x="10" y="10" width="20" height="20" data-category="vip" />
+  <rect id="vip-row1-seat2" x="40" y="10" width="20" height="20" data-category="vip" />
+  <rect id="vip-row1-seat3" x="70" y="10" width="20" height="20" data-category="vip" />
+  <rect id="vip-row2-seat1" x="10" y="40" width="20" height="20" data-category="vip" />
+  <rect id="vip-row2-seat2" x="40" y="40" width="20" height="20" data-category="vip" />
+  <rect id="vip-row2-seat3" x="70" y="40" width="20" height="20" data-category="vip" />
+
+  <!-- Section: General (2 rows, 4 seats each) -->
+  <rect id="general-row1-seat1" x="10" y="100" width="20" height="20" />
+  <rect id="general-row1-seat2" x="40" y="100" width="20" height="20" />
+  <rect id="general-row1-seat3" x="70" y="100" width="20" height="20" />
+  <rect id="general-row1-seat4" x="100" y="100" width="20" height="20" />
+  <rect id="general-row2-seat1" x="10" y="130" width="20" height="20" />
+  <rect id="general-row2-seat2" x="40" y="130" width="20" height="20" />
+  <rect id="general-row2-seat3" x="70" y="130" width="20" height="20" />
+  <rect id="general-row2-seat4" x="100" y="130" width="20" height="20" />
+
+  <!-- Non-seat elements (should be ignored by parser) -->
+  <rect id="stage" x="150" y="80" width="100" height="30" fill="#333" />
+  <text id="title" x="200" y="20">Venue Layout</text>
+</svg>

@@ -1,0 +1,13 @@
+/vendor/
+/node_modules/
+/build/
+/tmp/
+*.zip
+
+# Claude Code
+.claude/
+
+# Playwright
+/tests/e2e/.auth/
+/test-results/
+/playwright-report/

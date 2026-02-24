@@ -1,0 +1,39 @@
+{
+  "name": "clisyc-monorepo-assets",
+  "version": "1.0.0",
+  "description": "Asset building for Client Sync.",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf src/assets/dist build/blocks",
+    "prebuild": "npm run clean",
+    "build": "wp-scripts build && wp-scripts build --config webpack.block.config.js",
+    "start": "wp-scripts start",
+    "start:block": "wp-scripts start --config webpack.block.config.js",
+    "test:js": "wp-scripts test-unit-js --config jest.config.js --passWithNoTests",
+    "test:e2e": "npx playwright test",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:admin": "npx playwright test --project=auth-setup --project=admin",
+    "test:e2e:frontend": "npx playwright test --project=frontend"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^15.0.5",
+    "@testing-library/user-event": "^14.5.2",
+    "@wordpress/scripts": "^27.6.0"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.20",
+    "@fullcalendar/daygrid": "^6.1.20",
+    "@fullcalendar/interaction": "^6.1.20",
+    "@fullcalendar/list": "^6.1.20",
+    "@fullcalendar/react": "^6.1.20",
+    "@fullcalendar/resource-timeline": "^6.1.20",
+    "@fullcalendar/timegrid": "^6.1.20",
+    "@xyflow/react": "^12.8.3",
+    "html5-qrcode": "^2.3.8",
+    "qrcode-generator": "^2.0.4",
+    "react-beautiful-dnd": "^13.1.1"
+  }
+}

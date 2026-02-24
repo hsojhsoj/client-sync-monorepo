@@ -1,0 +1,270 @@
+/**
+ * File: src/assets/css/clisyc-admin-calendar.css
+ * Admin calendar styling with proper color contrast.
+ * 
+ * FIXES:
+ * 1. Ensures text is readable on all event backgrounds
+ * 2. Available slots use dark text on light green backgrounds
+ * 3. Booked events use dark red text on light red backgrounds
+ * 4. Blocked slots use dark gray text on light gray backgrounds
+ */
+
+/* ==========================================================================
+   Base Calendar Styles
+   ========================================================================== */
+
+/* Force text color inheritance from textColor property */
+.fc-event,
+.fc-event .fc-event-main,
+.fc-event .fc-event-time,
+.fc-event .fc-event-title {
+    color: inherit !important;
+}
+
+/* ==========================================================================
+   Available Slots - Light green background, dark green text
+   ========================================================================== */
+
+.clisyc-available-slot {
+    /* These are fallbacks - PHP now sets these via event data */
+    background-color: var(--clisyc-available-bg, #d1fae5) !important;
+    border-color: var(--clisyc-available-bg, #d1fae5) !important;
+    color: var(--clisyc-available-text, #065f46) !important;
+}
+
+.clisyc-available-slot .fc-event-main,
+.clisyc-available-slot .fc-event-time,
+.clisyc-available-slot .fc-event-title,
+.clisyc-available-slot .fc-event-dimensions,
+.clisyc-available-slot .fc-event-dimensions small {
+    color: var(--clisyc-available-text, #065f46) !important;
+}
+
+/* ==========================================================================
+   Booked Events - Light red background, dark red text
+   ========================================================================== */
+
+.clisyc-booked-event {
+    /* These are fallbacks - PHP now sets these via event data */
+    background-color: var(--clisyc-booked-bg, #fee2e2) !important;
+    border-color: var(--clisyc-booked-bg, #fee2e2) !important;
+    color: var(--clisyc-booked-text, #991b1b) !important;
+}
+
+.clisyc-booked-event .fc-event-main,
+.clisyc-booked-event .fc-event-time,
+.clisyc-booked-event .fc-event-title,
+.clisyc-booked-event .fc-event-dimensions,
+.clisyc-booked-event .fc-event-dimensions small {
+    color: var(--clisyc-booked-text, #991b1b) !important;
+}
+
+/* ==========================================================================
+   Blocked Slots - Light gray background, dark gray text
+   ========================================================================== */
+
+.clisyc-blocked-slot {
+    /* These are fallbacks - PHP now sets these via event data */
+    background-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+    border-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+    color: var(--clisyc-blocked-text, #374151) !important;
+}
+
+.clisyc-blocked-slot .fc-event-main,
+.clisyc-blocked-slot .fc-event-time,
+.clisyc-blocked-slot .fc-event-title,
+.clisyc-blocked-slot .fc-event-dimensions,
+.clisyc-blocked-slot .fc-event-dimensions small {
+    color: var(--clisyc-blocked-text, #374151) !important;
+}
+
+/* ==========================================================================
+   Override FullCalendar's Default White Text
+   ========================================================================== */
+
+/* FullCalendar sets --fc-event-text-color: #fff by default */
+.fc .clisyc-available-slot,
+.fc .clisyc-booked-event,
+.fc .clisyc-blocked-slot {
+    --fc-event-text-color: inherit;
+}
+
+/* Override any inline styles from FullCalendar that force white text */
+.fc-timegrid-event .fc-event-main,
+.fc-daygrid-event .fc-event-main {
+    color: inherit;
+}
+
+/* Ensure dimensions section inherits color */
+.fc-event .fc-event-dimensions {
+    margin-top: 2px;
+    line-height: 1.3;
+}
+
+.fc-event .fc-event-dimensions small {
+    opacity: 0.85;
+    font-size: 0.85em;
+}
+
+/* ==========================================================================
+   Event Title and Time Styling
+   ========================================================================== */
+
+.fc-event .fc-event-time {
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.fc-event .fc-event-title {
+    font-weight: 500;
+    white-space: normal;
+    overflow: visible;
+}
+
+/* ==========================================================================
+   List View Styles
+   ========================================================================== */
+
+.fc-list-event.clisyc-available-slot .fc-list-event-dot {
+    border-color: var(--clisyc-available-bg, #d1fae5) !important;
+    background-color: var(--clisyc-available-bg, #d1fae5) !important;
+}
+
+.fc-list-event.clisyc-booked-event .fc-list-event-dot {
+    border-color: var(--clisyc-booked-bg, #fee2e2) !important;
+    background-color: var(--clisyc-booked-bg, #fee2e2) !important;
+}
+
+.fc-list-event.clisyc-blocked-slot .fc-list-event-dot {
+    border-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+    background-color: var(--clisyc-blocked-bg, #e5e7eb) !important;
+}
+
+/* List view text colors */
+.fc-list-event.clisyc-available-slot td {
+    color: var(--clisyc-available-text, #065f46);
+}
+
+.fc-list-event.clisyc-booked-event td {
+    color: var(--clisyc-booked-text, #991b1b);
+}
+
+.fc-list-event.clisyc-blocked-slot td {
+    color: var(--clisyc-blocked-text, #374151);
+}
+
+/* ==========================================================================
+   Day Grid (Month View) Styles
+   ========================================================================== */
+
+.fc-daygrid-event.clisyc-available-slot,
+.fc-daygrid-event.clisyc-booked-event,
+.fc-daygrid-event.clisyc-blocked-slot {
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* ==========================================================================
+   Template Background Events (Master Schedule)
+   ========================================================================== */
+
+.fc-bg-event {
+    opacity: 0.15 !important;
+    background-color: #3b82f6 !important;
+}
+
+/* ==========================================================================
+   Calendar Legend
+   ========================================================================== */
+
+.clisyc-calendar-legend {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.clisyc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 13px;
+    color: #374151;
+}
+
+.clisyc-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-legend-color.available {
+    background-color: var(--clisyc-available-bg, #d1fae5);
+}
+
+.clisyc-legend-color.booked {
+    background-color: var(--clisyc-booked-bg, #fee2e2);
+}
+
+.clisyc-legend-color.blocked {
+    background-color: var(--clisyc-blocked-bg, #e5e7eb);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .fc-event .fc-event-dimensions {
+        display: none;
+    }
+    
+    .fc-event .fc-event-title {
+        font-size: 0.85em;
+    }
+    
+    .clisyc-calendar-legend {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* ==========================================================================
+   Hover States
+   ========================================================================== */
+
+.clisyc-available-slot:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.clisyc-booked-event:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.clisyc-blocked-slot:hover {
+    filter: brightness(0.95);
+}
+
+/* ==========================================================================
+   Tooltip Styles
+   ========================================================================== */
+
+.clisyc-calendar-tooltip {
+    background: #1f2937 !important;
+    color: #fff !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    max-width: 250px !important;
+    z-index: 10000 !important;
+}
+
+.clisyc-calendar-tooltip .ui-tooltip-content {
+    padding: 0 !important;
+}

@@ -1,0 +1,436 @@
+[
+  {
+    "template_meta": {
+      "title": "Medical / Chiropractic Clinic",
+      "description": "A setup for clinics that need to manage practitioners, services, AND bookable resources like treatment rooms. Shows advanced relationships."
+    },
+    "options": {
+      "clisyc_calendar_start_time": "08:00",
+      "clisyc_calendar_end_time": "18:00",
+      "clisyc_calendar_slot_duration": "00:15:00",
+      "clisyc_standard_schedule_calendar_start_time": "09:00",
+      "clisyc_standard_schedule_calendar_end_time": "17:00",
+      "clisyc_frontend_calendar_style": {
+        "initial_view": "timeGridWeek"
+      },
+      "clisyc_login_page_url": "",
+      "clisyc_custom_fields": [],
+      "clisyc_custom_fields_order": [],
+      "clisyc_appointment_custom_fields": [],
+      "clisyc_appointment_custom_fields_order": [],
+      "clisyc_notification_settings": {
+        "new_appointment_client": {
+          "admin_enabled": 1,
+          "admin_subject": "",
+          "admin_body": "",
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "new_appointment_admin": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "appointment_updated_admin": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "appointment_cancelled_admin": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "appointment_cancelled_by_client": {
+          "admin_enabled": 1,
+          "admin_subject": "",
+          "admin_body": "",
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "new_client_registration_client": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "new_client_registration_admin": {
+          "admin_enabled": 1,
+          "admin_subject": "",
+          "admin_body": ""
+        },
+        "payment_successful_client": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "payment_successful_admin": {
+          "admin_enabled": 1,
+          "admin_subject": "",
+          "admin_body": ""
+        },
+        "scheduled_payment_failure_client": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        },
+        "scheduled_payment_failure_admin": {
+          "admin_enabled": 1,
+          "admin_subject": "",
+          "admin_body": ""
+        },
+        "appointment_reminder": {
+          "client_enabled": 1,
+          "client_subject": "",
+          "client_body": ""
+        }
+      },
+      "clisyc_email_from_name": "test blank wp",
+      "clisyc_email_from_address": "josh@dependentmedia.com",
+      "clisyc_notification_admin_recipients": "josh@dependentmedia.com",
+      "clisyc_reminder_settings": {
+        "enabled": 1,
+        "lead_time_value": 24,
+        "lead_time_unit": "hours"
+      },
+      "clisyc_auto_generate_enabled": "1",
+      "clisyc_auto_generate_lookahead": "14",
+      "clisyc_wc_integration_enabled": "",
+      "clisyc_wc_appointment_product_id": "0",
+      "clisyc_min_booking_notice_minutes": "60",
+      "clisyc_global_buffer_before": "0",
+      "clisyc_global_buffer_after": "0",
+      "clisyc_calendar_show_overview_availability": "none",
+      "clisyc_calendar_smart_start_date": "",
+      "clisyc_mysql_convert_tz_override": "auto_detect",
+      "clisyc_calendar_color_settings": {
+        "available_bg": "",
+        "available_text": "",
+        "booked_bg": "",
+        "booked_text": "",
+        "blocked_bg": "",
+        "blocked_text": "",
+        "font_size": ""
+      },
+      "clisyc_enable_self_service": "",
+      "clisyc_cancellation_cutoff_value": "24",
+      "clisyc_cancellation_cutoff_unit": "hours",
+      "clisyc_cancellation_refund_policy": "none",
+      "clisyc_appointment_view_page_id": "220",
+      "clisyc_booking_page_id": "226",
+      "clisyc_booking_success_page_id": "345",
+      "clisyc_antispam_honeypot_enabled": true,
+      "clisyc_antispam_time_check_enabled": true,
+      "clisyc_recaptcha_v3_settings": {
+        "enabled": false,
+        "site_key": "",
+        "secret_key": ""
+      },
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_service": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true
+          },
+          "clisyc_pract": {
+            "enabled": true,
+            "primary": false,
+            "frontend_visible": true
+          },
+          "clisyc_room": {
+            "enabled": true,
+            "primary": false,
+            "frontend_visible": true
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_service",
+          "clisyc_pract",
+          "clisyc_room"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_service": {
+          "singular": "Service",
+          "plural": "Services",
+          "icon": "dashicons-book-alt",
+          "public": true
+        },
+        "clisyc_pract": {
+          "singular": "Practitioner",
+          "plural": "Practitioners",
+          "icon": "dashicons-businessperson",
+          "public": true
+        },
+        "clisyc_room": {
+          "singular": "Room",
+          "plural": "Treatment Rooms",
+          "icon": "dashicons-store",
+          "public": true
+        }
+      },
+      "clisyc_graph_visual_state": {
+        "clisyc_service": {
+          "position": {
+            "x": -272,
+            "y": 51
+          },
+          "isExpanded": true
+        },
+        "clisyc_pract": {
+          "position": {
+            "x": -271,
+            "y": 197
+          },
+          "isExpanded": true
+        },
+        "clisyc_room": {
+          "position": {
+            "x": -268,
+            "y": 347
+          },
+          "isExpanded": true
+        },
+        "clisyc_service:1556": {
+          "position": {
+            "x": 31,
+            "y": 131
+          },
+          "isExpanded": false
+        },
+        "clisyc_service:1555": {
+          "position": {
+            "x": 262,
+            "y": 128
+          },
+          "isExpanded": false
+        },
+        "clisyc_pract:1558": {
+          "position": {
+            "x": 20,
+            "y": 330
+          },
+          "isExpanded": false
+        },
+        "clisyc_pract:1557": {
+          "position": {
+            "x": 294,
+            "y": 324
+          },
+          "isExpanded": false
+        },
+        "clisyc_room:1560": {
+          "position": {
+            "x": 71,
+            "y": 504
+          },
+          "isExpanded": false
+        },
+        "clisyc_room:1559": {
+          "position": {
+            "x": 274,
+            "y": 503
+          },
+          "isExpanded": false
+        }
+      }
+    },
+    "cpts": {
+      "clisyc_service": [
+        {
+          "original_id": 1556,
+          "post_name": "new-patient-consultation",
+          "post_title": "New Patient Consultation",
+          "post_content": "",
+          "post_meta": {
+            "_clisyc_price": [
+              "120"
+            ],
+            "_clisyc_color": [
+              "#00a0d2"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"1\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"10:00\"}]},\"3\":{\"slots\":[{\"start\":\"14:00\",\"end\":\"15:00\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "original_id": 1555,
+          "post_name": "standard-adjustment",
+          "post_title": "Standard Adjustment",
+          "post_content": "",
+          "post_meta": {
+            "_clisyc_price": [
+              "65"
+            ],
+            "_clisyc_color": [
+              "#72aee6"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"0\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"09:20\"}]}}}}"
+            ]
+          }
+        }
+      ],
+      "clisyc_pract": [
+        {
+          "original_id": 1558,
+          "post_name": "dr-evans",
+          "post_title": "Dr. Evans",
+          "post_content": "",
+          "post_meta": {
+            "_clisyc_color": [
+              "#007cba"
+            ]
+          }
+        },
+        {
+          "original_id": 1557,
+          "post_name": "dr-carter",
+          "post_title": "Dr. Carter",
+          "post_content": "",
+          "post_meta": {
+            "_clisyc_color": [
+              "#8f34cc"
+            ]
+          }
+        }
+      ],
+      "clisyc_room": [
+        {
+          "original_id": 1560,
+          "post_name": "adjustment-room-1",
+          "post_title": "Adjustment Room 1",
+          "post_content": "",
+          "post_meta": []
+        },
+        {
+          "original_id": 1559,
+          "post_name": "consultation-office",
+          "post_title": "Consultation Office",
+          "post_content": "",
+          "post_meta": []
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "parent_slug": "new-patient-consultation",
+        "parent_type": "clisyc_service",
+        "child_slug": "dr-evans",
+        "child_type": "clisyc_pract"
+      },
+      {
+        "parent_slug": "new-patient-consultation",
+        "parent_type": "clisyc_service",
+        "child_slug": "consultation-office",
+        "child_type": "clisyc_room"
+      },
+      {
+        "parent_slug": "dr-evans",
+        "parent_type": "clisyc_pract",
+        "child_slug": "consultation-office",
+        "child_type": "clisyc_room"
+      },
+      {
+        "parent_slug": "standard-adjustment",
+        "parent_type": "clisyc_service",
+        "child_slug": "dr-evans",
+        "child_type": "clisyc_pract"
+      },
+      {
+        "parent_slug": "standard-adjustment",
+        "parent_type": "clisyc_service",
+        "child_slug": "dr-carter",
+        "child_type": "clisyc_pract"
+      },
+      {
+        "parent_slug": "standard-adjustment",
+        "parent_type": "clisyc_service",
+        "child_slug": "adjustment-room-1",
+        "child_type": "clisyc_room"
+      },
+      {
+        "parent_slug": "dr-evans",
+        "parent_type": "clisyc_pract",
+        "child_slug": "adjustment-room-1",
+        "child_type": "clisyc_room"
+      },
+      {
+        "parent_slug": "dr-carter",
+        "parent_type": "clisyc_pract",
+        "child_slug": "adjustment-room-1",
+        "child_type": "clisyc_room"
+      },
+      {
+        "parent_slug": "new-patient-consultation",
+        "parent_type": "clisyc_service",
+        "child_slug": "dr-carter",
+        "child_type": "clisyc_pract"
+      },
+      {
+        "parent_slug": "dr-carter",
+        "parent_type": "clisyc_pract",
+        "child_slug": "consultation-office",
+        "child_type": "clisyc_room"
+      }
+    ],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment has been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"If you need to make changes, please contact us at {site_name}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Appointment Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming appointment.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"View details: {appointment_view_link}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"We look forward to seeing you!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment on {appointment_date_formatted} at {appointment_time} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"If this was a mistake or you would like to reschedule, please visit {site_url} or contact us.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your payment!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Payment method: {order_payment_method_title}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Appointment: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_6\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Booking Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New booking received from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Notes: {appointment_notes}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

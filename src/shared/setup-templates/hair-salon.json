@@ -1,0 +1,252 @@
+[
+  {
+    "template_meta": {
+      "title": "Hair Salon / Spa",
+      "description": "A classic setup for businesses with staff (Stylists), services, and multiple locations. Ideal for salons, spas, and similar businesses. Includes two membership plans with recurring subscriptions.",
+      "recommended": false,
+      "new": true
+    },
+    "options": {
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_service": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true
+          },
+          "clisyc_pract": {
+            "enabled": true,
+            "primary": false,
+            "frontend_visible": true
+          },
+          "clisyc_loc": {
+            "enabled": true,
+            "primary": false,
+            "frontend_visible": true
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_loc",
+          "clisyc_service",
+          "clisyc_pract"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_service": {
+          "singular": "Service",
+          "plural": "Services",
+          "icon": "dashicons-admin-customizer",
+          "public": true
+        },
+        "clisyc_pract": {
+          "singular": "Stylist",
+          "plural": "Stylists",
+          "icon": "dashicons-businessperson",
+          "public": true
+        },
+        "clisyc_loc": {
+          "singular": "Location",
+          "plural": "Locations",
+          "icon": "dashicons-location-alt",
+          "public": true
+        }
+      }
+    },
+    "cpts": {
+      "clisyc_service": [
+        {
+          "post_name": "haircut-style",
+          "post_title": "Haircut & Style",
+          "post_meta": {
+            "_clisyc_price": [
+              "65"
+            ],
+            "_clisyc_color": [
+              "#e53983"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"2\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"10:00\"}]},\"4\":{\"slots\":[{\"start\":\"13:00\",\"end\":\"14:00\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "full-color",
+          "post_title": "Full Color Treatment",
+          "post_meta": {
+            "_clisyc_price": [
+              "150"
+            ],
+            "_clisyc_color": [
+              "#8f34cc"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"5\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"11:00\"}]}}}}"
+            ]
+          }
+        }
+      ],
+      "clisyc_pract": [
+        {
+          "post_name": "jessica",
+          "post_title": "Jessica (Senior Stylist)",
+          "post_meta": {
+            "_clisyc_color": [
+              "#e53983"
+            ]
+          }
+        },
+        {
+          "post_name": "david",
+          "post_title": "David (Stylist)",
+          "post_meta": {
+            "_clisyc_color": [
+              "#007cba"
+            ]
+          }
+        }
+      ],
+      "clisyc_loc": [
+        {
+          "post_name": "downtown-salon",
+          "post_title": "Downtown Salon",
+          "post_meta": {}
+        },
+        {
+          "post_name": "westside-studio",
+          "post_title": "Westside Studio",
+          "post_meta": {}
+        }
+      ],
+      "clisyc_member_plan": [
+        {
+          "post_name": "essentials-membership",
+          "post_title": "Essentials Membership",
+          "post_meta": {
+            "_clisyc_plan_price_display": ["$59/month"],
+            "_clisyc_plan_description": ["Monthly cut & styling"],
+            "_clisyc_member_plan_access_rules": [
+              [
+                {"rule_type": "booking_limit", "service_id": 0, "limit_value": 2, "limit_period": "per_month", "discount_value": 0},
+                {"rule_type": "discount_percent", "service_id": 0, "limit_value": 0, "limit_period": "per_month", "discount_value": 15}
+              ]
+            ]
+          }
+        },
+        {
+          "post_name": "vip-beauty",
+          "post_title": "VIP Beauty",
+          "post_meta": {
+            "_clisyc_plan_price_display": ["$149/month"],
+            "_clisyc_plan_description": ["Unlimited services, priority booking"],
+            "_clisyc_member_plan_access_rules": [
+              [
+                {"rule_type": "booking_limit", "service_id": 0, "limit_value": 1, "limit_period": "unlimited", "discount_value": 0},
+                {"rule_type": "discount_percent", "service_id": 0, "limit_value": 0, "limit_period": "per_month", "discount_value": 30}
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "pages": [
+      {
+        "post_name": "membership-plans",
+        "post_title": "Membership Plans",
+        "post_content": "[clisyc_membership_plans columns=\"2\"]"
+      }
+    ],
+    "relationships": [
+      {
+        "parent_type": "clisyc_pract",
+        "parent_slug": "jessica",
+        "child_type": "clisyc_service",
+        "child_slug": "haircut-style"
+      },
+      {
+        "parent_type": "clisyc_pract",
+        "parent_slug": "jessica",
+        "child_type": "clisyc_service",
+        "child_slug": "full-color"
+      },
+      {
+        "parent_type": "clisyc_pract",
+        "parent_slug": "jessica",
+        "child_type": "clisyc_loc",
+        "child_slug": "downtown-salon"
+      },
+      {
+        "parent_type": "clisyc_pract",
+        "parent_slug": "jessica",
+        "child_type": "clisyc_loc",
+        "child_slug": "westside-studio"
+      },
+      {
+        "parent_type": "clisyc_pract",
+        "parent_slug": "david",
+        "child_type": "clisyc_service",
+        "child_slug": "haircut-style"
+      },
+      {
+        "parent_type": "clisyc_pract",
+        "parent_slug": "david",
+        "child_type": "clisyc_loc",
+        "child_slug": "downtown-salon"
+      }
+    ],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment has been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"If you need to make changes, please contact us at {site_name}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Appointment Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming appointment.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"View details: {appointment_view_link}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"We look forward to seeing you!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment on {appointment_date_formatted} at {appointment_time} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"If this was a mistake or you would like to reschedule, please visit {site_url} or contact us.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your payment!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Payment method: {order_payment_method_title}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Appointment: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_6\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Booking Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New booking received from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Notes: {appointment_notes}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

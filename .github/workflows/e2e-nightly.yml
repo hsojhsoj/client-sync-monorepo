@@ -1,0 +1,55 @@
+##
+# E2E Nightly — Client Sync Monorepo
+#
+# Runs Playwright E2E tests against the live WordPress test site on a
+# nightly schedule (3 AM UTC) and on manual dispatch.
+#
+# These tests are separated from the main CI pipeline because:
+#   - They hit a live external site (testblankwp.dependentmedia.com)
+#   - They take 3+ minutes to complete
+#   - They require stored authentication state
+##
+name: E2E Nightly
+
+on:
+  schedule:
+    - cron: '0 3 * * *'   # 3 AM UTC daily
+  workflow_dispatch:        # Manual trigger
+
+jobs:
+  e2e-tests:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Create auth directory
+        run: mkdir -p tests/e2e/.auth
+
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=list,html
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

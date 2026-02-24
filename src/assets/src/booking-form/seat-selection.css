@@ -1,0 +1,411 @@
+/**
+ * Frontend seat selection styles.
+ *
+ * Imported by SeatMapPicker.js so any entry point (booking-form, hybrid-booking)
+ * that uses the component automatically gets these styles via webpack.
+ */
+
+/* ── Seat Map Container ──────────────────────────────────────────── */
+.clisyc-seat-map {
+	position: relative;
+}
+
+.clisyc-seat-map svg,
+.clisyc-seat-map__svg-wrap svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.clisyc-seat-map__svg-wrap {
+	position: relative;
+}
+
+/* Seat status colors applied via inline styles from JS,
+   but these provide baseline cursor + transition. */
+.clisyc-seat-map [data-seat-id],
+.clisyc-seat-map__svg-wrap [data-seat-id] {
+	cursor: pointer;
+	transition: fill 0.15s ease, stroke 0.15s ease, opacity 0.15s ease;
+}
+
+.clisyc-seat-map [data-seat-id]:hover,
+.clisyc-seat-map__svg-wrap [data-seat-id]:hover {
+	opacity: 0.8;
+}
+
+.clisyc-seat-map [data-seat-status="booked"],
+.clisyc-seat-map [data-seat-status="held"],
+.clisyc-seat-map__svg-wrap [data-seat-status="booked"],
+.clisyc-seat-map__svg-wrap [data-seat-status="held"] {
+	cursor: not-allowed;
+}
+
+.clisyc-seat-map [data-seat-status="disabled"],
+.clisyc-seat-map__svg-wrap [data-seat-status="disabled"] {
+	cursor: default;
+	pointer-events: none;
+}
+
+/* ── Seat Legend ──────────────────────────────────────────────────── */
+.clisyc-seat-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin: 12px 0;
+	font-size: 13px;
+}
+
+.clisyc-seat-legend__item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.clisyc-seat-legend__swatch {
+	width: 16px;
+	height: 16px;
+	border-radius: 3px;
+	border: 1px solid;
+}
+
+/* ── Seat Selection Info ─────────────────────────────────────────── */
+.clisyc-seat-selection-info {
+	margin: 12px 0;
+	padding: 12px 16px;
+	background: #eff6ff;
+	border: 1px solid #bfdbfe;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+/* ── Selected Seats List (tags) ────────────────────────────────── */
+.clisyc-selected-seats-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.clisyc-selected-seat-tag {
+	display: inline-block;
+	padding: 3px 10px;
+	background: #dbeafe;
+	border: 1px solid #93c5fd;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	color: #1e40af;
+	white-space: nowrap;
+}
+
+.clisyc-seat-selection-info__count {
+	font-weight: 600;
+}
+
+/* ── Hold Timer ──────────────────────────────────────────────────── */
+.clisyc-hold-timer {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 10px;
+	background: #fef3c7;
+	border: 1px solid #fcd34d;
+	border-radius: 4px;
+	font-size: 13px;
+	color: #92400e;
+}
+
+.clisyc-hold-timer--expiring {
+	background: #fee2e2;
+	border-color: #fca5a5;
+	color: #991b1b;
+	animation: clisyc-pulse 1s ease-in-out infinite;
+}
+
+@keyframes clisyc-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.6; }
+}
+
+/* ── Section Header (active section indicator) ───────────────────── */
+.clisyc-section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 16px;
+	margin-bottom: 12px;
+	background: #f8fafc;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+}
+
+.clisyc-section-header__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.clisyc-section-header__name {
+	font-weight: 600;
+	font-size: 16px;
+	color: #1e293b;
+}
+
+.clisyc-section-header__category {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	background: #e0f2fe;
+	color: #0369a1;
+	border: 1px solid #7dd3fc;
+}
+
+.clisyc-section-header__category--vip {
+	background: #ede9fe;
+	color: #6d28d9;
+	border-color: #c4b5fd;
+}
+
+.clisyc-section-header__category--general,
+.clisyc-section-header__category--standard {
+	background: #d1fae5;
+	color: #065f46;
+	border-color: #6ee7b7;
+}
+
+.clisyc-section-header__category--premium {
+	background: #fef3c7;
+	color: #92400e;
+	border-color: #fcd34d;
+}
+
+/* ── Overview SVG Section Selector ───────────────────────────────── */
+.clisyc-overview-svg {
+	margin: 12px 0;
+}
+
+.clisyc-overview-svg svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.clisyc-overview-svg [data-section-id] {
+	transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.clisyc-overview-svg [data-section-id]:hover {
+	opacity: 0.75;
+	filter: brightness(1.05);
+}
+
+/* ── Heatmap Legend (below overview SVG) ──────────────────────────── */
+.clisyc-heatmap-legend {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin: 8px 0 16px;
+	font-size: 12px;
+	color: #64748b;
+}
+
+.clisyc-heatmap-legend__item {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.clisyc-heatmap-legend__swatch {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 3px;
+	border: 1.5px solid;
+}
+
+/* ── Section Overview (text card fallback) ────────────────────────── */
+.clisyc-section-overview {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 12px;
+	margin: 16px 0;
+}
+
+.clisyc-section-overview .clisyc-section-card {
+	padding: 16px;
+	background: #fff;
+	border: 2px solid #e5e7eb;
+	border-radius: 8px;
+	text-align: center;
+	cursor: pointer;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.clisyc-section-overview .clisyc-section-card:hover {
+	border-color: #3b82f6;
+	box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.clisyc-section-card__name {
+	font-weight: 600;
+	font-size: 16px;
+	margin-bottom: 4px;
+}
+
+.clisyc-section-card__info {
+	font-size: 13px;
+	color: #6b7280;
+}
+
+/* ── Expanded / Fullscreen Seat Selection ──────────────────────── */
+
+/* Toolbar — sits above the seat map with expand toggle */
+.clisyc-seat-map__toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+}
+
+.clisyc-seat-map__toolbar-label {
+	font-weight: 600;
+	font-size: 15px;
+	color: #1e293b;
+}
+
+.clisyc-seat-map__expand-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 6px 12px;
+	background: #f1f5f9;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #475569;
+	cursor: pointer;
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.clisyc-seat-map__expand-btn:hover {
+	background: #e2e8f0;
+	border-color: #94a3b8;
+}
+
+.clisyc-seat-map__expand-btn svg {
+	width: 14px;
+	height: 14px;
+}
+
+/* Fullscreen overlay */
+.clisyc-seat-map--expanded {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 100001;
+	background: #ffffff;
+	overflow-y: auto;
+	padding: 24px 32px;
+	box-sizing: border-box;
+	animation: clisyc-seat-expand 0.25s ease-out;
+}
+
+@keyframes clisyc-seat-expand {
+	from {
+		opacity: 0;
+		transform: scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+/* Expanded toolbar is slightly larger */
+.clisyc-seat-map--expanded .clisyc-seat-map__toolbar {
+	margin-bottom: 16px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.clisyc-seat-map--expanded .clisyc-seat-map__toolbar-label {
+	font-size: 18px;
+}
+
+/* Done bar — sticky bottom action bar in expanded mode */
+.clisyc-seat-map__done-bar {
+	position: sticky;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 0;
+	margin-top: 16px;
+	background: #ffffff;
+	border-top: 1px solid #e2e8f0;
+}
+
+.clisyc-seat-map__done-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.clisyc-seat-map__done-count {
+	font-size: 14px;
+	color: #64748b;
+}
+
+.clisyc-seat-map__done-count strong {
+	color: #1e293b;
+}
+
+.clisyc-seat-map__done-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px 24px;
+	background: #3b82f6;
+	color: #ffffff;
+	border: none;
+	border-radius: 8px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.clisyc-seat-map__done-btn:hover {
+	background: #2563eb;
+}
+
+/* Body scroll lock class (applied via JS) */
+body.clisyc-seat-map-lock {
+	overflow: hidden !important;
+}
+
+/* ── Mobile: Expanded Mode ─────────────────────────────────────── */
+@media (max-width: 600px) {
+	.clisyc-seat-map--expanded {
+		padding: 16px;
+	}
+
+	.clisyc-seat-map__done-bar {
+		padding: 12px 0;
+	}
+
+	.clisyc-seat-map__done-btn {
+		padding: 10px 16px;
+		font-size: 14px;
+	}
+}

@@ -1,0 +1,417 @@
+/**
+ * File: src/assets/css/clisyc-calendar.css
+ * Calendar styling using CSS custom properties for theming.
+ *
+ * UPDATED: Removed !important declarations. Colors are now injected via
+ * CSS variables in :root scope by class-frontend.php using wp_add_inline_style.
+ *
+ * Variable Reference:
+ * --clisyc-available-bg, --clisyc-available-text, --clisyc-available-border
+ * --clisyc-booked-bg, --clisyc-booked-text, --clisyc-booked-border
+ * --clisyc-blocked-bg, --clisyc-blocked-text, --clisyc-blocked-border
+ * --clisyc-accent-bg, --clisyc-accent-text
+ * --clisyc-accent-hover-bg, --clisyc-accent-hover-text
+ * --clisyc-icon-bg, --clisyc-icon-text
+ * --clisyc-event-font-size (optional)
+ */
+
+/* =====================================================
+   GENERAL EVENT STYLING
+   ===================================================== */
+.fc-event {
+    font-size: var(--clisyc-event-font-size, 0.85em);
+    padding: 1px 3px;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    box-shadow: none;
+    transition: all 0.15s ease;
+}
+
+.fc-event .fc-event-time {
+    font-weight: normal;
+}
+
+/* =====================================================
+   AVAILABLE SLOTS - Bookable time slots
+   ===================================================== */
+.fc-event.clisyc-available-slot {
+    background-color: var(--clisyc-available-bg);
+    border-color: var(--clisyc-available-border);
+    color: var(--clisyc-available-text);
+    cursor: pointer;
+}
+
+.fc-event.clisyc-available-slot:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fc-event.clisyc-available-slot .fc-event-time,
+.fc-event.clisyc-available-slot .fc-event-title {
+    color: var(--clisyc-available-text);
+}
+
+/* Selected state for available slots */
+.fc-event.clisyc-available-slot.fc-event-selected {
+    filter: brightness(1.05);
+    box-shadow: 0 0 0 2px var(--clisyc-available-border),
+                0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* =====================================================
+   BOOKED SLOTS - Already reserved
+   ===================================================== */
+.fc-event.clisyc-booked-event,
+.fc-event.clisyc-unavailable-slot {
+    background-color: var(--clisyc-booked-bg);
+    border-color: var(--clisyc-booked-border);
+    color: var(--clisyc-booked-text);
+    cursor: default;
+    opacity: 0.9;
+}
+
+.fc-event.clisyc-booked-event:hover,
+.fc-event.clisyc-unavailable-slot:hover {
+    opacity: 1;
+}
+
+.fc-event.clisyc-booked-event .fc-event-time,
+.fc-event.clisyc-booked-event .fc-event-title,
+.fc-event.clisyc-unavailable-slot .fc-event-time,
+.fc-event.clisyc-unavailable-slot .fc-event-title {
+    color: var(--clisyc-booked-text);
+}
+
+/* =====================================================
+   BLOCKED SLOTS - Admin blocked periods
+   ===================================================== */
+.fc-event.clisyc-blocked-slot {
+    background-color: var(--clisyc-blocked-bg);
+    border-color: var(--clisyc-blocked-border);
+    color: var(--clisyc-blocked-text);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.fc-event.clisyc-blocked-slot .fc-event-time,
+.fc-event.clisyc-blocked-slot .fc-event-title {
+    color: var(--clisyc-blocked-text);
+}
+
+/* =====================================================
+   PAST / TOO SOON SLOTS - Unbookable due to timing
+   ===================================================== */
+.fc-event.clisyc-past-slot,
+.fc-event.clisyc-too-soon-slot {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* =====================================================
+   ADMIN CALENDAR - Editable slots
+   ===================================================== */
+
+/* Make available slots draggable in admin */
+.clisyc-admin-calendar .fc-event.clisyc-available-slot,
+.clisyc-admin-calendar .fc-event.clisyc-blocked-slot {
+    cursor: move;
+}
+
+/* Delete 'x' button on editable slots */
+.clisyc-delete-event {
+    float: right;
+    cursor: pointer;
+    padding: 0 4px;
+    margin-left: 5px;
+    font-weight: bold;
+    color: #e66f6f;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.fc-event.clisyc-available-slot:hover .clisyc-delete-event,
+.fc-event.clisyc-standard-slot:hover .clisyc-delete-event {
+    opacity: 1;
+    color: #dc3232;
+}
+
+.fc-event.clisyc-blocked-slot:hover .clisyc-delete-event {
+    opacity: 1;
+    color: #ffdddd;
+}
+
+/* =====================================================
+   TOOLBAR BUTTON STYLES
+   ===================================================== */
+
+/* WordPress-style Save Button in Header (Admin) */
+.fc .fc-saveAvailableSlotsButton-button {
+    margin-left: 0.5em;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    color: #2271b1;
+    border-color: #2271b1;
+    background: #f6f7f7;
+    vertical-align: top;
+}
+
+.fc .fc-saveAvailableSlotsButton-button:hover {
+    background: #f0f0f1;
+    border-color: #0a4b78;
+    color: #0a4b78;
+}
+
+.fc .fc-saveAvailableSlotsButton-button:disabled {
+    color: #a7aaad;
+    border-color: #dcdcde;
+    background: #f6f7f7;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   TIMEGRID VIEW (Week/Day)
+   ===================================================== */
+.fc-timegrid-event .fc-event-main,
+.fc-timegrid-event .fc-event-main-frame,
+.fc-timegrid-event .fc-event-time,
+.fc-timegrid-event .fc-event-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+
+/* =====================================================
+   DAYGRID VIEW (Month)
+   ===================================================== */
+.fc-daygrid-event .fc-event-title {
+    padding: 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* All-day events (date-range bookings) */
+.fc-daygrid-event.fc-daygrid-block-event {
+    border-radius: 3px;
+}
+
+/* =====================================================
+   FRONTEND BOOKING FORM - Higher specificity
+   ===================================================== */
+.clisyc-booking-form-app .fc-event.clisyc-available-slot {
+    background-color: var(--clisyc-available-bg);
+    border-color: var(--clisyc-available-border);
+    color: var(--clisyc-available-text);
+    cursor: pointer;
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-available-slot:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-available-slot.fc-event-selected {
+    filter: brightness(1.1);
+    box-shadow: 0 0 0 2px var(--clisyc-available-border),
+                0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .fc-event-time,
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .fc-event-title {
+    color: var(--clisyc-available-text);
+}
+
+/* Booked events in booking form */
+.clisyc-booking-form-app .fc-event.clisyc-booked-event {
+    background-color: var(--clisyc-booked-bg);
+    border-color: var(--clisyc-booked-border);
+    color: var(--clisyc-booked-text);
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-booked-event .fc-event-time,
+.clisyc-booking-form-app .fc-event.clisyc-booked-event .fc-event-title {
+    color: var(--clisyc-booked-text);
+}
+
+/* =====================================================
+   LITEPICKER DATE RANGE - Booked dates
+   ===================================================== */
+.litepicker .day-item.is-locked {
+    background-color: var(--clisyc-booked-bg);
+    color: var(--clisyc-booked-text);
+    text-decoration: line-through;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.litepicker .day-item.is-locked:hover {
+    background-color: var(--clisyc-booked-bg);
+    filter: brightness(0.95);
+}
+
+/* =====================================================
+   ACCENT COLORS - Buttons and interactive elements
+   ===================================================== */
+
+/* Primary action buttons */
+.clisyc-btn-primary,
+.clisyc-booking-form-app .clisyc-btn-primary {
+    background-color: var(--clisyc-accent-bg);
+    color: var(--clisyc-accent-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.clisyc-btn-primary:hover,
+.clisyc-booking-form-app .clisyc-btn-primary:hover {
+    background-color: var(--clisyc-accent-hover-bg);
+    color: var(--clisyc-accent-hover-text);
+}
+
+/* Icon containers */
+.clisyc-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--clisyc-icon-bg);
+    color: var(--clisyc-icon-text);
+}
+
+/* =====================================================
+   LOADING STATE
+   ===================================================== */
+.fc-initializing {
+    position: relative;
+    min-height: 200px;
+}
+
+.fc-initializing::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--clisyc-accent-bg, #3b82f6);
+    border-radius: 50%;
+    animation: clisyc-spin 1s linear infinite;
+}
+
+@keyframes clisyc-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* =====================================================
+   CALENDAR LEGEND (Optional)
+   ===================================================== */
+.clisyc-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.clisyc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.clisyc-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-legend-color.available {
+    background-color: var(--clisyc-available-bg);
+}
+
+.clisyc-legend-color.booked {
+    background-color: var(--clisyc-booked-bg);
+}
+
+.clisyc-legend-color.blocked {
+    background-color: var(--clisyc-blocked-bg);
+}
+
+/* =====================================================
+   RESPONSIVE ADJUSTMENTS
+   ===================================================== */
+@media (max-width: 768px) {
+    .fc-event {
+        font-size: 0.75em;
+        padding: 1px 2px;
+    }
+
+    .fc-toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+/* =====================================================
+   HIGH CONTRAST MODE SUPPORT
+   ===================================================== */
+@media (prefers-contrast: high) {
+    .fc-event {
+        border-width: 2px;
+    }
+
+    .fc-event.clisyc-available-slot {
+        border-color: #000;
+    }
+
+    .fc-event.clisyc-booked-event {
+        border-color: #000;
+    }
+
+    .fc-event.clisyc-blocked-slot {
+        border-color: #000;
+    }
+}
+
+/* =====================================================
+   DARK MODE SUPPORT (if theme provides)
+   ===================================================== */
+@media (prefers-color-scheme: dark) {
+    .clisyc-calendar-legend {
+        background: #1f2937;
+        color: #f9fafb;
+    }
+}

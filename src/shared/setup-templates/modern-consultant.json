@@ -1,0 +1,173 @@
+[
+  {
+    "template_meta": {
+      "title": "Modern Consultant / Coach",
+      "description": "A clean, simple setup for one-on-one appointments. Includes two membership plans with recurring subscriptions. Recommended for new users.",
+      "recommended": true,
+      "new": true
+    },
+    "options": {
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_service": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_service"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_service": {
+          "singular": "Service",
+          "plural": "Services",
+          "icon": "dashicons-businessperson",
+          "public": true
+        }
+      }
+    },
+    "cpts": {
+      "clisyc_service": [
+        {
+          "post_name": "30-min-intro-call",
+          "post_title": "30-Minute Intro Call",
+          "post_content": "A brief introductory call to discuss your needs and see if we're a good fit.",
+          "post_meta": {
+            "_clisyc_price": [
+              "0.00"
+            ],
+            "_clisyc_color": [
+              "#007cba"
+            ],
+            "_clisyc_capacity": [
+              "1"
+            ],
+            "_clisyc_booking_mode": [
+              "slot"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"1\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"09:30\"},{\"start\":\"09:30\",\"end\":\"10:00\"}]},\"3\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"09:30\"},{\"start\":\"09:30\",\"end\":\"10:00\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "1-hour-strategy-session",
+          "post_title": "1-Hour Strategy Session",
+          "post_content": "A full hour dedicated to deep-diving into your strategy and planning next steps.",
+          "post_meta": {
+            "_clisyc_price": [
+              "150.00"
+            ],
+            "_clisyc_color": [
+              "#8f34cc"
+            ],
+            "_clisyc_capacity": [
+              "1"
+            ],
+            "_clisyc_booking_mode": [
+              "slot"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"2\":{\"slots\":[{\"start\":\"13:00\",\"end\":\"14:00\"},{\"start\":\"14:00\",\"end\":\"15:00\"}]},\"4\":{\"slots\":[{\"start\":\"13:00\",\"end\":\"14:00\"},{\"start\":\"14:00\",\"end\":\"15:00\"}]}}}}"
+            ]
+          }
+        }
+      ],
+      "clisyc_member_plan": [
+        {
+          "post_name": "monthly-retainer",
+          "post_title": "Monthly Retainer",
+          "post_meta": {
+            "_clisyc_plan_price_display": ["$199/month"],
+            "_clisyc_plan_description": ["Regular coaching with priority scheduling"],
+            "_clisyc_member_plan_access_rules": [
+              [
+                {"rule_type": "booking_limit", "service_id": 0, "limit_value": 4, "limit_period": "per_month", "discount_value": 0},
+                {"rule_type": "discount_percent", "service_id": 0, "limit_value": 0, "limit_period": "per_month", "discount_value": 20}
+              ]
+            ]
+          }
+        },
+        {
+          "post_name": "vip-access",
+          "post_title": "VIP Access",
+          "post_meta": {
+            "_clisyc_plan_price_display": ["$499/month"],
+            "_clisyc_plan_description": ["Unlimited sessions, maximum flexibility"],
+            "_clisyc_member_plan_access_rules": [
+              [
+                {"rule_type": "booking_limit", "service_id": 0, "limit_value": 1, "limit_period": "unlimited", "discount_value": 0},
+                {"rule_type": "discount_percent", "service_id": 0, "limit_value": 0, "limit_period": "per_month", "discount_value": 40}
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "pages": [
+      {
+        "post_name": "membership-plans",
+        "post_title": "Membership Plans",
+        "post_content": "[clisyc_membership_plans columns=\"2\"]"
+      }
+    ],
+    "relationships": [],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment has been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"If you need to make changes, please contact us at {site_name}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Appointment Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming appointment.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"View details: {appointment_view_link}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"We look forward to seeing you!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment on {appointment_date_formatted} at {appointment_time} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"If this was a mistake or you would like to reschedule, please visit {site_url} or contact us.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your payment!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Payment method: {order_payment_method_title}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Appointment: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_6\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Booking Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New booking received from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Notes: {appointment_notes}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

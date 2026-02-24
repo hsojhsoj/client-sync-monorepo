@@ -1,0 +1,273 @@
+/**
+ * Seat selection admin + frontend styles.
+ */
+
+/* ── Admin: SVG Preview ────────────────────────────────────────────── */
+.clisyc-svg-preview {
+	margin-top: 16px;
+	padding: 16px;
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.clisyc-svg-preview svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.clisyc-svg-preview__empty {
+	margin-top: 16px;
+	padding: 32px;
+	background: #f9fafb;
+	border: 2px dashed #d1d5db;
+	border-radius: 6px;
+	text-align: center;
+	color: #6b7280;
+}
+
+/* ── Admin: Example SVG Actions (inside empty preview) ───────────── */
+.clisyc-svg-example-actions {
+	margin-top: 16px;
+	padding: 16px 20px;
+	background: #eff6ff;
+	border: 1px solid #bfdbfe;
+	border-radius: 6px;
+	display: inline-block;
+	text-align: left;
+}
+
+.clisyc-svg-example-actions__intro {
+	margin: 0 0 10px;
+	font-size: 13px;
+	color: #1e40af;
+	font-weight: 500;
+}
+
+.clisyc-svg-example-actions__buttons {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.clisyc-svg-example-actions__hint {
+	margin: 10px 0 0;
+	font-size: 12px;
+	color: #6b7280;
+	font-style: italic;
+}
+
+.clisyc-example-download-link {
+	font-size: 12px;
+}
+
+/* ── Admin: Layout Summary ─────────────────────────────────────────── */
+.clisyc-layout-summary ul {
+	list-style: disc;
+}
+
+/* ── Frontend: Seat Map ────────────────────────────────────────────── */
+.clisyc-seat-map {
+	position: relative;
+}
+
+.clisyc-seat-map svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+/* Seat status colors applied via inline styles from JS,
+   but these provide baseline cursor + transition. */
+.clisyc-seat-map [data-seat-id] {
+	cursor: pointer;
+	transition: fill 0.15s ease, stroke 0.15s ease, opacity 0.15s ease;
+}
+
+.clisyc-seat-map [data-seat-id]:hover {
+	opacity: 0.8;
+}
+
+.clisyc-seat-map [data-seat-status="booked"],
+.clisyc-seat-map [data-seat-status="held"] {
+	cursor: not-allowed;
+}
+
+.clisyc-seat-map [data-seat-status="disabled"] {
+	cursor: default;
+	pointer-events: none;
+}
+
+/* ── Frontend: Seat Legend ──────────────────────────────────────────── */
+.clisyc-seat-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin: 12px 0;
+	font-size: 13px;
+}
+
+.clisyc-seat-legend__item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.clisyc-seat-legend__swatch {
+	width: 16px;
+	height: 16px;
+	border-radius: 3px;
+	border: 1px solid;
+}
+
+/* ── Frontend: Seat Selection Info ─────────────────────────────────── */
+.clisyc-seat-selection-info {
+	margin: 12px 0;
+	padding: 12px 16px;
+	background: #eff6ff;
+	border: 1px solid #bfdbfe;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+.clisyc-seat-selection-info__count {
+	font-weight: 600;
+}
+
+/* ── Frontend: Hold Timer ──────────────────────────────────────────── */
+.clisyc-hold-timer {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 10px;
+	background: #fef3c7;
+	border: 1px solid #fcd34d;
+	border-radius: 4px;
+	font-size: 13px;
+	color: #92400e;
+}
+
+.clisyc-hold-timer--expiring {
+	background: #fee2e2;
+	border-color: #fca5a5;
+	color: #991b1b;
+	animation: clisyc-pulse 1s ease-in-out infinite;
+}
+
+@keyframes clisyc-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.6; }
+}
+
+/* ── Frontend: Section Header (active section indicator) ──────────── */
+.clisyc-section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 16px;
+	margin-bottom: 12px;
+	background: #f8fafc;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+}
+
+.clisyc-section-header__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.clisyc-section-header__name {
+	font-weight: 600;
+	font-size: 16px;
+	color: #1e293b;
+}
+
+.clisyc-section-header__category {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	background: #e0f2fe;
+	color: #0369a1;
+	border: 1px solid #7dd3fc;
+}
+
+.clisyc-section-header__category--vip {
+	background: #ede9fe;
+	color: #6d28d9;
+	border-color: #c4b5fd;
+}
+
+.clisyc-section-header__category--general,
+.clisyc-section-header__category--standard {
+	background: #d1fae5;
+	color: #065f46;
+	border-color: #6ee7b7;
+}
+
+.clisyc-section-header__category--premium {
+	background: #fef3c7;
+	color: #92400e;
+	border-color: #fcd34d;
+}
+
+/* ── Frontend: Overview SVG Section Selector ──────────────────────── */
+.clisyc-overview-svg {
+	margin: 12px 0;
+}
+
+.clisyc-overview-svg svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.clisyc-overview-svg [data-section-id] {
+	transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.clisyc-overview-svg [data-section-id]:hover {
+	opacity: 0.75;
+	filter: brightness( 1.05 );
+}
+
+/* ── Frontend: Section Overview (text card fallback) ──────────────── */
+.clisyc-section-overview {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 180px, 1fr ) );
+	gap: 12px;
+	margin: 16px 0;
+}
+
+.clisyc-section-card {
+	padding: 16px;
+	background: #fff;
+	border: 2px solid #e5e7eb;
+	border-radius: 8px;
+	text-align: center;
+	cursor: pointer;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.clisyc-section-card:hover {
+	border-color: #3b82f6;
+	box-shadow: 0 2px 8px rgba( 59, 130, 246, 0.15 );
+}
+
+.clisyc-section-card__name {
+	font-weight: 600;
+	font-size: 16px;
+	margin-bottom: 4px;
+}
+
+.clisyc-section-card__info {
+	font-size: 13px;
+	color: #6b7280;
+}

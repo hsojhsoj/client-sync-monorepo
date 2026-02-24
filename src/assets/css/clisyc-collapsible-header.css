@@ -1,0 +1,922 @@
+/**
+ * File: src/shared/assets/css/clisyc-collapsible-header.css
+ * Collapsible Header Styles for Client Sync Booking Form
+ * 
+ * IMPORTANT: This file loads AFTER clisyc-frontend-style.css and style.css
+ * to override the default timezone header and make it collapsible.
+ * 
+ * Features:
+ * - Collapsed state: Compact bar with timezone, UTC offset, and current time
+ * - Expanded state: Full timezone selector, world map, and clock
+ * - Persisted preference via localStorage
+ * - Responsive design for all screen sizes
+ * 
+ * Updated: 2026-01-19
+ */
+
+/* ============================================
+   BASE OVERRIDE - Reset wrapper styles
+   ============================================ */
+
+/* Override ALL existing .clisyc-time-selection-wrapper styles */
+.clisyc-booking-form-app .clisyc-time-selection-wrapper {
+    display: block !important;
+    padding: 0 !important;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+/* ============================================
+   COLLAPSED STATE - Compact Bar
+   ============================================ */
+
+.clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-collapsed {
+    padding: 12px 16px !important;
+}
+
+.clisyc-header-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 16px;
+}
+
+.clisyc-header-compact-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #374151;
+    flex-wrap: wrap;
+}
+
+.clisyc-header-compact-info > .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #6b7280;
+}
+
+.clisyc-header-compact-timezone {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.clisyc-header-compact-divider {
+    color: #d1d5db;
+    margin: 0 2px;
+}
+
+.clisyc-header-compact-time {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    background: #ffffff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    font-variant-numeric: tabular-nums;
+}
+
+.clisyc-header-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.clisyc-header-toggle-btn:hover {
+    background: #f3f4f6;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+}
+
+.clisyc-header-toggle-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.clisyc-header-toggle-text {
+    /* Visible by default */
+}
+
+/* ============================================
+   EXPANDED STATE - Full Controls
+   ============================================ */
+
+.clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-expanded {
+    padding: 20px !important;
+}
+
+.clisyc-header-expanded-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Top Row: Timezone + Clock + Collapse Button */
+.clisyc-header-top-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+/* Timezone Filter in expanded mode */
+.clisyc-header-top-row .clisyc-timezone-filter-wrapper {
+    flex: 1 1 280px;
+    max-width: 400px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Keep existing label styles */
+.clisyc-header-top-row .clisyc-timezone-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #374151;
+}
+
+/* Fix timezone selector wrapper - must be full width */
+.clisyc-header-top-row .clisyc-timezone-selector {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.clisyc-header-top-row .clisyc-timezone-selector:hover {
+    border-color: #3b82f6;
+}
+
+.clisyc-header-top-row .clisyc-timezone-selector:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Make dropdown fill the wrapper and position chevron correctly */
+.clisyc-header-top-row .clisyc-timezone-selector select,
+.clisyc-header-top-row .clisyc-timezone-filter-wrapper select {
+    width: 100% !important;
+    height: 52px !important;
+    padding: 12px 40px 12px 16px !important;
+    font-size: 15px !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    cursor: pointer;
+}
+
+/* Custom chevron for dropdown */
+.clisyc-header-top-row .clisyc-timezone-selector::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #6b7280;
+    pointer-events: none;
+}
+
+/* Live Clock in expanded mode */
+.clisyc-header-top-row .clisyc-live-clock-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+}
+
+/* "Current Time" label - MUST be above the clock */
+.clisyc-header-top-row .clisyc-clock-label {
+    order: -1 !important; /* Force to top */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+/* Clock display row - analog clock + digital time side by side */
+.clisyc-header-top-row .clisyc-clock-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ============================================
+   ANALOG CLOCK STYLES
+   ============================================ */
+
+.clisyc-clock-icon-container {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border: 3px solid #d1d5db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    flex-shrink: 0;
+}
+
+.clisyc-clock-hand {
+    position: absolute;
+    background: #374151;
+    transform-origin: bottom center;
+    border-radius: 2px;
+}
+
+.clisyc-clock-hand-hour {
+    width: 3px;
+    height: 12px;
+    bottom: 50%;
+    left: calc(50% - 1.5px);
+}
+
+.clisyc-clock-hand-minute {
+    width: 2px;
+    height: 16px;
+    bottom: 50%;
+    left: calc(50% - 1px);
+}
+
+.clisyc-clock-center-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #374151;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.clisyc-header-top-row .clisyc-live-clock {
+    height: 52px !important;
+    min-width: 150px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px !important;
+    font-weight: 700;
+    padding: 0 20px !important;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Collapse Button */
+.clisyc-header-collapse-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-bottom: 4px; /* Align with bottom of dropdown/clock */
+}
+
+.clisyc-header-collapse-btn:hover {
+    background: #f3f4f6;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.clisyc-header-collapse-btn .dashicons {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+/* ============================================
+   TIMEZONE MAP - Base Container Styles
+   (These were in style.css TIMEZONE SECTION but are needed for the map)
+   ============================================ */
+
+.clisyc-timezone-map-wrapper {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.clisyc-timezone-map-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: visible;
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    background: transparent; /* No background - let image fill */
+}
+
+.clisyc-timezone-map-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+}
+
+.clisyc-timezone-map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.clisyc-timezone-highlight {
+    fill: rgba(59, 130, 246, 0.3);
+    transition: x 0.3s ease-out;
+}
+
+/* Red indicator line for visibility on colorful map - animated dash */
+.clisyc-timezone-indicator-line {
+    stroke: #dc2626;
+    stroke-width: 1.5;
+    stroke-dasharray: 4, 3;
+    animation: clisyc-dash-scroll 4s linear infinite;
+}
+
+.clisyc-timezone-indicator-dot {
+    position: absolute;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background: #dc2626;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: left 0.3s ease-out;
+    z-index: 10;
+}
+
+/* Size presets for TimezoneMap component */
+.clisyc-timezone-map-container.clisyc-map-small {
+    width: 120px;
+    height: 60px;
+}
+
+.clisyc-timezone-map-container.clisyc-map-medium {
+    width: 200px;
+    height: 100px;
+}
+
+.clisyc-timezone-map-container.clisyc-map-large {
+    width: 280px;
+    height: 150px;
+}
+
+/* ============================================
+   MAP ROW - Full Width (Expanded Header)
+   ============================================ */
+
+.clisyc-header-map-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0 8px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 4px;
+    background: transparent;
+}
+
+/* Map wrapper - center it */
+.clisyc-header-map-row .clisyc-timezone-map-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    background: transparent !important;
+    margin: 0 auto;
+}
+
+/* 
+ * Override the inline styles from TimezoneMap component
+ * The component sets style="width: 280px; height: 150px;" 
+ * We need !important to override inline styles
+ */
+.clisyc-header-map-row .clisyc-timezone-map-container {
+    width: 800px !important;
+    height: 410px !important; /* 800 / 1.95 aspect ratio */
+    max-width: calc(100vw - 340px) !important; /* Account for sidebar */
+    position: relative !important;
+    background: transparent !important;
+    border-radius: 10px;
+    overflow: visible;
+}
+
+/* When sidebar is collapsed, allow more width */
+.clisyc-sidebar-collapsed .clisyc-header-map-row .clisyc-timezone-map-container {
+    max-width: calc(100vw - 100px) !important;
+}
+
+/* Image fills container completely */
+.clisyc-header-map-row .clisyc-timezone-map-image,
+.clisyc-header-map-row .clisyc-timezone-map-container > img {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 10px;
+}
+
+/* ============================================
+   TIMEZONE MAP OVERLAY - SVG positioning fix
+   ============================================ */
+
+/* SVG overlay positioned absolutely on top of the image */
+.clisyc-header-map-row .clisyc-timezone-map-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.clisyc-header-map-row .clisyc-timezone-highlight {
+    fill: rgba(59, 130, 246, 0.3) !important;
+    stroke: none !important;
+}
+
+/* Make the indicator line VERY visible - red with animated dash */
+.clisyc-header-map-row .clisyc-timezone-indicator-line {
+    stroke: #dc2626 !important;
+    stroke-width: 2 !important;
+    stroke-opacity: 1 !important;
+    stroke-dasharray: 4, 3 !important;
+    animation: clisyc-dash-scroll 4s linear infinite !important;
+}
+
+/* Slow scrolling dash animation */
+@keyframes clisyc-dash-scroll {
+    0% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: -14; /* Total of dasharray (4+3) × 2 */
+    }
+}
+
+/* Fallback styles - ensure overlay elements always have correct colors */
+.clisyc-timezone-map-overlay .clisyc-timezone-highlight {
+    fill: rgba(59, 130, 246, 0.35) !important;
+}
+
+.clisyc-timezone-map-overlay .clisyc-timezone-indicator-line {
+    stroke: #dc2626 !important;
+    stroke-width: 2 !important;
+    stroke-dasharray: 4, 3 !important;
+    animation: clisyc-dash-scroll 4s linear infinite !important;
+}
+
+/* ============================================
+   GLOBAL FALLBACK - Ensure map overlay works 
+   regardless of parent structure
+   ============================================ */
+
+/* Container must be position relative for absolute overlay */
+.clisyc-timezone-map-container {
+    position: relative !important;
+}
+
+/* SVG overlay must be absolute positioned over the map */
+svg.clisyc-timezone-map-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 5 !important;
+    pointer-events: none !important;
+}
+
+/* Ensure highlight rectangle is visible */
+rect.clisyc-timezone-highlight {
+    fill: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Ensure indicator line is visible - bright red with animated dash */
+line.clisyc-timezone-indicator-line {
+    stroke: #dc2626 !important;
+    stroke-width: 1.5 !important;
+    stroke-dasharray: 4, 3 !important;
+    animation: clisyc-dash-scroll 4s linear infinite !important;
+}
+
+/* Ensure indicator dot is visible */
+div.clisyc-timezone-indicator-dot {
+    position: absolute !important;
+    z-index: 10 !important;
+    background: #dc2626 !important;
+}
+
+.clisyc-header-map-row .clisyc-timezone-indicator-dot {
+    position: absolute !important;
+    top: -6px !important;
+    width: 12px !important;
+    height: 12px !important;
+    background: #dc2626 !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 15 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============================================
+   TRANSITIONS & ANIMATIONS
+   ============================================ */
+
+.clisyc-time-selection-wrapper {
+    transition: padding 0.3s ease, max-height 0.3s ease;
+}
+
+.clisyc-header-compact,
+.clisyc-header-expanded-content {
+    animation: clisyc-header-fade-in 0.25s ease-out;
+}
+
+@keyframes clisyc-header-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   RESPONSIVE - Tablet (max-width: 900px)
+   ============================================ */
+
+@media (max-width: 900px) {
+    .clisyc-header-compact {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .clisyc-header-compact-info {
+        flex: 1 1 60%;
+        min-width: 250px;
+    }
+    
+    .clisyc-header-toggle-btn {
+        flex: 0 0 auto;
+    }
+    
+    /* Expanded mode adjustments */
+    .clisyc-header-top-row {
+        gap: 16px;
+    }
+    
+    .clisyc-header-top-row .clisyc-timezone-filter-wrapper {
+        flex: 1 1 90px;
+        max-width: none;
+    }
+    
+    /* Smaller map on tablet */
+    .clisyc-header-map-row .clisyc-timezone-map-container {
+        width: 600px !important;
+        height: 308px !important;
+        max-width: calc(100vw - 80px) !important;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - Mobile (max-width: 600px)
+   ============================================ */
+
+@media (max-width: 600px) {
+    .clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-collapsed {
+        padding: 10px 12px !important;
+    }
+    
+    .clisyc-header-compact {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .clisyc-header-compact-info {
+        justify-content: center;
+        min-width: auto;
+    }
+    
+    .clisyc-header-toggle-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Expanded mode - stack vertically */
+    .clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-expanded {
+        padding: 16px !important;
+    }
+    
+    .clisyc-header-top-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    
+    .clisyc-header-top-row .clisyc-timezone-filter-wrapper {
+        max-width: none;
+        order: 1;
+    }
+    
+    .clisyc-header-top-row .clisyc-live-clock-wrapper {
+        order: 2;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .clisyc-header-top-row .clisyc-live-clock {
+        flex: 1;
+        max-width: none;
+    }
+    
+    .clisyc-header-collapse-btn {
+        order: 3;
+        width: 100%;
+        height: 40px;
+        margin-bottom: 0;
+    }
+    
+    .clisyc-header-collapse-btn::after {
+        content: ' Collapse';
+        font-size: 14px;
+        font-weight: 500;
+        margin-left: 6px;
+    }
+    
+    .clisyc-header-map-row {
+        padding: 12px 0 4px;
+    }
+    
+    /* Smaller map on mobile */
+    .clisyc-header-map-row .clisyc-timezone-map-container {
+        width: 100% !important;
+        height: auto !important;
+        max-width: calc(100vw - 40px) !important;
+        aspect-ratio: 1.95 / 1;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - Small Mobile (max-width: 400px)
+   ============================================ */
+
+@media (max-width: 400px) {
+    .clisyc-header-compact-info {
+        font-size: 13px;
+        gap: 8px;
+    }
+    
+    .clisyc-header-compact-time {
+        font-size: 13px;
+        padding: 4px 10px;
+    }
+    
+    .clisyc-header-toggle-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .clisyc-header-top-row .clisyc-timezone-selector select,
+    .clisyc-header-top-row .clisyc-timezone-filter-wrapper select {
+        height: 46px !important;
+        font-size: 14px !important;
+    }
+    
+    .clisyc-header-top-row .clisyc-live-clock {
+        height: 46px !important;
+        font-size: 16px !important;
+    }
+}
+
+/* ============================================
+   UTC BADGE - Ensure visibility in both states
+   ============================================ */
+
+.clisyc-header-compact .clisyc-timezone-offset-badge,
+.clisyc-header-top-row .clisyc-timezone-offset-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 12px;
+}
+
+.clisyc-header-compact .clisyc-timezone-offset-badge::before,
+.clisyc-header-top-row .clisyc-timezone-offset-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #3b82f6;
+    border-radius: 50%;
+    animation: clisyc-pulse-dot 2s ease-in-out infinite;
+}
+
+/* ============================================
+   HIDE CONFLICTING ELEMENTS
+   When header is collapsed, hide original children
+   ============================================ */
+
+.clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-collapsed > .clisyc-timezone-filter-wrapper,
+.clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-collapsed > .clisyc-live-clock-wrapper,
+.clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-collapsed > .clisyc-timezone-map-wrapper,
+.clisyc-booking-form-app .clisyc-time-selection-wrapper.clisyc-header-collapsed > .clisyc-timezone-map {
+    display: none !important;
+}
+
+/* ============================================
+   ENHANCED LOADING OVERLAY
+   ============================================ */
+
+.clisyc-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.clisyc-loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 32px;
+    text-align: center;
+}
+
+/* Spinner ring */
+.clisyc-loading-spinner {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.clisyc-spinner-ring {
+    width: 100%;
+    height: 100%;
+    animation: clisyc-spinner-rotate 2s linear infinite;
+}
+
+.clisyc-spinner-track {
+    stroke: #e5e7eb;
+}
+
+.clisyc-spinner-progress {
+    stroke: #3b82f6;
+    stroke-linecap: round;
+    stroke-dasharray: 80, 200;
+    stroke-dashoffset: 0;
+    animation: clisyc-spinner-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes clisyc-spinner-rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes clisyc-spinner-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 80, 200;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 80, 200;
+        stroke-dashoffset: -125;
+    }
+}
+
+/* Loading text - below spinner */
+.clisyc-loading-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.clisyc-loading-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.clisyc-loading-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Progress bar (optional, for future use) */
+.clisyc-loading-progress {
+    width: 200px;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.clisyc-loading-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6);
+    background-size: 200% 100%;
+    animation: clisyc-progress-shimmer 1.5s ease-in-out infinite;
+    border-radius: 2px;
+}
+
+@keyframes clisyc-progress-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Slot count display */
+.clisyc-loading-count {
+    font-size: 13px;
+    color: #059669;
+    font-weight: 500;
+    margin-top: 4px;
+    min-height: 20px;
+}

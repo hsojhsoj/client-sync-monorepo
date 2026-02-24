@@ -1,0 +1,890 @@
+/* File: src/assets/css/clisyc-admin-style.css -> client-sync/assets/css/clisyc-admin-style.css */
+/* REFACTORED: Prefixes updated to 'clisyc' to meet WordPress.org standards. */
+
+/* --- General Admin Layout & Forms --- */
+.clisyc-section .fc { max-width: 100%; }
+.clisyc-appointment-meta-table tr.clisyc-meta-field-type-multi_checkbox td .clisyc-checkbox-group-horizontal label,
+.clisyc-appointment-meta-table tr.clisyc-meta-field-type-radio td .clisyc-radio-group-horizontal label { display: inline-block; margin-right: 15px !important; margin-bottom: 5px; white-space: nowrap; }
+.clisyc-appointment-meta-table tr.clisyc-meta-field-type-multi_checkbox td .clisyc-checkbox-group-vertical label,
+.clisyc-appointment-meta-table tr.clisyc-meta-field-type-radio td .clisyc-radio-group-vertical label { display: block; margin-bottom: 5px; }
+
+
+/* --- FullCalendar General Admin Styles --- */
+#clisyc-admin-calendar-container, #clisyc-manage-slots-calendar-container, #clisyc-standard-schedule-calendar-container { margin-top: 20px; background: #fff; padding: 15px; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0, 0, 0, .04); }
+.fc .fc-saveAvailableSlotsButton-button { margin-left: 0.5em; display: inline-block; text-decoration: none; font-size: 13px; line-height: 2.15384615; min-height: 30px; margin: 0; padding: 0 10px; cursor: pointer; border-width: 1px; border-style: solid; -webkit-appearance: none; border-radius: 3px; white-space: nowrap; box-sizing: border-box; color: #2271b1; border-color: #2271b1; background: #f6f7f7; vertical-align: top; }
+.fc .fc-saveAvailableSlotsButton-button:hover { background: #f0f0f1; border-color: #0a4b78; color: #0a4b78; }
+.fc .fc-saveAvailableSlotsButton-button:disabled { color: #a7aaad !important; border-color: #dcdcde !important; background: #f6f7f7 !important; opacity: 0.7; cursor: not-allowed; }
+
+/* --- Manage Slots & Standard Schedule Calendar Event Styles --- */
+.fc-event.clisyc-available-slot, .fc-event.clisyc-blocked-slot, .fc-event.clisyc-booked-event, .fc-event.clisyc-standard-slot { font-size: 0.85em; padding: 1px 3px; overflow: hidden; }
+
+/* Set base colors for each event type */
+.fc-event.clisyc-available-slot { background-color: #d4edda !important; border-color: #a0d9ae !important; color: #155724 !important; cursor: move !important; }
+.fc-event.clisyc-blocked-slot { background-color: #6c757d !important; border-color: #5a6268 !important; color: #ffffff !important; cursor: move !important; opacity: 0.8; }
+.fc-event.clisyc-standard-slot { background-color: #466f8c !important; border-color: #315b7a !important; color: #fff !important; cursor: move; }
+.fc-event.clisyc-booked-event { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24 !important; cursor: pointer !important; opacity: 0.8; }
+.fc-event.clisyc-booked-event:hover { opacity: 1; }
+
+.fc-event-main-frame { /* Add this to ensure positioning context */
+    position: relative;
+}
+.clisyc-delete-event {
+    position: absolute;
+    top: 1px;
+    right: 2px;
+    cursor: pointer;
+    padding: 0 4px;
+    font-weight: bold;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 5; /* Ensure it's above the event content */
+    font-size: 1.2em; /* Make it a bit bigger and easier to click */
+    line-height: 1;
+}
+.fc-event:hover .clisyc-delete-event {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.fc-event:hover .clisyc-delete-event { opacity: 1; }
+/* Adjust delete icon color for contrast on dark backgrounds */
+.fc-event.clisyc-standard-slot:hover .clisyc-delete-event,
+.fc-event.clisyc-blocked-slot:hover .clisyc-delete-event { color: #ffdddd; }
+.fc-event.clisyc-booked-event:hover .clisyc-delete-event,
+.fc-event.clisyc-available-slot:hover .clisyc-delete-event { color: #dc3232; }
+
+/* --- Datepicker Highlighting --- */
+.ui-datepicker td.has-clisyc-slots a { background-color: #d4edda !important; border: 1px solid #c3e6cb !important; color: #155724 !important; font-weight: bold; }
+.ui-datepicker td.has-clisyc-slots a.ui-state-hover { background-color: #b8dfc1 !important; border-color: #a0d9ae !important; }
+
+/* --- Custom Field Table Sortable Styles --- */
+.custom-fields tbody tr .column-drag-handle { cursor: move; width: 30px; text-align: center; padding-left: 6px; }
+.custom-fields tbody tr .column-drag-handle .dashicons-menu { font-size: 20px; color: #888; }
+.custom-fields tbody tr .column-drag-handle:hover .dashicons-menu { color: #333; }
+.clisyc-sortable-placeholder { background-color: #f0f8ff; border: 1px dashed #add8e6; height: 40px; }
+.clisyc-sortable-placeholder td { visibility: hidden; }
+
+/* --- User Profile Progress Chart Styles --- */
+#clisyc-user-progress-charts-container { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; display: flex; flex-wrap: wrap; gap: 20px; }
+#clisyc-user-progress-charts-container h2 { width: 100%; margin-bottom: 15px; }
+.client-sync-progress-chart-wrapper { background-color: #fff; padding: 15px; border: 1px solid #e0e0e0; border-radius: 4px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); width: 100%; max-width: 48%; box-sizing: border-box; }
+.client-sync-progress-chart-wrapper h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.1em; color: #333; }
+.client-sync-progress-chart-wrapper canvas { max-width: 100%; height: auto !important; }
+@media (max-width: 782px) { .client-sync-progress-chart-wrapper { max-width: 100%; } }
+
+/* --- Dimension Display within Calendar Events (Styling only, color is handled above) --- */
+.fc-event-dimensions { font-size: 0.8em; margin-top: 2px; opacity: 0.8; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; }
+.fc-event-dimensions div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* --- Custom Field Options List Editor & Color Picker --- */
+.clisyc-options-list-editor {}
+.clisyc-options-sortable-list { list-style: none; margin: 0 0 10px 0; padding: 0; border: 1px solid #ddd; background-color: #fff; min-height: 40px; }
+.clisyc-options-sortable-list li.clisyc-field-option-item { display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
+.clisyc-options-sortable-list li.clisyc-field-option-item:last-child { border-bottom: none; }
+.clisyc-option-drag-handle { cursor: move; color: #888; margin-right: 8px; font-size: 20px; line-height: 1; }
+.clisyc-option-drag-handle:hover { color: #333; }
+.clisyc-options-sortable-list li.clisyc-field-option-item input[type="text"].clisyc-option-value-input { flex-grow: 1; margin-right: 8px; }
+.clisyc-options-sortable-list li.clisyc-field-option-item .clisyc-delete-option-item { color: #a00; text-decoration: none; padding: 0; border: none; background: none; box-shadow: none; display: flex; align-items: center; }
+.clisyc-options-sortable-list li.clisyc-field-option-item .clisyc-delete-option-item .dashicons-trash { font-size: 18px; line-height: 1; }
+.clisyc-options-sortable-list li.clisyc-field-option-item .clisyc-delete-option-item:hover { color: #dc3232; }
+.clisyc-option-sortable-placeholder { background-color: #f0f8ff; border: 1px dashed #add8e6; height: 40px; visibility: visible !important; }
+.clisyc-options-list-editor .clisyc-add-option-button { margin-top: 5px; }
+.clisyc-options-sortable-list li.clisyc-field-option-item .wp-picker-container { display: inline-block; vertical-align: middle; margin-left: 8px; margin-right: 8px; position: relative; }
+.clisyc-options-sortable-list li.clisyc-field-option-item .wp-color-result.wp-picker-open { position: relative; }
+.clisyc-options-sortable-list li.clisyc-field-option-item .clisyc-option-color-picker.wp-color-picker { width: 80px !important; }
+/* WordPress Iris Color Picker Adjustments for Popup Behavior */
+.clisyc-options-sortable-list .iris-picker, .wp-picker-container .iris-picker {
+    position: absolute !important;
+    z-index: 100 !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    background: #fff;
+    border: 1px solid #ccc;
+    display: block;
+}
+
+/* --- Styles for general Color Picker Settings Fields --- */
+.clisyc-color-picker { max-width: 100px; }
+.wp-picker-container .wp-color-result { vertical-align: middle; margin-left: 6px; }
+.form-table .wp-picker-input-wrap { display: inline-block !important; vertical-align: middle; }
+
+/* --- Style & Behavior Page Fixes --- */
+.clisyc-styles-behavior-settings input[type="text"][id^="clisyc_calendar_"] {
+    width: 120px;
+}
+
+/* Style for the event time text for better visual hierarchy */
+.fc-event .fc-event-time {
+    color: #666; /* A neutral, readable grey */
+    font-weight: normal;
+    margin-right: 5px; /* Add some space between time and title */
+}
+
+/* For dark events, make the time text lighter */
+.fc-event.clisyc-blocked-slot .fc-event-time,
+.fc-event.clisyc-standard-slot .fc-event-time {
+    color: #f0f0f0;
+    opacity: 0.8;
+}
+
+/* Style for the service name inside a booked event on admin calendars */
+.fc-event-title small {
+opacity: 0.8;
+font-weight: normal;
+font-size: 0.9em;
+}
+
+/* --- Fix for Displaying Service Names in Manage Time Slots Calendar Events --- */
+#clisyc-manage-slots-calendar-container .fc-timegrid-event .fc-event-main-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    padding: 2px 3px;
+}
+
+#clisyc-manage-slots-calendar-container .fc-timegrid-event .fc-event-time,
+#clisyc-manage-slots-calendar-container .fc-timegrid-event .fc-event-title {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-height: 1.2;
+    max-width: 100%;
+}
+
+#clisyc-manage-slots-calendar-container .fc-timegrid-event .fc-event-title-container {
+    width: 100%;
+}
+
+#clisyc-manage-slots-calendar-container .fc-event {
+    padding: 3px 3px;
+    min-height: 30px;
+}
+
+/* Adjust delete icon position for vertical layout */
+#clisyc-manage-slots-calendar-container .clisyc-delete-event {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    margin: 0;
+}
+
+/* --- Admin Page Instructional Text --- */
+.clisyc-admin-instructions {
+    background-color: #f6f7f7;
+    border-left: 4px solid #7e8993;
+    padding: 10px 15px;
+    margin: 0 0 1em 0;
+}
+.clisyc-admin-instructions p {
+    margin-top: 0;
+    font-size: 14px;
+}
+.clisyc-admin-instructions ul {
+    margin: 1em 0 0.5em 1em;
+    list-style: disc;
+}
+.clisyc-admin-instructions ul li {
+    margin-bottom: 0.5em;
+}
+
+/* --- Legend Styling --- */
+.clisyc-admin-instructions .clisyc-legend {
+    margin-left: 0;
+    list-style: none;
+}
+.clisyc-legend .clisyc-legend-color {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(0,0,0,0.2);
+    vertical-align: middle;
+    margin-right: 8px;
+    border-radius: 2px;
+}
+.clisyc-legend .clisyc-available-slot { background-color: #d4edda !important; }
+.clisyc-legend .clisyc-booked-event { background-color: #f8d7da !important; }
+.clisyc-legend .clisyc-blocked-slot { background-color: #6c757d !important; }
+
+/* --- Meta Box Instructional Text --- */
+.clisyc-admin-instructions-metabox {
+    background-color: #f0f4f8;
+    border: 1px solid #c9d7e6;
+    padding: 5px 15px;
+    margin: 0 0 1em 0;
+    border-radius: 3px;
+}
+.clisyc-admin-instructions-metabox p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.clisyc-admin-instructions-metabox ol {
+    margin: 0.5em 0 1em 1.5em;
+}
+.clisyc-admin-instructions-metabox li {
+    margin-bottom: 0.5em;
+}
+
+/* --- Help Tooltips --- */
+.clisyc-help-tip {
+    color: #787c82;
+    cursor: help;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+.clisyc-help-tip:hover {
+    color: #2271b1;
+}
+
+/* --- Expandable Help Section --- */
+.clisyc-expandable-help .hndle {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.clisyc-expandable-help.closed .hndle {
+    border-bottom: 1px solid #ccd0d4;
+}
+.clisyc-expandable-help .hndle .dashicons {
+    color: #787c82;
+    transition: transform 0.2s ease-in-out;
+}
+.clisyc-expandable-help.closed .hndle .dashicons {
+    transform: rotate(0deg);
+}
+.clisyc-expandable-help .hndle .dashicons {
+     transform: rotate(180deg);
+}
+.clisyc-expandable-help .inside {
+    padding: 12px;
+}
+.clisyc-expandable-help .inside h4 {
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+    font-size: 1.1em;
+}
+.clisyc-expandable-help .inside h4:first-child {
+    margin-top: 0;
+}
+.clisyc-expandable-help .inside ul {
+    list-style: disc;
+    margin-left: 1.5em;
+}
+.clisyc-expandable-help .inside li {
+    margin-bottom: 0.5em;
+}
+
+/* Make jQuery UI tooltips look more like native WordPress pointers */
+.ui-tooltip {
+    padding: 8px 12px;
+    background: #333;
+    color: #fff;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    font-size: 13px;
+    max-width: 350px;
+}
+
+/* --- Styling for Dimension Details in Slots List Table --- */
+.clisyc-list-table-dimensions {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.clisyc-list-table-dimensions li {
+    margin-bottom: 4px;
+}
+
+.clisyc-list-table-dimensions li:last-child {
+    margin-bottom: 0;
+}
+
+.clisyc-list-table-dimensions strong {
+    color: #50575e;
+}
+
+/* --- START: Testing & Development Page Styles --- */
+.clisyc-testing-page .postbox { margin-bottom: 20px; }
+.clisyc-testing-page .button-danger {
+    background-color: #d63638;
+    border-color: #b62c2e #a32628 #a32628;
+    color: #fff;
+    text-shadow: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 0 rgba(0,0,0,.15);
+}
+.clisyc-testing-page .button-danger:hover,
+.clisyc-testing-page .button-danger:focus {
+    background-color: #b62c2e;
+    border-color: #8c2223;
+    color: #fff;
+}
+.clisyc-testing-page .postbox.clisyc-danger-zone {
+    border-color: #d63638;
+}
+.clisyc-testing-page .postbox.clisyc-danger-zone .hndle {
+    background-color: #fbeaea;
+    border-bottom-color: #f1a899;
+}
+.clisyc-testing-page .postbox .inside h4 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.1em;
+}
+.clisyc-testing-page .postbox .inside h4:first-child {
+    margin-top: 0;
+}
+.clisyc-testing-page .postbox .inside hr {
+    margin: 1.5em -12px;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+.clisyc-testing-page .clisyc-tool-form {
+    margin-top: 0.5em;
+}
+.clisyc-testing-page .button .dashicons {
+    vertical-align: text-top;
+    margin-right: 4px;
+}
+/* --- END: Testing & Development Page Styles --- */
+
+/* --- START: Onboarding Wizard Styles (Corrected) --- */
+.cs-setup-wizard-wrap { margin-top: 2em; background: #fff; border: 1px solid #ccd0d4; padding: 1px 2em 2em; }
+.cs-setup-steps { display: flex; flex-wrap: wrap; justify-content: space-around; margin: 2em 0; padding-bottom: 1em; border-bottom: 1px solid #ddd; }
+.cs-step { color: #888; padding: 5px; text-decoration: none; }
+.cs-step.is-active { font-weight: bold; color: #2271b1; }
+.cs-setup-content { text-align: center; padding: 2em 0; }
+.cs-setup-content .button { margin: 0.5em; }
+.cs-setup-content form { margin-top: 2em; }
+
+/* --- START: NEW STYLES FOR WIZARD LAYOUT --- */
+.cs-setup-primary-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 2.5em;
+}
+.cs-templates-heading {
+    text-align: center;
+    margin: 2em 0 1.5em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1em;
+}
+/* --- END: NEW STYLES FOR WIZARD LAYOUT --- */
+
+.cs-setup-choices-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; text-align: left; }
+.cs-setup-choice-box { border: 1px solid #ccd0d4; padding: 1.5em; border-radius: 4px; display: flex; flex-direction: column; }
+.cs-setup-choice-box h3 { margin-top: 0; }
+.cs-setup-choice-box p { flex-grow: 1; }
+.cs-setup-choice-box form { text-align: left; margin-top: auto; } /* Align button to the left & bottom */
+.cs-setup-choice-box .button-hero { font-size: 1em; padding: 8px 14px; height: auto; line-height: 1.5; } /* Make template buttons smaller */
+.cs-setup-choice-box.recommended { border-width: 2px; border-color: #007cba; box-shadow: 0 0 5px rgba(0,124,186,0.2); }
+.cs-setup-choice-box.cs-template-new { border-width: 2px; border-color: #00a32a; box-shadow: 0 0 5px rgba(0,163,42,0.2); }
+.cs-setup-choice-box.recommended.cs-template-new { border-image: linear-gradient(135deg, #007cba, #00a32a) 1; box-shadow: 0 0 5px rgba(0,124,186,0.15), 0 0 5px rgba(0,163,42,0.15); }
+.cs-template-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 3px; vertical-align: middle; margin-left: 8px; line-height: 1.6; }
+.cs-template-badge--new { background: #00a32a; color: #fff; }
+.cs-template-key { display: flex; gap: 20px; margin-top: 16px; padding: 10px 0; font-size: 13px; color: #50575e; }
+.cs-template-key__item { display: inline-flex; align-items: center; gap: 6px; }
+.cs-template-key__swatch { display: inline-block; width: 16px; height: 16px; border-radius: 3px; border: 2px solid transparent; }
+.cs-template-key__item--recommended .cs-template-key__swatch { border-color: #007cba; box-shadow: 0 0 3px rgba(0,124,186,0.3); }
+.cs-template-key__item--new .cs-template-key__swatch { border-color: #00a32a; box-shadow: 0 0 3px rgba(0,163,42,0.3); }
+.cs-step.is-accessible { cursor: pointer; }
+a.cs-step { text-decoration: none; color: #0073aa; }
+a.cs-step:hover { color: #00a0d2; }
+a.cs-step.is-active { color: #2271b1; }
+.cs-step:not(.is-accessible) { cursor: default; color: #a0a5aa; }
+/* --- END: Onboarding Wizard Styles --- */
+
+/* --- Dashboard, Getting Started, and Quick Links (Corrected Specificity) --- */
+/* Basic styles for setup progress & status lists */
+.clisyc-getting-started-page .postbox, .clisyc-dashboard-page .postbox, .clisyc-guide-page .postbox { margin-top: 1.5em; }
+.client-sync-progress-bar-container { background-color: #e0e0e0; border-radius: 4px; padding: 3px; margin: 10px 0 20px; }
+.client-sync-progress-bar { background-color: #4CAF50; height: 20px; border-radius: 4px; line-height: 20px; color: white; text-align: center; font-size: 0.8em; transition: width 0.5s ease-in-out; }
+.clisyc-milestone-list { list-style: none; margin: 0; padding: 0; }
+.clisyc-milestone-item { padding: 15px 10px; border-bottom: 1px solid #eee; }
+.clisyc-milestone-item:last-child { border-bottom: none; }
+.clisyc-milestone-item .dashicons { vertical-align: middle; margin-right: 8px; font-size: 24px; float: left; }
+.clisyc-milestone-item.completed .dashicons { color: #4CAF50; }
+.clisyc-milestone-item.pending .dashicons { color: #ffb900; }
+.clisyc-milestone-item strong { font-size: 1.1em; }
+.clisyc-milestone-item .description { margin-left: 32px; font-size: 0.95em; color: #555; margin-bottom: 8px; margin-top: 5px; }
+.clisyc-milestone-actions { margin-left: 32px; }
+#clisyc-setup-progress-section { margin-bottom: 2em; }
+#clisyc-system-status-section .inside { padding: 0 12px 12px; }
+.clisyc-status-list { list-style: none; margin: 0; padding: 0; }
+.clisyc-status-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #eee; }
+.clisyc-status-item:last-child { border-bottom: none; }
+.clisyc-status-item .dashicons { font-size: 20px; line-height: 1.4; flex-shrink: 0; }
+.clisyc-status-item .clisyc-status-text { flex-grow: 1; }
+.clisyc-status-item.clisyc-status-critical .dashicons { color: #d63638; }
+.clisyc-status-item.clisyc-status-warning .dashicons { color: #dba617; }
+.clisyc-status-item.clisyc-status-notice .dashicons { color: #2271b1; }
+.clisyc-status-text p { margin: 0 0 8px; }
+
+/*
+ * THE FIX: More specific selectors to override WordPress core dashboard styles.
+ */
+.clisyc-dashboard-page #dashboard-widgets-wrap { margin-top: 1.5em; }
+
+.clisyc-dashboard-page #dashboard-widgets.metabox-holder {
+    display: grid; /* This is the key change */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    width: auto; /* Reset core width */
+}
+
+/* Reset core's 50% width on postbox containers to let the grid manage them */
+.clisyc-dashboard-page #dashboard-widgets .postbox-container {
+    width: 100%;
+}
+
+/* New Widget Content Styles (Unchanged) */
+.clisyc-glance-list, .clisyc-upcoming-list { list-style: none; margin: 0; padding: 0; }
+.clisyc-glance-list li, .clisyc-upcoming-list li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+.clisyc-glance-list li:last-child, .clisyc-upcoming-list li:last-child { border-bottom: none; }
+.clisyc-glance-list li strong { font-size: 1.2em; }
+.clisyc-upcoming-list .clisyc-upcoming-main { display: flex; flex-direction: column; }
+.clisyc-upcoming-list .clisyc-upcoming-title { font-weight: 600; text-decoration: none; }
+.clisyc-upcoming-list .clisyc-upcoming-client { font-size: 0.9em; color: #555; }
+.clisyc-upcoming-list .clisyc-upcoming-time { font-size: 0.9em; color: #777; text-align: right; flex-shrink: 0; margin-left: 10px; }
+.clisyc-widget-actions { margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; text-align: right; }
+.clisyc-chart-container { position: relative; height: 250px; width: 100%; }
+
+/* Today's Appointments Highlight in At a Glance */
+.clisyc-glance-list li.clisyc-glance-highlight { background: #f0f9ff; margin: -12px -12px 0; padding: 12px; border-radius: 4px 4px 0 0; border-bottom: 2px solid #3b82f6; }
+.clisyc-glance-list li.clisyc-glance-highlight strong { color: #1d4ed8; font-size: 1.4em; }
+
+/* Today's Schedule Widget */
+.clisyc-todays-list { list-style: none; margin: 0; padding: 0; }
+.clisyc-todays-list li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f1; }
+.clisyc-todays-list li:last-child { border-bottom: none; }
+.clisyc-todays-time { display: flex; align-items: center; gap: 4px; flex-shrink: 0; min-width: 90px; font-size: 0.9em; font-weight: 600; color: #1d2327; }
+.clisyc-todays-time .dashicons { font-size: 16px; width: 16px; height: 16px; color: #2271b1; }
+.clisyc-todays-main { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.clisyc-todays-title { font-weight: 600; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.clisyc-todays-client { font-size: 0.85em; color: #50575e; }
+.clisyc-todays-status { flex-shrink: 0; }
+.clisyc-status-pill { display: inline-block; padding: 3px 10px; border-radius: 9999px; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; background: #f0f0f1; color: #50575e; }
+.clisyc-status-pill--publish, .clisyc-status-pill--confirmed, .clisyc-status-pill--clisyc_paid_on_day { background: #d1fae5; color: #065f46; }
+.clisyc-status-pill--pending, .clisyc-status-pill--clisyc_pending_pay { background: #fef3c7; color: #92400e; }
+.clisyc-status-pill--wc-processing { background: #dbeafe; color: #1e40af; }
+.clisyc-status-pill--wc-completed { background: #e0e7ff; color: #3730a3; }
+.clisyc-status-pill--clisyc_waitlisted { background: #dbeafe; color: #1e40af; }
+.clisyc-todays-empty { text-align: center; color: #787c82; padding: 20px 0; }
+
+/* Quick Links Section Styles (Unchanged) */
+.clisyc-quick-links-section { margin-top: 2em; }
+.clisyc-quick-links-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 1em; }
+.clisyc-quick-link-card { background: #fff; border: 1px solid #ccd0d4; padding: 20px; text-align: center; box-shadow: 0 1px 1px rgba(0,0,0,.04); }
+.clisyc-quick-link-card .dashicons { font-size: 40px; width: 40px; height: 40px; color: #50575e; margin-bottom: 10px; }
+.clisyc-quick-link-card h3 { margin: 0 0 10px; font-size: 1.2em; }
+.clisyc-quick-link-card p { min-height: 60px; color: #50575e; }
+
+/* --- END: Dashboard, Getting Started, and Quick Links --- */
+
+/* --- START: Extracted from view-dimensions-page.php --- */
+.clisyc-dimension-manager-page .form-field p { margin-top: 2px; }
+.clisyc-dimension-manager-page #col-container { display: block; margin-bottom: 20px; }
+.clisyc-dimension-manager-page #col-left { float: left; width: 320px; margin-right: 20px; }
+.clisyc-dimension-manager-page #col-right { float: none; width: auto; }
+.clisyc-dimension-manager-page tr.is-disabled { opacity: 0.6; }
+.clisyc-drag-handle { cursor: move; }
+.clisyc-sortable-placeholder { background-color: #f0f8ff; border: 1px dashed #add8e6; height: 50px; }
+/* --- END: Extracted from view-dimensions-page.php --- */
+
+/* --- START: Extracted from view-import-export-page.php --- */
+.clisyc-template-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 1em; }
+.clisyc-template-card { padding: 15px; border: 1px solid #ddd; background: #f9f9f9; border-radius: 4px; }
+.clisyc-template-card h4 { margin: 0 0 10px; }
+.clisyc-template-card p { font-size: 13px; color: #555; margin: 0 0 15px; min-height: 50px; }
+/* --- END: Extracted from view-import-export-page.php --- */
+
+/* --- START: Extracted from part-schedule-editor.php --- */
+.clisyc-template-nav-container { display: flex; align-items: center; gap: 5px; padding: 8px; background-color: #f6f7f7; border: 1px solid #c3c4c7; border-bottom: none; border-top-left-radius: 3px; border-top-right-radius: 3px; }
+.clisyc-template-tab { padding: 5px 10px; border: 1px solid transparent; border-radius: 3px; cursor: pointer; background: #e0e0e0; color: #555; }
+.clisyc-template-tab.active { background: #fff; border-color: #c3c4c7; border-bottom-color: #fff; color: #000; margin-bottom: -9px; }
+.clisyc-template-tab .clisyc-delete-template { margin-left: 5px; color: #a00; opacity: 0.5; font-weight: bold; }
+.clisyc-template-tab:hover .clisyc-delete-template { opacity: 1; }
+.clisyc-add-template-btn { margin-left: auto; }
+/* --- END: Extracted from part-schedule-editor.php --- */
+
+/* --- START: Extracted from part-schedule-pattern.php --- */
+.clisyc-schedule-pattern-settings .description { display: block; margin-top: 4px; }
+.clisyc-schedule-pattern-settings p { margin-bottom: 10px; }
+.clisyc-schedule-pattern-settings label { margin-bottom: 4px; display: block; }
+/* --- END: Extracted from part-schedule-pattern.php --- */
+
+/* --- START: Extracted from view-reports-page.php --- */
+.clisyc-filters-container { padding: 1em; margin-bottom: 1.5em; }
+.clisyc-filters-container form label { margin-right: 5px; margin-left: 15px; }
+.clisyc-filters-container form label:first-child { margin-left: 0; }
+.clisyc-reports-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+.clisyc-report-box { flex: 1 1 45%; min-width: 300px; }
+.clisyc-reports-page .postbox { margin-bottom: 0; }
+.clisyc-reports-page .postbox-header { display: flex; justify-content: space-between; align-items: center; }
+.clisyc-reports-page .handle-actions { padding: 0 12px; }
+.clisyc-reports-page .clisyc-chart-container { max-width: 90%; margin: 0 auto 20px auto; }
+.clisyc-reports-page .wp-list-table { margin-top: 10px; }
+.clisyc-kpi-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+.clisyc-kpi-card { flex: 1 1 150px; background: #fff; border: 1px solid #ccd0d4; border-left: 4px solid #2271b1; padding: 15px 20px; text-align: center; box-shadow: 0 1px 1px rgba(0,0,0,.04); }
+.clisyc-kpi-value { display: block; font-size: 1.8em; font-weight: 600; color: #1d2327; }
+.clisyc-kpi-label { display: block; font-size: 0.85em; color: #50575e; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.clisyc-kpi-card-export { display: flex; align-items: center; justify-content: center; border-left-color: #ccd0d4; flex: 0 0 auto; }
+@media (max-width: 782px) { .clisyc-kpi-row { flex-direction: column; } }
+/* --- END: Extracted from view-reports-page.php --- */
+
+/* --- START: Schedule Editor Day Tab Indicators --- */
+
+.clisyc-day-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.clisyc-day-tab .clisyc-day-tab-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.clisyc-day-tab.no-slots .clisyc-day-tab-indicator {
+    background-color: #a7aaad; /* A neutral, slightly lighter grey */
+}
+
+.clisyc-day-tab.has-slots .clisyc-day-tab-indicator {
+    background-color: #4CAF50; /* WordPress green for "configured" */
+}
+
+/* Add a subtle grow effect on hover */
+.clisyc-day-tab:hover .clisyc-day-tab-indicator {
+    transform: scale(1.1);
+}
+
+/* --- END: Schedule Editor Day Tab Indicators --- */
+
+/* --- START: Global Icon Picker Modal Styles (Final - V4) --- */
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+}
+
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-item:hover,
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-item:focus {
+    background: #f0f0f1;
+    border-color: #c3c4c7;
+    outline: 1px solid #007cba;
+}
+
+/* 
+  Container for the icon. This provides a consistent size box for both icon types.
+*/
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 8px;
+}
+
+/*
+  Style the inner span directly. This works for Font Awesome.
+  For Dashicons, it ensures the container for the ::before pseudo-element has the right size.
+*/
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-icon-wrapper > span {
+    font-size: 32px;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+}
+
+/*
+  THIS IS THE CRITICAL FIX FOR DASHICONS.
+  We are forcing the font-family ONLY on the ::before pseudo-element of spans
+  that have a "dashicons-" class. This is exactly how WordPress's own stylesheet works,
+  but our version is more specific, so it will win any conflicts.
+*/
+#clisyc-global-icon-picker-modal span[class*="dashicons-"]::before {
+    font-family: 'dashicons' !important;
+}
+
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-label {
+    font-size: 11px;
+    color: #50575e;
+    word-break: break-all;
+    text-transform: capitalize;
+}
+/* --- END: Global Icon Picker Modal Styles --- */
+
+/* START: NEW FIX FOR DOUBLE SCROLLBAR */
+
+/* Target the main content area of the jQuery UI dialog that holds our picker */
+#clisyc-global-icon-picker-modal.ui-dialog-content {
+    height: auto !important; /* Override the inline style set by jQuery UI */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Make the icon grid flexible so it takes up the remaining space */
+#clisyc-global-icon-picker-modal .clisyc-icon-picker-grid {
+    flex-grow: 1; /* Allows the grid to expand and contract */
+    min-height: 200px; /* Ensures it has a minimum height even if empty */
+}
+
+/* END: NEW FIX FOR DOUBLE SCROLLBAR */
+
+/* --- START: Shortcodes Page Styles --- */
+.clisyc-shortcodes-page .postbox-header h2.hndle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.clisyc-copy-shortcode-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.clisyc-copy-shortcode-button.copied {
+    background-color: #d1e7dd !important;
+    border-color: #badbcc !important;
+    color: #0f5132 !important;
+}
+
+.clisyc-copy-shortcode-button.copied .dashicons {
+    color: #0f5132 !important;
+}
+/* --- END: Shortcodes Page Styles --- */
+
+/* --- START: Directions / Guide Page Styles --- */
+.clisyc-directions-page .postbox ol,
+.clisyc-directions-page .postbox ul,
+.clisyc-guide-page .postbox ol,
+.clisyc-guide-page .postbox ul {
+    margin-left: 1.5em; /* In RTL this will be margin-right */
+}
+
+.clisyc-directions-page .postbox li,
+.clisyc-guide-page .postbox li {
+    margin-bottom: 1em;
+}
+
+.clisyc-directions-page .postbox li ul,
+.clisyc-guide-page .postbox li ul {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Compact success banner when setup is 100% complete */
+.clisyc-guide-setup-complete {
+    background: #f0fdf4;
+    border-left: 4px solid #4CAF50;
+    padding: 12px 16px;
+    margin-bottom: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.clisyc-guide-setup-complete .dashicons { color: #4CAF50; font-size: 24px; }
+
+/* Override list styles inside the milestone list on the Guide page */
+.clisyc-guide-page .clisyc-milestone-list { margin-left: 0; }
+.clisyc-guide-page .clisyc-milestone-list li { margin-bottom: 0; }
+/* --- END: Directions / Guide Page Styles --- */
+
+/* --- START: Dimension Manager UI Enhancements --- */
+.clisyc-dimension-manager-page input[type="checkbox"][disabled] {
+    cursor: help;
+}
+/* --- END: Dimension Manager UI Enhancements --- */
+
+/* --- START: Master Schedule Styles --- */
+.clisyc-schedule-template {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 0, 0, 0.05),
+        rgba(0, 0, 0, 0.05) 5px,
+        transparent 5px,
+        transparent 10px
+    );
+    background-color: #f0f4f8; /* A light blue-gray */
+    border-color: #d1dde8;
+    color: #444;
+    cursor: pointer;
+}
+
+.clisyc-legend .clisyc-schedule-template {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 4px,
+        transparent 4px,
+        transparent 8px
+    );
+    background-color: #f0f4f8;
+}
+/* --- END: Master Schedule Styles --- */
+
+/* 
+ * Fix for Time Inputs on Settings Page 
+ * Updated to target both the old behavior page and the new appearance page
+ */
+.clisyc-behavior-settings input.small-text,
+.clisyc-appearance-settings input.small-text,
+#clisyc_calendar_start_time,
+#clisyc_calendar_end_time,
+#clisyc_standard_schedule_calendar_start_time,
+#clisyc_standard_schedule_calendar_end_time {
+    width: 125px !important; /* Overrides the WP default 50px */
+    text-align: center;
+}
+
+#clisyc_calendar_slot_duration {
+    width: 100px !important;
+    text-align: center;
+}
+
+/* --- Appointment Slot Selector Styling --- */
+#clisyc_slot_selection_date {
+    cursor: pointer !important;
+    background-color: #ffffff;
+    /* Add a Calendar Icon (SVG) to the right side */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill%3D%22%2350575e%22%20d%3D%22M17%203h-1v2h-2V3H6V5H4V3H3c-1.1%200-2%20.9-2%202v12c0%201.1.9%202%202%202h14c1.1%200%202-.9%202-2V5c0-1.1-.9-2-2-2zm0%2014H3V9h14v8zM5%207V5h1v2H5zm10%200V5h1v2h-1z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 35px !important; /* Make room for the icon */
+    border: 1px solid #8c8f94;
+    transition: all 0.2s ease;
+}
+
+#clisyc_slot_selection_date:hover {
+    border-color: #2271b1; /* WordPress Admin Blue */
+    background-color: #f0f0f1;
+    color: #2271b1;
+}
+
+#clisyc_slot_selection_date:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+/* Fix WooCommerce Linked Product Select2 alignment */
+#clisyc-woocommerce-metabox .select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 14px;
+}
+
+/* --- START: Output Template Preview Page --- */
+.clisyc-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.clisyc-preview-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.clisyc-preview-card--draft {
+    border-style: dashed;
+    opacity: 0.85;
+}
+.clisyc-preview-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f6f7f7;
+    border-bottom: 1px solid #dcdcde;
+}
+.clisyc-preview-card-header h3 {
+    margin: 0;
+    font-size: 14px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.clisyc-preview-card-header .button { flex-shrink: 0; }
+.clisyc-preview-draft-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: normal;
+    background: #dba617;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+.clisyc-preview-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #f0f0f1;
+    background: #fafafa;
+}
+.clisyc-preview-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #50575e;
+    background: #f0f0f1;
+    padding: 2px 8px;
+    border-radius: 3px;
+    line-height: 1.5;
+}
+.clisyc-preview-tag--none {
+    color: #a7aaad;
+    font-style: italic;
+}
+.clisyc-preview-tag--trigger { max-width: 100%; }
+.clisyc-preview-body {
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    max-height: 300px;
+    overflow-y: auto;
+    color: #1d2327;
+    flex: 1;
+}
+.clisyc-preview-body .clisyc-output-document { word-wrap: break-word; }
+.clisyc-preview-body .clisyc-output-text { margin-bottom: 8px; }
+.clisyc-preview-body .clisyc-output-text:last-child { margin-bottom: 0; }
+@media (max-width: 782px) {
+    .clisyc-preview-grid { grid-template-columns: 1fr; }
+}
+/* --- END: Output Template Preview Page --- */

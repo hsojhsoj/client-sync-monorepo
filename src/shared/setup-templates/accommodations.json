@@ -1,0 +1,214 @@
+[
+  {
+    "template_meta": {
+      "title": "Accommodations (Hotel / Rentals)",
+      "description": "A powerful setup for hotels, vacation rentals, or any multi-day booking system. It demonstrates per-item capacity and uses custom, filterable 'Dimension Attributes' like Bedrooms and Bathrooms. NOTE: You must link each property to a WooCommerce product to enable payments.",
+      "recommended": true
+    },
+    "options": {
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_property": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_property"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_property": {
+          "singular": "Property",
+          "plural": "Properties",
+          "icon": "dashicons-admin-home",
+          "public": true
+        }
+      },
+      "clisyc_dimension_fields": {
+        "bedrooms": {
+          "label": "Bedrooms",
+          "type": "number",
+          "filterable": true,
+          "icon": "dashicons-bed",
+          "applies_to": [
+            "clisyc_property"
+          ]
+        },
+        "bathrooms": {
+          "label": "Bathrooms",
+          "type": "number",
+          "filterable": true,
+          "icon": "dashicons-buddicons-replies",
+          "applies_to": [
+            "clisyc_property"
+          ]
+        },
+        "location_type": {
+          "label": "Location Type",
+          "type": "select",
+          "filterable": true,
+          "icon": "dashicons-location-alt",
+          "options": "Beachfront,Downtown,Mountainside,Suburban",
+          "applies_to": [
+            "clisyc_property"
+          ]
+        }
+      }
+    },
+    "cpts": {
+      "clisyc_property": [
+        {
+          "post_name": "the-beach-house",
+          "post_title": "The Beach House",
+          "post_excerpt": "A beautiful 3-bedroom home right on the water. Requires a 3-night minimum stay.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "date_range"
+            ],
+            "_clisyc_capacity": [
+              "1"
+            ],
+            "_clisyc_min_stay": [
+              "3"
+            ],
+            "_clisyc_buffer_days": [
+              "1"
+            ],
+            "_clisyc_color": [
+              "#007cba"
+            ],
+            "_clisyc_bedrooms": [
+              "3"
+            ],
+            "_clisyc_bathrooms": [
+              "2"
+            ],
+            "_clisyc_location_type": [
+              "Beachfront"
+            ]
+          }
+        },
+        {
+          "post_name": "downtown-loft",
+          "post_title": "Modern Downtown Loft",
+          "post_excerpt": "A stylish 1-bedroom loft in the heart of the city. Perfect for short stays.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "date_range"
+            ],
+            "_clisyc_capacity": [
+              "1"
+            ],
+            "_clisyc_min_stay": [
+              "2"
+            ],
+            "_clisyc_buffer_days": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#e53983"
+            ],
+            "_clisyc_bedrooms": [
+              "1"
+            ],
+            "_clisyc_bathrooms": [
+              "1"
+            ],
+            "_clisyc_location_type": [
+              "Downtown"
+            ]
+          }
+        },
+        {
+          "post_name": "standard-queen-room",
+          "post_title": "Standard Queen Room",
+          "post_excerpt": "A comfortable room with two queen-sized beds. We have 12 of this type available.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "date_range"
+            ],
+            "_clisyc_capacity": [
+              "12"
+            ],
+            "_clisyc_min_stay": [
+              "1"
+            ],
+            "_clisyc_buffer_days": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#72aee6"
+            ],
+            "_clisyc_bedrooms": [
+              "1"
+            ],
+            "_clisyc_bathrooms": [
+              "1"
+            ],
+            "_clisyc_location_type": [
+              "Suburban"
+            ]
+          }
+        }
+      ]
+    },
+    "relationships": [],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment has been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"If you need to make changes, please contact us at {site_name}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Appointment Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming appointment.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"View details: {appointment_view_link}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"We look forward to seeing you!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment on {appointment_date_formatted} at {appointment_time} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"If this was a mistake or you would like to reschedule, please visit {site_url} or contact us.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your payment!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Payment method: {order_payment_method_title}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Appointment: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_6\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Booking Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New booking received from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Notes: {appointment_notes}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

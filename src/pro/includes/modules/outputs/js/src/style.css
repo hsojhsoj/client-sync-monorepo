@@ -1,0 +1,111 @@
+/**
+ * File: src/pro/includes/modules/outputs/js/src/style.css -> src/pro/includes/modules/outputs/js/dist/style-index.css
+ * Styles for the Client Sync Pro Output Template Builder application.
+ *
+ * @package    ClientSyncPro
+ * @subpackage ClientSyncPro/Modules/Outputs/JS
+ */
+
+/* ── 1. Builder Layout ───────────────────────────────── */
+.clisyc-output-builder { display: flex; gap: 20px; }
+.clisyc-field-palette { width: 220px; flex-shrink: 0; }
+.clisyc-field-palette h4 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #50575e; }
+.clisyc-field-palette-btn { display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 5px !important; justify-content: flex-start; }
+.clisyc-output-canvas { flex-grow: 1; min-height: 400px; background: #fff; border: 1px dashed #c3c4c7; padding: 10px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 10px; }
+
+/* ── 2. Sections ─────────────────────────────────────── */
+.clisyc-output-section { background: #f6f7f7; border: 1px solid #ddd; padding: 15px; margin-bottom: 0; border-radius: 3px; position: relative; box-sizing: border-box; width: 100%; }
+.clisyc-output-section.is-dragging { opacity: 0.7; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.clisyc-section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: grab; }
+.clisyc-section-type { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #50575e; flex-grow: 1; }
+.clisyc-section-delete { cursor: pointer; background: none; border: none; color: #787c82; padding: 0; }
+.clisyc-section-delete:hover { color: #d63638; }
+.clisyc-output-section input[type="text"],
+.clisyc-output-section textarea { width: 100%; box-sizing: border-box; }
+.clisyc-output-section textarea { min-height: 80px; }
+
+/* ── 3. Starter Template Picker ──────────────────────── */
+.clisyc-starter-picker { width: 100%; padding: 10px 0; }
+.clisyc-starter-picker h3 { margin: 0 0 4px; font-size: 16px; color: #1d2327; }
+.clisyc-starter-subtitle { margin: 0 0 20px; color: #50575e; font-size: 13px; }
+.clisyc-starter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.clisyc-starter-card {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 20px 16px; border: 1px solid #c3c4c7; border-radius: 4px;
+    background: #fff; cursor: pointer; text-align: center;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.clisyc-starter-card:hover { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
+.clisyc-starter-card .dashicons { font-size: 28px; width: 28px; height: 28px; color: #2271b1; }
+.clisyc-starter-card strong { font-size: 13px; color: #1d2327; }
+.clisyc-starter-desc { font-size: 12px; color: #787c82; line-height: 1.4; }
+
+/* ── 4. Placeholder Picker Dropdown ──────────────────── */
+.clisyc-placeholder-picker { position: relative; }
+.clisyc-placeholder-toggle { display: inline-flex !important; align-items: center; gap: 4px; font-size: 12px !important; }
+.clisyc-placeholder-toggle .dashicons { font-size: 16px; width: 16px; height: 16px; }
+.clisyc-placeholder-dropdown {
+    position: absolute; top: 100%; right: 0; z-index: 100;
+    width: 320px; max-height: 350px;
+    background: #fff; border: 1px solid #c3c4c7; border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column;
+    margin-top: 4px;
+}
+.clisyc-placeholder-search {
+    padding: 8px 10px !important; border: none !important; border-bottom: 1px solid #f0f0f1 !important;
+    font-size: 13px !important; outline: none; border-radius: 4px 4px 0 0;
+    width: 100% !important; box-sizing: border-box !important; margin: 0 !important;
+}
+.clisyc-placeholder-list { overflow-y: auto; max-height: 290px; padding: 4px 0; }
+.clisyc-placeholder-group-label {
+    padding: 6px 10px 4px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; color: #787c82;
+    background: #f9f9f9; border-bottom: 1px solid #f0f0f1; position: sticky; top: 0;
+}
+.clisyc-placeholder-item {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 6px 10px; border: none; background: none;
+    cursor: pointer; text-align: left; font-size: 12px;
+}
+.clisyc-placeholder-item:hover { background: #f0f6fc; }
+.clisyc-placeholder-item code {
+    font-family: Consolas, Monaco, monospace; font-size: 11px;
+    background: #f0f0f1; padding: 1px 5px; border-radius: 3px;
+    color: #1d2327; white-space: nowrap; flex-shrink: 0;
+}
+.clisyc-placeholder-item span { color: #50575e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.clisyc-placeholder-empty { text-align: center; color: #787c82; padding: 15px 10px; font-size: 12px; margin: 0; }
+
+/* ── 5. Rich Text Editor ───────────────────────────────── */
+.clisyc-format-toolbar {
+    display: flex; gap: 2px; padding: 4px; margin-bottom: 0;
+    background: #f0f0f1; border: 1px solid #c3c4c7; border-bottom: none;
+    border-radius: 3px 3px 0 0;
+}
+.clisyc-format-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; padding: 0; border: 1px solid transparent;
+    background: none; cursor: pointer; border-radius: 2px;
+    font-size: 13px; color: #1d2327;
+}
+.clisyc-format-btn:hover { background: #fff; border-color: #c3c4c7; }
+.clisyc-richtext-editor {
+    width: 100%; min-height: 40px; padding: 8px 10px; box-sizing: border-box;
+    background: #fff; border: 1px solid #c3c4c7; border-radius: 0 0 3px 3px;
+    font-size: 13px; line-height: 1.6; outline: none;
+}
+.clisyc-richtext-editor:focus { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
+.clisyc-richtext-editor:empty::before {
+    content: "Enter text with {placeholders} — use toolbar for formatting";
+    color: #a7aaad; pointer-events: none;
+}
+.clisyc-richtext-editor a { color: #2271b1; text-decoration: underline; }
+.clisyc-richtext-editor ul, .clisyc-richtext-editor ol { margin: 4px 0 4px 20px; padding: 0; }
+.clisyc-richtext-editor li { margin-bottom: 2px; }
+
+/* ── 6. Confirm Dialog ───────────────────────────────── */
+.clisyc-confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100000; display: flex; align-items: center; justify-content: center; }
+.clisyc-confirm-dialog { background: #fff; border-radius: 4px; padding: 24px; max-width: 360px; width: 90%; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+.clisyc-confirm-dialog p { margin: 0 0 16px; font-size: 14px; color: #1d2327; }
+.clisyc-confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }

@@ -1,0 +1,721 @@
+This project is a monorepo containing both modern JavaScript (React) applications and a large PHP backend. The development workflows for each are different.
+
+--------------------------------------------------------------------------------
+### PHPUnit Test Setup
+--------------------------------------------------------------------------------
+
+Before running the backend unit tests for the first time, you must set up the test environment. This is a one-time command.
+
+**Run this command once:**
+./build.sh test-setup
+
+**What this command does:**
+1.  Installs Composer Dependencies: Runs `composer install` to get PHPUnit, the WP test suite tools, and libraries like the Google/Twilio SDKs.
+2.  Downloads WooCommerce: Our tests for features like the `Price_Calculator` depend on WooCommerce classes. This command downloads the WooCommerce plugin into the `tmp/` test directory so it's available to PHPUnit.
+3.  Configures the WP Test Suite: Runs the `install-wp-tests.sh` script to download the WordPress core files and create a dedicated test database.
+
+After the setup is complete, you can run the entire PHPUnit test suite at any time with:
+composer test
+
+
+--------------------------------------------------------------------------------
+### JavaScript (React) & Asset Workflow
+--------------------------------------------------------------------------------
+
+You only need to run `npm run clean && npm run build` when you make changes to the **source JavaScript or CSS files for the React applications**.
+
+#### Mental Model Breakdown
+
+Let's break down why, based on the project's structure:
+
+1.  **The Two "Worlds":** Your project has two distinct types of code:
+    *   **PHP & Standard Assets:** This includes all `.php` files, the jQuery-based `.js` files (like `clisyc-admin-manage-slots-fc.js`), and the standard `.css` files (like `clisyc-admin-style.css`). These files are used "as-is" and are simply copied into the final plugin by the `build.sh` script.
+    *   **Modern JavaScript (React):** This includes the source code for your three React applications located in `src` subdirectories (the Relationship Graph, the Forms Builder, and the Outputs Builder). This code is **not** used directly by the browser.
+
+2.  **The `npm` Build Step:** The command `npm run build` is a "compilation" or "transpilation" step. It tells the `@wordpress/scripts` tool to:
+    *   Take the modern React/JavaScript source code from the `.../js/src` folders.
+    *   Bundle it, optimize it, and transform it into browser-compatible JavaScript and CSS.
+    *   Place these final, compiled files into the `.../js/dist` folders.
+
+The files inside the `dist` directories are the only ones that WordPress actually loads with `wp_enqueue_script` and `wp_enqueue_style`.
+
+#### Your Workflow Guide
+
+Here is a simple guide for when to run which command:
+
+*   **If you modify a .js or .css file inside any `.../src` subfolder...**
+    *   `src/assets/src`
+    *   `src/pro/includes/modules/forms/js/src`
+    *   `src/pro/includes/modules/outputs/js/src`
+    *   **Action:** Run `npm run build`, then run `build.sh`.
+
+*   **If you modify any .php file...**
+    *   **Action:** Just run `build.sh`. You do not need `npm run build`.
+
+*   **If you modify a .js or .css file NOT in a `.../src` subfolder...**
+    *   e.g., `clisyc-admin-styles-page.js` or `src/assets/css/clisyc-admin-style.css`
+    *   **Action:** Just run `build.sh`. You do not need `npm run build`.
+
+*   **If you modify composer.json...**
+    *   **Action:** Run `composer install` first, then run `build.sh`.
+
+--------------------------------------------------------------------------------
+#### Developer Tip: Use `npm start`
+--------------------------------------------------------------------------------
+
+When you are actively developing one of the React applications, running `npm run build` after every change is slow. Instead, you should use the `start` command:
+
+`npm start`
+
+This command will:
+1.  Run all three build processes (`build:graph`, `build:forms`, `build:outputs`) in "watch" mode.
+2.  Automatically re-compile the code the instant you save a file.
+3.  Produce un-minified code with better error messages for easier debugging.
+
+You would typically run `npm start` in a terminal window, leave it running while you code, and only run `npm run build` once when you are finished and ready to create the final production version of the plugin.
+
+--------------------------------------------------------------------------------
+### PHPUnit Test Setup & Autoloading Architecture
+--------------------------------------------------------------------------------
+
+Setting up and running the PHPUnit test suite requires a specific workflow due to the interaction between the WordPress test environment, Composer dependencies, and the plugin's monorepo structure.
+
+#### One-Time Test Environment Setup
+
+Before running tests for the first time, you must set up the test environment. This is a one-time command:
+
+**Run this command once:**
+`./build.sh test-setup`
+
+**What this command does:**
+1.  **Installs Composer Dependencies:** Runs `composer install` to get PHPUnit and other required PHP libraries.
+2.  **Sets up the WordPress Test Suite:** Runs `bash bin/install-wp-tests.sh` to download the WordPress core files and create a dedicated test database (`wordpress_test`). You will be prompted for database credentials on the first run.
+3.  **Installs WooCommerce:** The test suite depends on WooCommerce classes. This command downloads and installs the WooCommerce plugin into the temporary `tmp/` test directory so it's available to PHPUnit.
+
+After the setup is complete, you can run the entire PHPUnit test suite at any time with:
+`composer test`
+
+#### Autoloading and Dependency Management (The Journey)
+
+Getting the test suite to run reliably involved solving several layers of dependency issues. Here is a summary of what was tried and the final solution:
+
+1.  **The Problem:** The initial test setup failed with "Class not found" fatal errors. This was because the WordPress test environment loads plugins in a way that bypasses standard Composer autoloading, and our plugin's classes were not being manually included.
+
+2.  **Attempt #1 (PSR-4 Autoloading):** The first attempt was to implement the modern PSR-4 autoloading standard in `composer.json`. This failed because the plugin's file naming convention (e.g., `class-database-manager.php`) does not match the strict naming required by PSR-4 (which would expect `DatabaseManager.php`).
+
+3.  **Attempt #2 (Classmap Autoloading):** The next attempt was to switch to Composer's `classmap` autoloader. This is more flexible as it scans directories and maps class names to file paths, regardless of the filename. However, this also failed within the PHPUnit bootstrap process, indicating a deeper conflict with how the WordPress test suite loads plugins and handles dependencies.
+
+4.  **The Final Solution (Hybrid Approach):**
+    *   We kept the **`classmap` autoloader** in `composer.json`. This is still a best practice for the live plugin, ensuring that when the plugin is active on a real site, its classes are autoloaded efficiently without manual `require_once` statements. The `build.sh` script correctly copies the `vendor` directory into the final plugin packages.
+    *   We **restored the manual dependency loading** within the plugin's core `Plugin` class (`src/shared/includes/core/class-plugin.php`). The `load_dependencies()` method was reinstated to explicitly `require_once` all necessary class files.
+    *   This method uses the `CLISYC_SHARED_DIR` constant, which intelligently points to the correct `shared/` directory whether running in the monorepo (for tests) or from a final built plugin directory.
+
+This hybrid approach provides the best of both worlds: robust, explicit dependency loading for the unique context of the PHPUnit test suite, and modern, efficient autoloading for the live production environment.
+
+
+--------------------------------------------------------------------------------
+### PHPUnit Test Setup & Autoloading Architecture
+--------------------------------------------------------------------------------
+
+Setting up and running the PHPUnit test suite requires a specific workflow due to the interaction between the WordPress test environment, Composer dependencies, and the plugin's monorepo structure.
+
+#### One-Time Test Environment Setup
+
+Before running tests for the first time, you must set up the test environment. This is a one-time command:
+
+**Run this command once:**
+`./build.sh test-setup`
+
+**What this command does:**
+1.  **Installs Composer Dependencies:** Runs `composer install` to get PHPUnit and other required PHP libraries.
+2.  **Sets up the WordPress Test Suite:** Runs `bash bin/install-wp-tests.sh` to download the WordPress core files and create a dedicated test database (`wordpress_test`). You will be prompted for database credentials on the first run.
+3.  **Installs WooCommerce:** The test suite depends on WooCommerce classes. This command downloads and installs the WooCommerce plugin into the temporary `tmp/` test directory so it's available to PHPUnit.
+
+After the setup is complete, you can run the entire PHPUnit test suite at any time with:
+`composer test`
+
+#### Autoloading and Dependency Management (The Journey)
+
+Getting the test suite to run reliably involved solving several layers of dependency issues. Here is a summary of what was tried and the final solution:
+
+1.  **The Problem:** The initial test setup failed with "Class not found" fatal errors. This was because the WordPress test environment loads plugins in a way that bypasses standard Composer autoloading, and our plugin's classes were not being manually included.
+
+2.  **Attempt #1 (PSR-4 Autoloading):** The first attempt was to implement the modern PSR-4 autoloading standard in `composer.json`. This failed because the plugin's file naming convention (e.g., `class-database-manager.php`) does not match the strict naming required by PSR-4 (which would expect `DatabaseManager.php`).
+
+3.  **Attempt #2 (Classmap Autoloading):** The next attempt was to switch to Composer's `classmap` autoloader. This is more flexible as it scans directories and maps class names to file paths, regardless of the filename. However, this also failed within the PHPUnit bootstrap process, indicating a deeper conflict with how the WordPress test suite loads plugins and handles dependencies.
+
+4.  **The Final Solution (Hybrid Approach):**
+    *   We kept the **`classmap` autoloader** in `composer.json`. This is still a best practice for the live plugin, ensuring that when the plugin is active on a real site, its classes are autoloaded efficiently without manual `require_once` statements. The `build.sh` script correctly copies the `vendor` directory into the final plugin packages.
+    *   We **restored the manual dependency loading** within the plugin's core `Plugin` class (`src/shared/includes/core/class-plugin.php`). The `load_dependencies()` method was reinstated to explicitly `require_once` all necessary class files.
+    *   This method uses the `CLISYC_SHARED_DIR` constant, which intelligently points to the correct `shared/` directory whether running in the monorepo (for tests) or from a final built plugin directory.
+
+This hybrid approach provides the best of both worlds: robust, explicit dependency loading for the unique context of the PHPUnit test suite, and modern, efficient autoloading for the live production environment.
+
+
+
+
+
+
+
+
+
+_______________________________________________________________________________________________
+
+# Relationship Graph System - Developer Documentation
+
+## Overview
+
+The Relationship Graph is a visual interface for managing relationships between dimension custom post types (CPTs) in the Client Sync plugin. It uses React Flow to provide an interactive node-based graph where administrators can:
+
+- View all dimension posts (Services, Practitioners, Rooms, etc.) as nodes
+- Create connections (edges) between posts to define which items can work together
+- Visually organize the hierarchy through drag-and-drop positioning
+- Save relationship configurations that control booking availability
+
+**Business Logic:** A booking is only valid when ALL required dimensions are connected. For example, a "Heart Surgery" service can only be booked when a connected practitioner AND a connected room are both available.
+
+---
+
+## Architecture
+
+### System Components
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Admin Interface (PHP)                     │
+│                  Dimension Manager Page                      │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  React Frontend (JS)                         │
+│  - App.js (main component)                                   │
+│  - PostNode.js (node rendering)                              │
+│  - React Flow library                                        │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│              REST API (PHP)                                  │
+│  class-dimensions-controller.php                             │
+│  - GET  /clisyc/v1/dimensions/graph  (load data)            │
+│  - POST /clisyc/v1/dimensions/graph  (save data)            │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    Database Layer                            │
+│  - wp_clisyc_relationships (edges/connections)               │
+│  - wp_clisyc_graph_nodes (node index)                        │
+│  - clisyc_graph_visual_state option (positions)              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Database Structure
+
+### Table: `wp_clisyc_relationships`
+
+Stores the connections between posts (the edges in the graph).
+
+```sql
+CREATE TABLE wp_clisyc_relationships (
+    relationship_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    parent_object_id BIGINT(20) UNSIGNED NOT NULL,
+    parent_object_type VARCHAR(32) NOT NULL,
+    child_object_id BIGINT(20) UNSIGNED NOT NULL,
+    child_object_type VARCHAR(32) NOT NULL,
+    UNIQUE KEY unique_relationship (parent_object_id, parent_object_type, child_object_id, child_object_type)
+);
+```
+
+**Important:** Each relationship is stored ONCE in a single direction (parent → child). Do NOT create bidirectional duplicates.
+
+**Example:**
+```
+parent_object_id: 123 (Service: "Heart Surgery")
+parent_object_type: clisyc_service
+child_object_id: 456 (Practitioner: "Dr. Smith")
+child_object_type: clisyc_practitioner
+```
+
+### Table: `wp_clisyc_graph_nodes`
+
+Index of all posts that appear as nodes in the graph.
+
+```sql
+CREATE TABLE wp_clisyc_graph_nodes (
+    node_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    node_hash VARCHAR(128) NOT NULL UNIQUE,
+    cpt_slug VARCHAR(32) NOT NULL,
+    wp_post_id BIGINT(20) UNSIGNED NOT NULL,
+    node_type VARCHAR(32) NOT NULL,
+    label VARCHAR(255) NOT NULL,
+    parent_hash VARCHAR(128),
+    last_updated DATETIME NOT NULL
+);
+```
+
+**Node Types:**
+- `dimension` - The CPT type itself (e.g., "Services" - used for filtering, not displayed as a node)
+- `postNode` - Individual posts (e.g., "Heart Surgery", "Dr. Smith")
+
+**Node Hash Format:**
+- Dimension: `clisyc_service`
+- Post Node: `clisyc_service:123` (CPT slug + post ID)
+
+### Option: `clisyc_graph_visual_state`
+
+Stores the X,Y coordinates of each node for positioning.
+
+```php
+[
+    'clisyc_service:123' => [
+        'position' => ['x' => 100, 'y' => 50]
+    ],
+    'clisyc_practitioner:456' => [
+        'position' => ['x' => 200, 'y' => 150]
+    ]
+]
+```
+
+---
+
+## Key Files and Their Responsibilities
+
+### Backend (PHP)
+
+#### `/src/shared/includes/rest-api/class-dimensions-controller.php`
+**Purpose:** REST API endpoints for loading and saving graph data
+
+**Key Methods:**
+- `get_graph_data()` - Fetches nodes, edges, and visual state from database
+- `update_graph_data()` - Saves nodes, edges, and visual state to database
+
+**Critical Logic:**
+```php
+// When saving edges, preserve direction (source → target)
+// Do NOT normalize by ID or create reverse relationships
+$wpdb->insert( $rels_table_name, [
+    'parent_object_id'   => $source_id,    // Preserve as-is
+    'parent_object_type' => $source_type,
+    'child_object_id'    => $target_id,    // Preserve as-is
+    'child_object_type'  => $target_type,
+]);
+```
+
+#### `/src/shared/includes/admin/class-graph-node-manager.php`
+**Purpose:** Maintains the graph_nodes index table
+
+**Key Methods:**
+- `rebuild_index()` - Rebuilds entire node index from scratch
+- `handle_save_post()` - Updates index when a post is created/updated
+- `handle_delete_post()` - Removes node when post is deleted
+
+**Hooks:**
+- `save_post` (priority 99) - After post is saved
+- `before_delete_post` - Before post is deleted
+- `update_option_clisyc_dimension_registry` - When dimensions change
+
+#### `/src/shared/includes/services/class-importer.php`
+**Purpose:** Imports pre-configured templates
+
+**Critical Bug Fix:** Only create relationships in ONE direction (parent → child), never create reverse relationships.
+
+```php
+// CORRECT ✅
+$wpdb->insert( $rels_table_name, [
+    'parent_object_id' => $parent_id,
+    'child_object_id' => $child_id
+]);
+
+// WRONG ❌ - Creates duplicate phantom edges
+$wpdb->insert( $rels_table_name, [
+    'parent_object_id' => $child_id,  // Reversed!
+    'child_object_id' => $parent_id
+]);
+```
+
+### Frontend (JavaScript/React)
+
+#### `/src/assets/src/App.js`
+**Purpose:** Main React component for the graph interface
+
+**Key Features:**
+- Loads graph data from REST API on mount
+- Manages nodes and edges state with React Flow hooks
+- Handles save operations
+- Provides toolbar buttons (Auto-Layout, Connect All, etc.)
+
+**Important Hook:**
+```javascript
+useEffect(() => {
+    const fetchData = async () => {
+        const { nodes, edges } = await apiFetch({ 
+            path: '/clisyc/v1/dimensions/graph' 
+        });
+        
+        setNodes(nodes || []);
+        
+        // CRITICAL: Delay edge setting to ensure nodes are registered first
+        setTimeout(() => {
+            setEdges(edges || []);
+        }, 100);
+    };
+    fetchData();
+}, [setNodes, setEdges, fitView]);
+```
+
+#### `/src/assets/src/PostNode.js`
+**Purpose:** Custom node component for React Flow
+
+**Key Features:**
+- Renders node with title, icon, and dimension label
+- Always includes BOTH top and bottom handles (for React Flow connections)
+- Hides unnecessary handles with CSS for visual clarity
+
+**Critical Implementation:**
+```javascript
+// Always render both handles (needed for React Flow to connect)
+<Handle type="target" position={Position.Top} id="a" />
+<Handle type="source" position={Position.Bottom} id="b" />
+```
+
+**Handle Visibility Rules:**
+- Top handle on Services (first dimension): Should be hidden via CSS
+- Bottom handle on Rooms (last dimension): Should be hidden via CSS
+- All middle dimensions: Show both handles
+
+---
+
+## Data Flow
+
+### Loading the Graph
+
+```
+1. User navigates to Dimension Manager → Relationship Graph tab
+   ↓
+2. React app mounts, useEffect triggers
+   ↓
+3. apiFetch GET /clisyc/v1/dimensions/graph
+   ↓
+4. PHP: get_graph_data() executes
+   ↓
+5. Query wp_clisyc_graph_nodes for all postNode records
+   ↓
+6. Query wp_clisyc_relationships for all edges
+   ↓
+7. Get clisyc_graph_visual_state option for positions
+   ↓
+8. Return JSON: { nodes: [...], edges: [...], visual_state: {...} }
+   ↓
+9. React: setNodes() and setEdges() (with 100ms delay)
+   ↓
+10. React Flow renders the graph
+```
+
+### Saving the Graph
+
+```
+1. User clicks "Save Changes" button
+   ↓
+2. handleSaveChanges() gathers current nodes and edges from React Flow
+   ↓
+3. apiFetch POST /clisyc/v1/dimensions/graph with payload:
+   {
+       nodes: [{ id, position, data }, ...],
+       edges: [{ source, target }, ...]
+   }
+   ↓
+4. PHP: update_graph_data() executes
+   ↓
+5. Extract positions from nodes → save to clisyc_graph_visual_state option
+   ↓
+6. TRUNCATE wp_clisyc_relationships table
+   ↓
+7. Loop through edges:
+      - Parse source/target (format: "clisyc_service:123")
+      - Verify both posts exist
+      - Check for duplicates (both forward and reverse)
+      - INSERT single directional relationship
+   ↓
+8. Return success response
+   ↓
+9. React shows success toast notification
+```
+
+---
+
+## Critical Issues and Solutions
+
+### Issue #1: Conditional Handle Rendering
+**Problem:** Initially, handles were conditionally rendered based on filterOrder:
+```javascript
+{!isFirst && <Handle type="target" ... />}  // ❌ BAD
+```
+
+This caused newly created posts to have missing handles, so connections to them would disappear on page refresh.
+
+**Solution:** Always render both handles, hide them with CSS when not needed:
+```javascript
+<Handle type="target" position={Position.Top} id="a" />  // ✅ GOOD
+<Handle type="source" position={Position.Bottom} id="b" />
+```
+
+### Issue #2: Bidirectional Relationships
+**Problem:** The importer was creating relationships in BOTH directions:
+```php
+// Forward
+INSERT (parent: 123, child: 456)
+// Reverse
+INSERT (parent: 456, child: 123)  // ❌ Creates phantom edges
+```
+
+This caused "phantom connection lines" appearing in wrong directions.
+
+**Solution:** Only create relationships in ONE direction (parent → child):
+```php
+// Only insert the relationship as defined in template
+INSERT (parent: 123, child: 456)  // ✅ CORRECT
+```
+
+### Issue #3: Edge Loading Timing
+**Problem:** Edges were set at the same time as nodes, causing React Flow to try rendering edges before nodes were registered.
+
+**Solution:** Delay edge setting by 100ms:
+```javascript
+setNodes(nodes);
+setTimeout(() => setEdges(edges), 100);  // ✅ Gives React Flow time to register nodes
+```
+
+### Issue #4: Auto-Connect on Empty Graph
+**Problem:** When installing a template, the graph would auto-run "Connect All" if no edges existed, creating invalid connections (e.g., Service → Room directly, skipping Practitioner).
+
+**Solution:** Removed auto-connect on load. Templates define their own relationships:
+```javascript
+// REMOVED this problematic code:
+if (!edges?.length) {
+    handleConnectAll();  // ❌ BAD
+}
+```
+
+---
+
+## Extending the System
+
+### Adding a New Dimension Type
+
+1. **Register the CPT** (usually in template or via System Setup):
+```php
+$custom_types['clisyc_equipment'] = [
+    'singular' => 'Equipment',
+    'plural' => 'Equipment',
+    'icon' => 'dashicons-admin-tools',
+    'public' => true
+];
+update_option('clisyc_custom_dimension_types', $custom_types);
+```
+
+2. **Enable in Registry**:
+```php
+$registry['dimensions']['clisyc_equipment'] = [
+    'enabled' => true,
+    'primary' => false,
+    'frontend_visible' => true,
+    'is_resource' => true
+];
+```
+
+3. **Add to Filter Order**:
+```php
+$registry['filter_order'][] = 'clisyc_equipment';
+```
+
+4. **Rebuild Node Index**:
+```php
+$graph_manager = new Graph_Node_Manager();
+$graph_manager->rebuild_index();
+```
+
+The new dimension will automatically appear in the Relationship Graph!
+
+### Querying Relationships Programmatically
+
+**Find all children of a parent:**
+```php
+global $wpdb;
+$table = $wpdb->prefix . 'clisyc_relationships';
+
+$children = $wpdb->get_results( $wpdb->prepare(
+    "SELECT child_object_id, child_object_type 
+     FROM {$table} 
+     WHERE parent_object_id = %d 
+     AND parent_object_type = %s",
+    $parent_id,
+    $parent_type
+));
+```
+
+**Check if two posts are connected:**
+```php
+$exists = $wpdb->get_var( $wpdb->prepare(
+    "SELECT COUNT(*) FROM {$table}
+     WHERE (parent_object_id = %d AND child_object_id = %d)
+     OR (parent_object_id = %d AND child_object_id = %d)",
+    $post_a_id, $post_b_id,
+    $post_b_id, $post_a_id  // Check both directions
+));
+
+$are_connected = ($exists > 0);
+```
+
+---
+
+## Troubleshooting
+
+### Problem: Connections Disappear After Refresh
+
+**Possible Causes:**
+1. Node missing from `wp_clisyc_graph_nodes` table
+2. Handle missing or hidden on target node
+3. Post was deleted or unpublished
+
+**Debug Steps:**
+```sql
+-- Check if node exists in index
+SELECT * FROM wp_clisyc_graph_nodes WHERE wp_post_id = 123;
+
+-- Check if relationship exists
+SELECT * FROM wp_clisyc_relationships 
+WHERE (parent_object_id = 123 OR child_object_id = 123);
+
+-- Check if post exists and is published
+SELECT post_status FROM wp_posts WHERE ID = 123;
+```
+
+### Problem: Phantom Connection Lines
+
+**Cause:** Duplicate relationships in database (both A→B and B→A exist)
+
+**Solution:**
+```sql
+-- Find duplicates
+SELECT 
+    LEAST(parent_object_id, child_object_id) as id1,
+    GREATEST(parent_object_id, child_object_id) as id2,
+    COUNT(*) as count
+FROM wp_clisyc_relationships
+GROUP BY id1, id2
+HAVING count > 1;
+
+-- Delete duplicates (keep only parent_id < child_id)
+DELETE FROM wp_clisyc_relationships
+WHERE parent_object_id > child_object_id;
+```
+
+### Problem: Graph Shows No Nodes
+
+**Possible Causes:**
+1. No dimensions enabled with `frontend_visible: true`
+2. Node index needs rebuilding
+3. JavaScript error preventing render
+
+**Debug Steps:**
+```php
+// Check dimension registry
+$registry = get_option('clisyc_dimension_registry');
+var_dump($registry['dimensions']);
+
+// Rebuild node index
+$graph_manager = new Graph_Node_Manager();
+$graph_manager->rebuild_index();
+
+// Check browser console for JS errors
+// Look for React/React Flow errors
+```
+
+---
+
+## Best Practices
+
+1. **Never create bidirectional relationships** - Each connection should exist ONCE as parent→child
+
+2. **Always preserve edge direction** - When saving, don't normalize based on ID comparison
+
+3. **Delay edge rendering** - Give React Flow 100ms to register nodes before setting edges
+
+4. **Always include both handles** - Even if hidden, handles must exist for React Flow to connect
+
+5. **Rebuild index after bulk changes** - After imports, dimension changes, or data migrations:
+   ```php
+   $graph_manager->rebuild_index();
+   ```
+
+6. **Validate relationships** - Before inserting, verify both posts exist:
+   ```php
+   if (get_post($parent_id) && get_post($child_id)) {
+       // Safe to insert
+   }
+   ```
+
+7. **Use transactions for bulk operations** - When inserting many relationships:
+   ```php
+   $wpdb->query('START TRANSACTION');
+   // ... multiple inserts ...
+   $wpdb->query('COMMIT');
+   ```
+
+---
+
+## Testing Checklist
+
+When modifying the Relationship Graph system, test:
+
+- [ ] Load graph with existing relationships
+- [ ] Create new connection between existing nodes
+- [ ] Create new post, then connect it (tests handle rendering)
+- [ ] Delete connection, save, refresh (tests deletion)
+- [ ] Install template, verify no phantom edges
+- [ ] Create connection, refresh page, verify it persists
+- [ ] Test with 1, 2, 3, and 4+ dimensions
+- [ ] Test Auto-Layout button
+- [ ] Test Connect All / Disconnect All buttons
+- [ ] Verify handle visibility (hidden on first/last dimension)
+- [ ] Test drag-and-drop positioning saves correctly
+
+---
+
+## Future Enhancements
+
+Potential improvements to consider:
+
+1. **Edge Labels** - Show relationship metadata on edges
+2. **Bulk Operations** - Select multiple nodes, perform actions
+3. **Relationship Types** - Different edge styles for different relationship types
+4. **Validation Rules** - Prevent invalid connections (e.g., Service → Service)
+5. **Undo/Redo** - History stack for graph changes
+6. **Mini-map** - Overview navigation for large graphs
+7. **Search/Filter** - Find specific nodes in complex graphs
+8. **Export/Import** - Save graph layouts as templates
+
+---
+
+## Version History
+
+**v1.0** - Initial implementation with conditional handle rendering (had bugs)
+**v1.1** - Fixed handle rendering to always include both handles
+**v1.2** - Fixed bidirectional relationship bug in importer
+**v1.3** - Added edge loading delay for React Flow compatibility
+**v1.4** - Removed auto-connect on empty graph
+**v1.5** - Current stable version
+
+---
+
+## Support Resources
+
+- React Flow Documentation: https://reactflow.dev/
+- WordPress REST API: https://developer.wordpress.org/rest-api/
+- Custom Post Types: https://developer.wordpress.org/plugins/post-types/
+
+For questions or issues, contact the development team or refer to the main plugin documentation.

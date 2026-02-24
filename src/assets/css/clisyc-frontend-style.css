@@ -1,0 +1,2850 @@
+/* 
+ * File: src/shared/assets/css/clisyc-frontend-style.css
+ * IMPROVED Frontend Styles for Client Sync Appointment Booking
+ * Enhanced version with better large screen layout and color-coding
+ * 
+ * CLEANED (2026-01-19): Removed redundant timezone/header styles
+ * - Timezone section now in clisyc-collapsible-header.css
+ */
+
+/* --- IMPORTS AND BASE FIXES --- */
+.ui-widget-content .ui-icon, .ui-widget-header .ui-icon, .ui-button .ui-icon {
+    background-image: none !important;
+}
+.ui-icon-circle-triangle-e:before { content: "\25B6"; }
+.ui-icon-circle-triangle-w:before { content: "\25C0"; }
+.ui-datepicker .ui-icon {
+    text-indent: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* --- IMPROVED: Date Range Highlighting --- */
+.ui-datepicker td.ui-datepicker-range .ui-state-default {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1e40af;
+}
+.ui-datepicker td.ui-datepicker-range-start .ui-state-default,
+.ui-datepicker td.ui-datepicker-current-day.ui-datepicker-range-start a.ui-state-default,
+.ui-datepicker td.ui-datepicker-current-day a.ui-state-active {
+    background: #3b82f6 !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+.ui-datepicker td.ui-datepicker-range-end .ui-state-default,
+.ui-datepicker td.ui-datepicker-current-day.ui-datepicker-range-end a.ui-state-default {
+    background: #3b82f6 !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+}
+
+/* --- IMPROVED: List View Rendering --- */
+.fc-list-table .fc-event-selected::before,
+.fc-list-table .fc-event-selected::after {
+    display: none !important;
+}
+.fc-list-event .fc-list-event-graphic {
+    display: none;
+}
+.fc-list-event-title-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1em;
+}
+.fc-list-table .fc-event-selected td {
+    background-color: #dbeafe !important;
+}
+.fc-list-event.clisyc-available-slot:hover td {
+    background-color: #eff6ff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.fc-list-event.clisyc-booked-event .fc-list-event-title-container,
+.fc-list-event.clisyc-unavailable-slot .fc-list-event-title-container {
+    font-style: italic;
+    color: #6b7280;
+}
+
+/* --- NEW: Striped Blocked Slots --- */
+.fc-event.clisyc-blocked-slot,
+.fc-timegrid-event.clisyc-blocked-slot .fc-event-main {
+    background-color: rgba(229, 231, 235, 0.7) !important; /* A light grey, semi-transparent */
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 0, 0, 0.07),
+        rgba(0, 0, 0, 0.07) 5px,
+        transparent 5px,
+        transparent 10px
+    ) !important;
+    border-color: #d1d5db !important;
+    color: #6b7280 !important;
+    cursor: not-allowed;
+}
+
+.fc-event.clisyc-blocked-slot .fc-event-time {
+    text-decoration: line-through;
+}
+
+/* --- IMPROVED: General Form & Message Styling --- */
+.clisyc-form-field { 
+    margin-bottom: 20px; 
+}
+.clisyc-form-field label, .clisyc-user-account-form label, .clisyc-registration-form label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.95em;
+}
+.clisyc-form-field label .required, .clisyc-user-account-form label .required, .clisyc-registration-form label .required { 
+    color: #ef4444; 
+    font-weight: 600; 
+    margin-left: 3px; 
+}
+.clisyc-form-field input[type="text"], 
+.clisyc-form-field input[type="email"], 
+.clisyc-form-field input[type="password"], 
+.clisyc-form-field textarea, 
+.clisyc-form-field select,
+.clisyc-user-account-form input[type="text"], 
+.clisyc-user-account-form input[type="email"], 
+.clisyc-user-account-form textarea, 
+.clisyc-user-account-form select,
+.clisyc-registration-form input[type="text"], 
+.clisyc-registration-form input[type="email"], 
+.clisyc-registration-form input[type="password"] { 
+    width: 100%; 
+    max-width: 500px; 
+    padding: 10px 12px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    box-sizing: border-box;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.clisyc-form-field input:focus,
+.clisyc-form-field textarea:focus,
+.clisyc-form-field select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* --- IMPROVED: Message Banners --- */
+.clisyc-registration-message { 
+    padding: 14px 16px 14px 48px; 
+    margin-bottom: 20px; 
+    border: 1px solid transparent; 
+    border-radius: 8px; 
+    position: relative; 
+    line-height: 1.6;
+    font-size: 0.95em;
+}
+.clisyc-registration-message .dashicons { 
+    position: absolute; 
+    left: 16px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    font-size: 22px; 
+}
+.clisyc-registration-message p { 
+    margin: 0; 
+}
+.clisyc-error-message { 
+    color: #991b1b; 
+    background-color: #fee2e2; 
+    border-color: #fecaca; 
+}
+.clisyc-error-message .dashicons { 
+    color: #991b1b; 
+}
+.clisyc-success-message { 
+    color: #065f46; 
+    background-color: #d1fae5; 
+    border-color: #a7f3d0; 
+}
+.clisyc-success-message .dashicons { 
+    color: #065f46; 
+}
+.clisyc-info-message { 
+    color: #075985; 
+    background-color: #e0f2fe; 
+    border-color: #bae6fd; 
+}
+.clisyc-info-message .dashicons { 
+    color: #075985; 
+}
+
+/* --- IMPROVED: Main Booking Container --- */
+#clisyc-appointment-calendar-container { 
+    margin: 20px auto; 
+}
+
+/* --- IMPROVED: Selected Slot Display --- */
+#selected_slot_display { 
+    font-weight: normal; 
+    margin: 20px 0; 
+    padding: 16px 20px; 
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 2px solid #93c5fd; 
+    border-radius: 8px; 
+    transition: all 0.3s ease; 
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+#selected_slot_display.none { 
+    display: none; 
+}
+#selected_slot_display span { 
+    color: #1e40af; 
+    font-weight: 700;
+    font-size: 1.05em;
+}
+
+/* --- IMPROVED: Faceted Search Layout (Main Container) --- */
+/* CRITICAL CHANGE: Reduced sidebar width from 320px to 240px for better proportions */
+.clisyc-faceted-search-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    margin: 0 auto;
+    max-width: 1400px;
+}
+
+/* --- IMPROVED: Filters Container (Left Sidebar) --- */
+.clisyc-faceted-search-layout .clisyc-availability-filters-container {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+}
+
+.clisyc-faceted-search-layout .clisyc-availability-filters-container h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 1.1em;
+    color: #111827;
+    font-weight: 700;
+}
+
+/* --- IMPROVED: Right Side Content Area --- */
+.clisyc-faceted-search-layout .clisyc-main-content-area {
+    min-width: 0;
+}
+
+/* --- IMPROVED: Filter Groups --- */
+.clisyc-filter-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.clisyc-filter-group {
+    margin-bottom: 0;
+}
+
+.clisyc-filter-group-label {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- IMPROVED: Radio Button Container (Card Style) --- */
+.clisyc-filter-radio-container {
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+    margin-top: 6px;
+}
+
+/* Custom scrollbar for filter container */
+.clisyc-filter-radio-container::-webkit-scrollbar {
+    width: 6px;
+}
+.clisyc-filter-radio-container::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 3px;
+}
+.clisyc-filter-radio-container::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+.clisyc-filter-radio-container::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* --- IMPROVED: Radio Options as Cards with Color Indicators --- */
+.clisyc-radio-option {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.clisyc-radio-option label {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9em;
+}
+
+.clisyc-radio-option label:hover {
+    background: #f3f4f6;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.clisyc-radio-option input[type="radio"] {
+    margin: 0 10px 0 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: #3b82f6;
+}
+
+.clisyc-radio-option input[type="radio"]:checked + span,
+.clisyc-radio-option input[type="radio"]:checked ~ * {
+    color: #1e40af;
+}
+
+.clisyc-radio-option:has(input[type="radio"]:checked) label {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+}
+
+/* NEW: Color dot indicator for filter options */
+.clisyc-filter-color-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 6px;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Show option count if available */
+.clisyc-radio-option-count {
+    margin-left: auto;
+    padding: 2px 8px;
+    background: #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.clisyc-radio-option:has(input[type="radio"]:checked) .clisyc-radio-option-count {
+    background: #bfdbfe;
+    color: #1e40af;
+}
+
+/* --- IMPROVED: Buttons Container --- */
+.clisyc-filter-buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.clisyc-filter-button {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.clisyc-filter-button:hover {
+    background: #f9fafb;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.clisyc-filter-button:active {
+    transform: translateY(0);
+}
+
+/* Mobile filter toggle button */
+#clisyc-mobile-filter-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+#clisyc-mobile-filter-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+.clisyc-event-label-group {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 4px;
+}
+
+.clisyc-event-color-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.fc-event-line-1 {
+    display: flex;
+    align-items: center;
+}
+
+/* --- IMPROVED: Button Styling --- */
+#schedule_button, .clisyc-submit-button {
+    padding: 14px 24px;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+#schedule_button:hover:not(:disabled), 
+.clisyc-submit-button:hover:not(.clisyc-button-disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+#schedule_button:disabled, 
+.clisyc-submit-button.clisyc-button-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.clisyc-submit-button.clisyc-button-processing::after {
+    content: " .";
+    animation: clisyc-dots 1s steps(5, end) infinite;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+@keyframes clisyc-dots {
+    0%, 20% { color: rgba(255, 255, 255, 0); text-shadow: .25em 0 0 rgba(255, 255, 255, 0), .5em 0 0 rgba(255, 255, 255, 0); }
+    40% { color: inherit; text-shadow: .25em 0 0 rgba(255, 255, 255, 0), .5em 0 0 rgba(255, 255, 255, 0); }
+    60% { text-shadow: .25em 0 0, .5em 0 0 rgba(255, 255, 255, 0); }
+    80%, 100% { text-shadow: .25em 0 0, .5em 0 0; }
+}
+
+/* TIMEZONE SECTION REMOVED - Now in clisyc-collapsible-header.css */
+
+/* --- IMPROVED: Loading States --- */
+.clisyc-loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    border: 4px solid rgba(59, 130, 246, 0.2);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: clisyc-spinner-spin 0.8s linear infinite;
+    z-index: 10;
+}
+
+@keyframes clisyc-spinner-spin {
+    to { transform: rotate(360deg); }
+}
+
+.clisyc-availability-filters-container {
+    position: relative;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.clisyc-availability-filters-container.clisyc-filters-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.clisyc-availability-filters-container.clisyc-filters-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border: 3px solid rgba(59, 130, 246, 0.2);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: clisyc-spinner-spin 0.8s linear infinite;
+    z-index: 20;
+}
+
+/* --- IMPROVED: Calendar Tooltip --- */
+.clisyc-calendar-tooltip.ui-tooltip {
+    padding: 12px 16px;
+    background: #1f2937;
+    color: #ffffff;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    font-size: 0.9em;
+    max-width: 320px;
+    z-index: 9999 !important;
+}
+
+.clisyc-calendar-tooltip strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* --- IMPROVED: Validation Errors --- */
+#clisyc-client-side-validation-errors {
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    background: #fee2e2;
+    border: 2px solid #fecaca;
+}
+
+#clisyc-client-side-validation-errors ul {
+    margin: 0;
+    padding-left: 24px;
+    list-style: disc;
+}
+
+#clisyc-client-side-validation-errors li {
+    margin-bottom: 6px;
+    color: #991b1b;
+    font-weight: 500;
+}
+
+.clisyc-form-field.clisyc-field-error {
+    border-left: 4px solid #ef4444;
+    padding-left: 16px;
+    background-color: #fee2e2;
+    border-radius: 6px;
+}
+
+.clisyc-form-field.clisyc-field-error > label {
+    color: #dc2626;
+}
+
+/* --- IMPROVED: Calendar Container Sizing --- */
+/* Make sure calendar takes full available width */
+#clisyc-calendar {
+    width: 100%;
+    min-height: 600px;
+}
+
+/* Ensure FullCalendar month view cells are properly sized */
+.fc-daygrid-day {
+    min-height: 100px;
+}
+
+/* Better month view spacing */
+.fc-dayGridMonth-view .fc-daygrid-day-frame {
+    min-height: 100px;
+}
+
+/* --- IMPROVED: Responsive Design --- */
+@media (max-width: 1024px) {
+    .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .clisyc-faceted-search-layout .clisyc-availability-filters-container {
+        position: relative;
+        top: auto;
+        max-height: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .clisyc-faceted-search-layout {
+        gap: 20px;
+    }
+    
+    .clisyc-faceted-search-layout .clisyc-availability-filters-container {
+        padding: 20px;
+    }
+    
+    
+    
+    
+    
+    #schedule_button, .clisyc-submit-button {
+        width: 100%;
+        padding: 16px 24px;
+    }
+    
+    #clisyc-mobile-filter-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* --- IMPROVED: Step Headers (Numbered Sections) --- */
+.clisyc-step-header {
+    font-size: 1.35em;
+    font-weight: 700;
+    color: #111827;
+    margin: 32px 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.clisyc-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.85em;
+}
+
+/* --- Section Cards --- */
+.clisyc-section-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.clisyc-section-card h3 {
+    margin-top: 0;
+}
+
+/* --- Empty State --- */
+.clisyc-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.clisyc-empty-state-icon {
+    font-size: 4em;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.clisyc-empty-state-message {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.clisyc-empty-state-description {
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+/* --- ACCESSIBILITY IMPROVEMENTS --- */
+.clisyc-radio-option input[type="radio"]:focus + span,
+.clisyc-radio-option input[type="radio"]:focus ~ * {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.clisyc-radio-option label:focus-within {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* --- ANIMATION FOR SMOOTH TRANSITIONS --- */
+@media (prefers-reduced-motion: no-preference) {
+    .fc-event,
+    .clisyc-radio-option label,
+    #schedule_button,
+    .clisyc-submit-button {
+        transition: all 0.2s ease;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* --- NEW: Event Duration Display --- */
+.fc-event-main-frame {
+    position: relative; /* This is crucial for positioning the child element */
+    height: 100%;
+}
+
+.clisyc-event-duration {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 1px 4px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: #4b5563; /* A neutral dark grey for readability */
+}
+
+/* On selected events, make the duration text white */
+.fc-event-selected .clisyc-event-duration {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.clisyc-event-duration .dashicons {
+    font-size: 12px;
+    line-height: 1;
+    height: 12px;
+    width: 12px;
+}
+
+/* ============================================================================
+   FIX FOR FULLCALENDAR EVENT COLORS
+   Replaces hardcoded colors with CSS variables from Calendar Event Styling settings
+   ============================================================================ */
+
+/* --- Available Slots: Use configured purple color --- */
+.clisyc-booking-form-app .fc-event.clisyc-available-slot {
+    cursor: pointer;
+    background-color: var(--clisyc-available-bg, #3b82f6) !important;
+    color: var(--clisyc-available-text, #ffffff) !important;
+    border-color: var(--clisyc-available-bg, #2563eb) !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) !important;
+}
+
+/* Hover state for available slots */
+.clisyc-booking-form-app .fc-event.clisyc-available-slot:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Selected state for available slots */
+.clisyc-booking-form-app .fc-event.clisyc-available-slot.fc-event-selected {
+    filter: brightness(1.1);
+    box-shadow: 0 0 0 2px var(--clisyc-available-bg, #2563eb), 
+                0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    border: 2px solid var(--clisyc-available-text, #ffffff) !important;
+}
+
+/* --- Booked Events: Use configured booked color --- */
+.clisyc-booking-form-app .fc-event.clisyc-booked-event {
+    background-color: var(--clisyc-booked-bg, #fee2e2) !important;
+    color: var(--clisyc-booked-text, #991b1b) !important;
+    border-color: var(--clisyc-booked-bg, #fca5a5) !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* --- Unavailable Slots: Use configured unavailable color --- */
+.clisyc-booking-form-app .fc-event.clisyc-unavailable-slot {
+    background-color: var(--clisyc-unavailable-bg, #f3f4f6) !important;
+    color: var(--clisyc-unavailable-text, #6b7280) !important;
+    border-color: var(--clisyc-unavailable-bg, #e5e7eb) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* --- List View Fixes --- */
+.clisyc-booking-form-app .fc-list-event.clisyc-available-slot:hover td {
+    background-color: var(--clisyc-available-bg, #eff6ff) !important;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clisyc-booking-form-app .fc-list-table .fc-event-selected td {
+    background-color: var(--clisyc-available-bg, #dbeafe) !important;
+}
+
+/* --- Ensure text and details are visible --- */
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .fc-event-time,
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .clisyc-event-details-compact,
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .clisyc-event-detail-label,
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .clisyc-event-more-count {
+    color: inherit;
+}
+
+/* --- Legend Styling --- */
+.clisyc-booking-form-app .clisyc-legend-item.clisyc-legend-available {
+    background-color: var(--clisyc-available-bg, #3b82f6);
+    color: var(--clisyc-available-text, #ffffff);
+}
+
+.clisyc-booking-form-app .clisyc-legend-item.clisyc-legend-booked {
+    background-color: var(--clisyc-booked-bg, #fee2e2);
+    color: var(--clisyc-booked-text, #991b1b);
+}
+
+.clisyc-booking-form-app .clisyc-legend-item.clisyc-legend-unavailable {
+    background-color: var(--clisyc-unavailable-bg, #f3f4f6);
+    color: var(--clisyc-unavailable-text, #6b7280);
+}
+
+/* --- User Appointment List Improvements --- */
+#clisyc-user-appointments-dashboard {
+    max-width: 100%;
+}
+
+.clisyc-appointment-list-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 1.5em;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+}
+
+.clisyc-filter-group label {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.clisyc-table-container {
+    position: relative;
+    overflow-x: auto;
+}
+
+.clisyc-appointment-actions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.clisyc-appointment-actions a {
+    display: inline-block;
+    color: #50575e;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.clisyc-appointment-actions a:hover {
+    color: #007cba;
+}
+
+.clisyc-appointment-actions .clisyc-action-cancel:hover {
+    color: #d63638;
+}
+
+.clisyc-appointment-actions .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* --- User Appointment List Improvements v2 --- */
+#clisyc-user-appointments-dashboard {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 2em;
+}
+
+.clisyc-appointment-list-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+    margin-bottom: 1.5em;
+    padding-bottom: 1.5em;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.clisyc-filter-group label {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.clisyc-table-container {
+    position: relative;
+    overflow-x: auto;
+}
+
+.clisyc-appointment-list-table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders are single lines */
+}
+
+/* Header Styling */
+.clisyc-appointment-list-table thead th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    text-align: left;
+    color: #374151;
+    font-size: 13px;
+    border-bottom: 2px solid #e5e7eb; /* Thicker line for header */
+    padding: 12px 24px; /* Vertical | Horizontal */
+}
+
+/* Body Cell Styling - This is the key change for spacing */
+.clisyc-appointment-list-table tbody td {
+    padding: 16px 24px; /* More vertical padding for breathing room, more horizontal for column separation */
+    border-bottom: 1px solid #f0f0f1; /* Thin line between rows */
+    vertical-align: middle;
+}
+
+/* Striped Rows */
+.clisyc-appointment-list-table.striped tbody tr:nth-child(odd) {
+    background-color: #f9fafb;
+}
+
+/* Action Buttons */
+.clisyc-appointment-actions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.clisyc-appointment-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: #6b7280;
+    text-decoration: none;
+    border-radius: 50%;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.clisyc-appointment-actions a:hover {
+    background-color: #f0f0f1;
+    color: #007cba;
+}
+
+.clisyc-appointment-actions a.clisyc-action-cancel:hover {
+    color: #d63638;
+}
+
+.clisyc-appointment-actions .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* --- Mini Calendar Widget Styles --- */
+.clisyc-mini-calendar-wrapper {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 15px;
+    max-width: 320px; /* Constrain width like a widget */
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Adjust FullCalendar Toolbar for Mini */
+#clisyc-user-mini-calendar .fc-toolbar {
+    margin-bottom: 10px !important;
+    font-size: 0.8em; /* Smaller title */
+}
+#clisyc-user-mini-calendar .fc-toolbar-title {
+    font-size: 1.1em;
+}
+#clisyc-user-mini-calendar .fc-button {
+    padding: 2px 6px;
+    font-size: 0.85em;
+}
+
+/* Adjust Day Cells */
+#clisyc-user-mini-calendar .fc-daygrid-day-frame {
+    min-height: 30px; /* Squash cells vertically */
+    cursor: pointer;
+}
+#clisyc-user-mini-calendar .fc-daygrid-day-top {
+    justify-content: center; /* Center date numbers */
+    font-size: 0.9em;
+}
+
+/* Selection Highlight */
+#clisyc-user-mini-calendar .clisyc-day-selected {
+    background-color: #eff6ff !important;
+}
+#clisyc-user-mini-calendar .clisyc-day-selected .fc-daygrid-day-number {
+    color: #3b82f6;
+    font-weight: bold;
+}
+
+/* Event Dots (using List Item View trick) */
+#clisyc-user-mini-calendar .fc-daygrid-event-harness {
+    /* Center the dot */
+    display: flex;
+    justify-content: center;
+    margin-top: -4px; /* Pull up closer to date */
+}
+#clisyc-user-mini-calendar .fc-event-title,
+#clisyc-user-mini-calendar .fc-event-time {
+    display: none; /* Hide text */
+}
+#clisyc-user-mini-calendar .fc-daygrid-dot-event {
+    background: none;
+    border: none;
+    padding: 0;
+}
+#clisyc-user-mini-calendar .fc-daygrid-event-dot {
+    border-width: 3px; /* Make dots slightly larger */
+    border-color: #3b82f6; /* Use brand color */
+}
+
+/* --- Mini Details List (Below Calendar) --- */
+#clisyc-mini-calendar-details {
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+    min-height: 50px;
+}
+#clisyc-mini-calendar-details h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.95em;
+    color: #374151;
+}
+.clisyc-mini-hint, .clisyc-mini-empty {
+    font-size: 0.85em;
+    color: #6b7280;
+    font-style: italic;
+    text-align: center;
+}
+.clisyc-mini-event-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.clisyc-mini-event-list li {
+    margin-bottom: 6px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 6px;
+}
+.clisyc-mini-event-list li:last-child {
+    border-bottom: none;
+}
+.clisyc-mini-event-link {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9em;
+    line-height: 1.3;
+}
+.clisyc-mini-time {
+    color: #6b7280;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+.clisyc-mini-title {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/**
+ * 
+ * FIXES:
+ * - Timezone dropdown appearing as bulleted list
+ * - Legend labels not visible
+ * - Consistent styling between [clisyc_manager_calendar] and [clisyc_booking_form]
+ */
+
+/* ==========================================================================
+   MANAGER CALENDAR HEADER - Timezone & Clock
+   ========================================================================== */
+
+.clisyc-manager-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    align-items: flex-start;
+}
+
+/* ==========================================================================
+   STYLED SELECT DROPDOWN (CSS-only solution)
+   ========================================================================== */
+
+.clisyc-select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 320px;
+}
+
+.clisyc-styled-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: 12px 40px 12px 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111827;
+    background-color: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.4;
+}
+
+.clisyc-styled-select:hover {
+    border-color: #3b82f6;
+}
+
+.clisyc-styled-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Custom dropdown arrow */
+.clisyc-select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clisyc-select-arrow svg {
+    transition: transform 0.2s ease;
+}
+
+/* Arrow rotation when select is open (requires JS to add .is-open class) */
+.clisyc-select-wrapper.is-open .clisyc-select-arrow svg {
+    transform: rotate(180deg);
+}
+
+/* Hide the default dropdown arrow in IE */
+.clisyc-styled-select::-ms-expand {
+    display: none;
+}
+
+/* LIVE CLOCK SECTION REMOVED - Now in clisyc-collapsible-header.css */
+
+.clisyc-tz-region {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.clisyc-tz-region .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* ==========================================================================
+   CALENDAR LOADING STATE
+   ========================================================================== */
+
+.clisyc-calendar-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   CALENDAR LEGEND - Consistent styling
+   ========================================================================== */
+
+.clisyc-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    padding: 0.875rem 1.25rem;
+    margin-top: 1rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.clisyc-legend-title {
+    font-weight: 600;
+    color: #374151;
+    margin-right: 0.25rem;
+}
+
+.clisyc-legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+}
+
+.clisyc-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clisyc-legend-indicator {
+    flex-shrink: 0;
+}
+
+/* Legend slot indicators (square with rounded corners) */
+.clisyc-legend-indicator.clisyc-legend-slot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    border: 2px solid transparent;
+}
+
+/* Legend highlight indicator (for "Today") */
+.clisyc-legend-indicator.clisyc-legend-highlight {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.125rem;
+    border: 1px solid;
+}
+
+/* Legend line indicator (for "Current Time") */
+.clisyc-legend-indicator.clisyc-legend-line {
+    width: 1.25rem;
+    height: 3px;
+    border-radius: 2px;
+}
+
+.clisyc-legend-label {
+    color: #4b5563;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   LEGEND COLOR CLASSES - Using CSS Variables from Appearance settings
+   ========================================================================== */
+
+/* Available slot */
+.clisyc-legend-available {
+    background-color: var(--clisyc-available-bg, #d1fae5);
+    border-color: var(--clisyc-available-bg, #d1fae5);
+}
+
+/* Booked slot */
+.clisyc-legend-booked {
+    background-color: var(--clisyc-booked-bg, #fee2e2);
+    border-color: var(--clisyc-booked-bg, #fee2e2);
+}
+
+/* Blocked/Unavailable slot */
+.clisyc-legend-blocked {
+    background-color: var(--clisyc-blocked-bg, #e5e7eb);
+    border-color: var(--clisyc-blocked-bg, #e5e7eb);
+}
+
+/* Today highlight */
+.clisyc-legend-today {
+    background-color: #fffbeb;
+    border-color: #fcd34d;
+}
+
+/* Current time line */
+.clisyc-legend-current-time {
+    background-color: #ef4444;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS - UPDATED FIX
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .clisyc-manager-header {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    /* FIX: Remove flex-grow so it doesn't expand to fill empty space */
+    
+
+    .clisyc-select-wrapper {
+        max-width: 100%;
+    }
+
+.clisyc-calendar-legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .clisyc-legend-title {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    .clisyc-legend-items {
+        width: 100%;
+        gap: 0.625rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-manager-header {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .clisyc-styled-select {
+        padding: 10px 36px 10px 12px;
+        font-size: 0.9rem;
+    }
+
+.clisyc-legend-items {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .clisyc-legend-item {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   OVERRIDE: Fix for any existing custom dropdown plugin styles
+   These rules ensure the native select is properly displayed
+   ========================================================================== */
+
+/* Hide any accidentally rendered list elements from custom dropdown plugins */
+#clisyc-manager-dashboard-wrapper .clisyc-select-wrapper ul,
+#clisyc-manager-dashboard-wrapper .clisyc-select-wrapper li,
+#clisyc-manager-timezone-selector + ul,
+#clisyc-manager-timezone-selector ~ ul {
+    display: none !important;
+}
+
+/* Ensure the native select is always visible */
+#clisyc-manager-timezone-selector.clisyc-styled-select {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* --- Form Grid Layout Engine --- */
+.clisyc-form-wrapper form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between columns */
+    align-items: flex-start;
+}
+
+/* Width Definitions */
+.clisyc-field-width-full { 
+    width: 100%; 
+}
+
+.clisyc-field-width-half { 
+    width: calc(50% - 10px); /* 50% minus half the gap */
+}
+
+.clisyc-field-width-one-third { 
+    width: calc(33.333% - 14px); 
+}
+
+.clisyc-field-width-two-thirds { 
+    width: calc(66.666% - 7px); 
+}
+
+/* Mobile Responsiveness: Stack everything 100% on small screens */
+@media (max-width: 600px) {
+    .clisyc-field-width-half,
+    .clisyc-field-width-one-third,
+    .clisyc-field-width-two-thirds {
+        width: 100%;
+    }
+}
+
+/* Ensure buttons and registration blocks always take full width */
+.clisyc-form-wrapper .clisyc-submit-button-wrapper,
+.clisyc-form-wrapper fieldset.clisyc-field-width-full {
+    width: 100%;
+}/**
+ * RESPONSIVE IMPROVEMENTS for clisyc-frontend-style.css
+ * 
+ * 
+ * These rules complement the booking-form/style.css improvements
+ * and handle the shared components like timezone selector and clock.
+ * 
+ * INSTRUCTIONS:
+ * Append these rules at the end of clisyc-frontend-style.css
+ * OR replace the existing responsive sections starting around line 1471
+ */
+
+/* TIME SELECTION WRAPPER RESPONSIVE REMOVED - Now in clisyc-collapsible-header.css */
+
+/* ==========================================================================
+   IMPROVED RESPONSIVE - FILTER SIDEBAR
+   ========================================================================== */
+
+/* At 950px, filters become horizontal */
+@media (max-width: 950px) {
+    .clisyc-faceted-search-layout .clisyc-availability-filters-container {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    .clisyc-filter-radio-container {
+        max-height: none;
+        overflow-y: visible;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .clisyc-radio-option {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+    }
+    
+    .clisyc-radio-option label {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 600px) {
+    .clisyc-faceted-search-layout .clisyc-availability-filters-container {
+        padding: 12px;
+        border-radius: 8px;
+    }
+    
+    .clisyc-filter-group-label {
+        font-size: 0.85em;
+        margin-bottom: 6px;
+    }
+    
+    .clisyc-radio-option label {
+        padding: 6px 10px;
+        font-size: 0.8em;
+        border-radius: 6px;
+    }
+    
+    .clisyc-filter-color-indicator {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* ==========================================================================
+   IMPROVED RESPONSIVE - CALENDAR LEGEND
+   ========================================================================== */
+
+@media (max-width: 850px) {
+    .clisyc-calendar-legend {
+        padding: 10px 12px;
+        gap: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .clisyc-legend-items {
+        gap: 6px 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .clisyc-calendar-legend {
+        padding: 8px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 12px;
+    }
+    
+    .clisyc-legend-title {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+    
+    .clisyc-legend-items {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 4px 10px;
+    }
+    
+    .clisyc-legend-item {
+        gap: 4px;
+    }
+    
+    .clisyc-legend-indicator.clisyc-legend-slot {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .clisyc-legend-label {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-legend-items {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+/* ==========================================================================
+   IMPROVED RESPONSIVE - FORM FIELDS
+   ========================================================================== */
+
+@media (max-width: 600px) {
+    .clisyc-form-field {
+        margin-bottom: 16px;
+    }
+    
+    .clisyc-form-field label {
+        font-size: 0.9em;
+        margin-bottom: 6px;
+    }
+    
+    .clisyc-form-field input[type="text"],
+    .clisyc-form-field input[type="email"],
+    .clisyc-form-field textarea,
+    .clisyc-form-field select {
+        padding: 8px 10px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+    
+    #schedule_button,
+    .clisyc-submit-button {
+        padding: 12px 20px;
+        font-size: 1em;
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   MANAGER HEADER RESPONSIVE (if using shared layout)
+   ========================================================================== */
+
+@media (max-width: 950px) {
+    .clisyc-manager-header {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+    
+    
+    
+
+}
+
+@media (max-width: 768px) {
+    .clisyc-manager-header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+
+}
+
+@media (max-width: 480px) {
+    .clisyc-manager-header {
+        padding: 10px;
+    }
+    
+
+}
+/**
+ * FIXES for reported issues - December 28, 2025
+ */
+
+/* ==========================================================================
+   FIX 1: CHECKBOX/RADIO CUTOFF
+   ========================================================================== */
+
+.clisyc-radio-option label {
+    min-height: 40px;
+    padding: 10px 12px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.clisyc-filter-color-indicator {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    border-width: 2px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .clisyc-radio-option label {
+        min-height: 44px;
+        padding: 10px 12px;
+        gap: 10px;
+    }
+    
+    .clisyc-filter-color-indicator {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+    }
+}
+
+/* ==========================================================================
+   FIX 2: FILTER GROUP SPACING
+   ========================================================================== */
+
+.clisyc-filter-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.clisyc-filter-group {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+}
+
+/* Filter radio container should not have excessive height */
+.clisyc-filter-radio-container {
+    max-height: none;
+    overflow-y: visible;
+}
+
+@media (max-width: 950px) {
+    .clisyc-filter-group-wrapper {
+        gap: 16px;
+    }
+    
+    .clisyc-filter-radio-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .clisyc-radio-option {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+    }
+}
+
+/* ==========================================================================
+   FIX 3: ANALOG CLOCK AS ICON
+   Restructure to put small analog clock next to "Current Time" label
+   ========================================================================== */
+
+/* The live clock wrapper layout */
+
+/* Put clock icon inline with label */
+.clisyc-clock-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+/* Hide the default hourglass/dashicons if present */
+.clisyc-clock-label .dashicons-clock,
+.clisyc-clock-label .dashicons-hourglass,
+.clisyc-clock-label > .dashicons {
+    display: none;
+}
+
+/* Small analog clock icon styling */
+
+.clisyc-clock-hand {
+    position: absolute;
+    background: #374151;
+    transform-origin: bottom center;
+    border-radius: 1px;
+}
+
+.clisyc-clock-hand-hour {
+    width: 2px;
+    height: 7px;
+    bottom: 50%;
+    left: calc(50% - 1px);
+}
+
+.clisyc-clock-hand-minute {
+    width: 1.5px;
+    height: 10px;
+    bottom: 50%;
+    left: calc(50% - 0.75px);
+}
+
+.clisyc-clock-center-dot {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #374151;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+/* Digital clock display */
+
+/* Responsive adjustments */
+@media (max-width: 850px) {
+    
+    
+    .clisyc-clock-hand-hour {
+        width: 1.5px;
+        height: 6px;
+    }
+    
+    .clisyc-clock-hand-minute {
+        width: 1px;
+        height: 8px;
+    }
+    
+    .clisyc-clock-center-dot {
+        width: 2px;
+        height: 2px;
+    }
+    
+    
+}
+
+@media (max-width: 600px) {
+    .clisyc-clock-label {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    
+    
+    .clisyc-clock-hand-hour {
+        width: 1.5px;
+        height: 5px;
+    }
+    
+    .clisyc-clock-hand-minute {
+        width: 1px;
+        height: 7px;
+    }
+}
+
+/* Booking Confirmation Styling */
+.clisyc-booking-confirmation {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.clisyc-success-icon-circle {
+    width: 60px;
+    height: 60px;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.clisyc-success-icon-circle .dashicons {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+}
+
+.clisyc-confirmation-header h2 {
+    color: #065f46;
+    margin: 0 0 0.5rem 0;
+}
+
+.clisyc-confirmation-header p {
+    color: #166534;
+    font-size: 1.1rem;
+}
+
+.clisyc-confirmation-card {
+    margin-top: 2rem;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Minimal Style */
+.clisyc-booking-confirmation.clisyc-style-minimal {
+    padding: 1rem;
+    background: transparent;
+    border-left: 4px solid #22c55e;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0;
+    text-align: left;
+}
+
+.clisyc-booking-confirmation.clisyc-style-minimal .clisyc-success-icon-circle {
+    display: none;
+}
+
+/* ==========================================================================
+   MANAGER APPOINTMENTS DASHBOARD - Style Upgrade v3
+   
+   IMPORTANT: Add this CSS to the END of src/assets/css/clisyc-frontend-style.css
+   
+   UPDATED: Now uses Client Sync CSS variables for typography to respect
+   the "Text Size" setting in Settings → Appearance.
+   
+   Typography Variables Used:
+   - --clisyc-font-size-xs    : Small badges, uppercase labels
+   - --clisyc-font-size-sm    : Secondary text, button labels
+   - --clisyc-font-size-base  : Default body text
+   - --clisyc-font-size-md    : Slightly larger body text
+   - --clisyc-font-size-lg    : Sub-headings, card titles
+   - --clisyc-font-size-xl    : Section headers (H3)
+   - --clisyc-font-size-2xl   : Main page titles (H2)
+   ========================================================================== */
+
+/* ==========================================================================
+   DASHBOARD CONTAINER
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+#clisyc-manager-appointments-dashboard h2 {
+    margin: 0 0 24px 0;
+    font-size: var(--clisyc-font-size-2xl, 1.5rem);
+    font-weight: 700;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#clisyc-manager-appointments-dashboard h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 2px;
+}
+
+/* ==========================================================================
+   CONTROLS BAR (Search, Filters, Export)
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-manager-list-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 140px;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group label {
+    font-size: var(--clisyc-font-size-xs, 0.75rem);
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group input[type="text"] {
+    padding: 10px 14px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 0.9rem);
+    min-width: 220px;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group input[type="text"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group input[type="text"]::placeholder {
+    color: #9ca3af;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group select {
+    padding: 10px 36px 10px 14px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 0.9rem);
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group select:hover {
+    border-color: #3b82f6;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-filter-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Export Button */
+#clisyc-manager-appointments-dashboard .clisyc-export-form {
+    margin-left: auto;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-export-form button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 0.9rem);
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-export-form button:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-export-form button svg {
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   TABLE CONTAINER & LOADING STATE
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-table-container {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+/* Loading Overlay */
+#clisyc-manager-appointments-dashboard .clisyc-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(59, 130, 246, 0.2);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: clisyc-manager-spin 0.7s linear infinite;
+}
+
+@keyframes clisyc-manager-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   TABLE STYLING
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--clisyc-font-size-base, 0.9rem);
+    border: none;
+    box-shadow: none;
+}
+
+/* Table Header */
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table thead th {
+    background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+    padding: 14px 20px;
+    font-weight: 600;
+    font-size: var(--clisyc-font-size-xs, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Sortable Column Headers */
+#clisyc-manager-appointments-dashboard .clisyc-sortable-column {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-sortable-column:hover {
+    color: #3b82f6;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-sortable-column::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 6px;
+    vertical-align: middle;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #9ca3af;
+    opacity: 0.5;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-sortable-column.sorted.asc::after {
+    border-top: none;
+    border-bottom: 5px solid #3b82f6;
+    opacity: 1;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-sortable-column.sorted.desc::after {
+    border-top: 5px solid #3b82f6;
+    opacity: 1;
+}
+
+/* Table Body */
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f1;
+    vertical-align: middle;
+    color: #374151;
+    font-size: var(--clisyc-font-size-base, 0.9rem);
+}
+
+/* Alternating Row Colors */
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table.striped tbody tr:nth-child(odd) {
+    background-color: #fafbfc;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table.striped tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* Row Hover */
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody tr:hover {
+    background-color: #f0f7ff !important;
+}
+
+/* Client Name Column - First column bold */
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td:first-child {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ==========================================================================
+   STATUS BADGES
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-status-cell {
+    font-weight: 500;
+}
+
+/* Status Badge Base */
+#clisyc-manager-appointments-dashboard .clisyc-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: var(--clisyc-font-size-xs, 0.75rem);
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+/* Status: Published/Upcoming */
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--published,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--upcoming,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--confirmed {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--published::before,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--upcoming::before,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--confirmed::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #3b82f6;
+    border-radius: 50%;
+}
+
+/* Status: Checked In */
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--checked_in,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--completed {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--checked_in::before,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--completed::before {
+    content: '✓';
+    font-size: var(--clisyc-font-size-xs, 0.7rem);
+}
+
+/* Status: No Show */
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--no_show,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--no_show::before,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--cancelled::before {
+    content: '✕';
+    font-size: var(--clisyc-font-size-xs, 0.65rem);
+}
+
+/* Status: Pending */
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--pending,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--draft {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--pending::before,
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--draft::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #f59e0b;
+    border-radius: 50%;
+}
+
+/* Status: Past */
+#clisyc-manager-appointments-dashboard .clisyc-status-badge--past {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+}
+
+/* ==========================================================================
+   ACTION BUTTONS
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-appointment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Quick Action Button Base */
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #6b7280;
+    font-size: var(--clisyc-font-size-sm, 0.85rem);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Check-In Button (Green) */
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn[data-new-status="checked_in"] {
+    border-color: #86efac;
+    color: #16a34a;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn[data-new-status="checked_in"]:hover {
+    background: #dcfce7;
+    border-color: #22c55e;
+}
+
+/* No-Show Button (Red) */
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn[data-new-status="no_show"] {
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-quick-action-btn[data-new-status="no_show"]:hover {
+    background: #fee2e2;
+    border-color: #ef4444;
+}
+
+/* Edit/Details Buttons */
+#clisyc-manager-appointments-dashboard .clisyc-appointment-actions .button.button-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 14px;
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-sm, 0.85rem);
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    gap: 6px;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-appointment-actions .button.button-small:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-appointment-actions .button.button-small .dashicons {
+    font-size: var(--clisyc-font-size-base, 16px);
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   PAGINATION
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-pagination-container .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 0.9rem);
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-pagination-container .page-numbers:hover:not(.current):not(.dots) {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: translateY(-1px);
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-pagination-container .page-numbers.current {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+#clisyc-manager-appointments-dashboard .clisyc-pagination-container .page-numbers.dots {
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    min-width: auto;
+    padding: 0 4px;
+}
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+#clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td[colspan] {
+    text-align: center;
+    padding: 48px 20px;
+    color: #6b7280;
+    font-size: var(--clisyc-font-size-base, 0.95rem);
+    font-style: italic;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    #clisyc-manager-appointments-dashboard {
+        padding: 20px;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-manager-list-controls {
+        gap: 12px;
+        padding: 16px;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-filter-group {
+        flex: 1 1 calc(50% - 6px);
+        min-width: 120px;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-filter-group input[type="text"] {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-export-form {
+        flex: 1 1 100%;
+        margin-left: 0;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-export-form button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table thead {
+        display: none;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody tr {
+        display: block;
+        padding: 16px;
+        margin-bottom: 12px;
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody tr:hover {
+        border-color: #3b82f6;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td:last-child {
+        border-bottom: none;
+        padding-top: 14px;
+        justify-content: flex-start;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td::before {
+        content: attr(data-colname);
+        font-weight: 600;
+        font-size: var(--clisyc-font-size-xs, 0.75rem);
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        flex-shrink: 0;
+        margin-right: 12px;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-list-table tbody td:first-child {
+        padding-top: 0;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-table-container {
+        border: none;
+        border-radius: 0;
+    }
+    
+    /* Actions row styling for mobile */
+    #clisyc-manager-appointments-dashboard .clisyc-appointment-actions {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    #clisyc-manager-appointments-dashboard {
+        padding: 16px;
+        border-radius: 8px;
+    }
+    
+    #clisyc-manager-appointments-dashboard h2 {
+        font-size: var(--clisyc-font-size-xl, 1.25rem);
+        margin-bottom: 16px;
+    }
+    
+    #clisyc-manager-appointments-dashboard .clisyc-filter-group {
+        flex: 1 1 100%;
+    }
+}
+
+/**
+ * Manager Appointments Dashboard - Button & Details Fixes
+ * Add to: src/assets/css/clisyc-frontend-style.css
+ *
+ * Fixes action buttons and adds styling for the Edit Appointment Details page
+ */
+
+/* ==========================================================================
+   Manager Appointments Dashboard - Action Buttons Fix
+   ========================================================================== */
+
+/* Action buttons container */
+.clisyc-appointment-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+/* Base action button style (icon buttons) */
+.clisyc-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    color: #555;
+}
+
+.clisyc-action-btn:hover {
+    background: #f5f5f5;
+    text-decoration: none;
+}
+
+/* Details button (info icon) - blue */
+.clisyc-action-btn--details:hover {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1e40af;
+}
+
+/* Admin edit button - purple */
+.clisyc-action-btn--admin:hover {
+    background: #ede9fe;
+    border-color: #8b5cf6;
+    color: #5b21b6;
+}
+
+/* SVG icons inside action buttons */
+.clisyc-action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Quick action buttons (check-in, no-show) */
+.clisyc-quick-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.clisyc-quick-action-btn:hover {
+    background: #f5f5f5;
+}
+
+/* Check-in button (green on hover) */
+.clisyc-quick-action-btn[data-new-status="checked_in"] {
+    border-color: #10b981;
+    color: #065f46;
+}
+
+.clisyc-quick-action-btn[data-new-status="checked_in"]:hover {
+    background: #d1fae5;
+}
+
+/* No-show button (red on hover) */
+.clisyc-quick-action-btn[data-new-status="no_show"] {
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.clisyc-quick-action-btn[data-new-status="no_show"]:hover {
+    background: #fee2e2;
+}
+
+.clisyc-quick-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* SVG icons inside quick action buttons */
+.clisyc-quick-action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   Edit Appointment Details Page
+   ========================================================================== */
+
+.clisyc-manager-edit-container {
+    max-width: 800px;
+}
+
+.clisyc-back-links {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.clisyc-back-links a {
+    color: #2271b1;
+    text-decoration: none;
+}
+
+.clisyc-back-links a:hover {
+    text-decoration: underline;
+}
+
+/* Appointment Summary Section */
+.clisyc-appointment-summary {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.clisyc-appointment-summary h3 {
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Details Table */
+.clisyc-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clisyc-details-table th,
+.clisyc-details-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.clisyc-details-table th {
+    width: 140px;
+    font-weight: 500;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.clisyc-details-table td {
+    color: #1e293b;
+    font-size: 14px;
+}
+
+.clisyc-details-table tr:last-child th,
+.clisyc-details-table tr:last-child td {
+    border-bottom: none;
+}
+
+.clisyc-client-email {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* Notes Section */
+.clisyc-appointment-notes-section {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.clisyc-appointment-notes-section h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #92400e;
+}
+
+.clisyc-notes-content {
+    color: #78350f;
+    line-height: 1.6;
+}
+
+.clisyc-no-notes {
+    color: #a16207;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Status badges */
+.clisyc-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+/* Status badge colors */
+.clisyc-status-badge--publish,
+.clisyc-status-badge--confirmed,
+.clisyc-status-badge--published {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.clisyc-status-badge--checked_in,
+.clisyc-status-badge--completed {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.clisyc-status-badge--no_show,
+.clisyc-status-badge--cancelled {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.clisyc-status-badge--pending,
+.clisyc-status-badge--draft {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.clisyc-status-badge--clisyc_pending_pay {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+/* Success/Error Messages */
+.clisyc-registration-message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.clisyc-success-message {
+    background-color: #d1fae5;
+    border: 1px solid #10b981;
+    color: #065f46;
+}
+
+.clisyc-error-message {
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #991b1b;
+}
+
+.clisyc-info-message {
+    background-color: #dbeafe;
+    border: 1px solid #3b82f6;
+    color: #1e40af;
+}
+
+/* Form styling */
+.clisyc-edit-appointment-form h3 {
+    margin: 24px 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* ==========================================================================
+   Responsive adjustments for smaller screens
+   ========================================================================== */
+
+@media screen and (max-width: 782px) {
+    .clisyc-appointment-actions {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .clisyc-action-btn,
+    .clisyc-quick-action-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .clisyc-details-table th {
+        width: 100px;
+    }
+    
+    .clisyc-details-table th,
+    .clisyc-details-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+}

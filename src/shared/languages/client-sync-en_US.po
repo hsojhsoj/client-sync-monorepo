@@ -1,0 +1,1217 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Client Sync\n"
+"POT-Creation-Date: 2025-04-06 15:30-0700\n"
+"PO-Revision-Date: 2025-07-07 22:07-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: clisyc.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: includes/core/class-post-type-manager.php:120
+msgctxt "Post type general name"
+msgid "Appointments"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:121
+msgctxt "Post type singular name"
+msgid "Appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:122
+msgctxt "Admin Menu text"
+msgid "Appointments"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:123
+msgctxt "Add New on Toolbar"
+msgid "Appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:124
+msgid "Add New"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:125
+msgid "Add New Appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:126
+msgid "New Appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:127
+msgid "Edit Appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:128
+msgid "View Appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:129
+msgid "All Appointments"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:130
+msgid "Search Appointments"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:131
+msgid "Parent Appointments:"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:132
+msgid "No appointments found."
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:133
+msgid "No appointments found in Trash."
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:134
+msgctxt "The post type archive label."
+msgid "Appointment archives"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:135
+msgctxt "Insert into post phrase."
+msgid "Insert into appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:136
+msgctxt "Uploaded to this post phrase."
+msgid "Uploaded to this appointment"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:137
+msgctxt "Filter posts list phrase."
+msgid "Filter appointments list"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:138
+msgctxt "Posts list navigation phrase."
+msgid "Appointments list navigation"
+msgstr ""
+
+#: includes/core/class-post-type-manager.php:139
+msgctxt "Posts list phrase."
+msgid "Appointments list"
+msgstr ""
+
+#: clisyc.php:147 includes/admin-standard-day-schedule.php:113
+msgid "No changes detected in visual slots."
+msgstr ""
+
+#: clisyc.php:150
+msgid "Standard schedule visual slots saved."
+msgstr ""
+
+#: clisyc.php:151
+msgid "Failed to save visual schedule slots."
+msgstr ""
+
+#: clisyc.php:389
+msgid "No available slots found for this date."
+msgstr ""
+
+#: clisyc.php:390
+msgid "Error loading slots."
+msgstr ""
+
+#: clisyc.php:391 includes/admin-appointment-meta-boxes.php:152
+msgid "Please select a date above to see available slots."
+msgstr ""
+
+#: clisyc.php:392 includes/admin-appointment-meta-boxes.php:168
+#: includes/appointments.php:350 includes/appointments.php:471
+msgid "None"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#: clisyc.php:414 clisyc.php:415
+msgid "Client Sync"
+msgstr ""
+
+#: clisyc.php:425 clisyc.php:426
+msgid "Calendar & Settings"
+msgstr ""
+
+#: clisyc.php:449
+msgid "Access Denied."
+msgstr ""
+
+#: clisyc.php:456 includes/admin-appointment-calendar.php:53
+msgid "Appointment Calendar"
+msgstr ""
+
+#: clisyc.php:457 includes/admin-client-list.php:21
+msgid "Client List"
+msgstr ""
+
+#: clisyc.php:458
+msgid "Client Custom Fields"
+msgstr ""
+
+#: clisyc.php:459
+msgid "Appointment Custom Fields"
+msgstr ""
+
+#: clisyc.php:460
+msgid "Manage Time Slots"
+msgstr ""
+
+#: clisyc.php:461 includes/admin-standard-day-schedule.php:120
+msgid "Standard Day Schedule"
+msgstr ""
+
+#: clisyc.php:466
+msgid "Secondary menu"
+msgstr ""
+
+#: clisyc.php:555
+msgid "Invalid format for Visible Start Time. Please use HH:MM."
+msgstr ""
+
+#: clisyc.php:560
+msgid "Invalid format for Visible End Time. Please use HH:MM."
+msgstr ""
+
+#: clisyc.php:567
+msgid "Start time must be strictly before end time (unless end time is 23:59)."
+msgstr ""
+
+#: clisyc.php:584
+msgid "Calendar display times saved successfully."
+msgstr ""
+
+#: clisyc.php:586
+msgid "No changes detected in display times."
+msgstr ""
+
+#: clisyc.php:624
+msgid "You do not have sufficient permissions to manage these settings."
+msgstr ""
+
+#: clisyc.php:682
+msgid "Custom field updated."
+msgstr ""
+
+#: clisyc.php:686 includes/admin-appointment-custom-fields.php:85
+msgid "Field Key does not exist."
+msgstr ""
+
+#: clisyc.php:713
+msgid "Assign Client"
+msgstr ""
+
+#: clisyc.php:723
+msgid "Appointment Time Slot"
+msgstr ""
+
+#: clisyc.php:733
+msgid "Appointment Details"
+msgstr ""
+
+#: clisyc.php:859
+#, php-format
+msgid "Appointment for %s on %s at %s"
+msgstr ""
+
+#: clisyc.php:865
+#, php-format
+msgid "Appointment for %s (Time Not Set)"
+msgstr ""
+
+#: clisyc.php:1028 includes/admin-standard-day-schedule.php:17
+msgid "Unauthorized"
+msgstr ""
+
+#: clisyc.php:1111 includes/admin-manage-time-slots.php:96
+msgid "No changes detected in available slots."
+msgstr ""
+
+#: clisyc.php:1117
+#, php-format
+msgid "Successfully saved %d available time slots."
+msgstr ""
+
+#: clisyc.php:1119
+#, php-format
+msgid "%d slot(s) could not be processed due to errors."
+msgstr ""
+
+#: clisyc.php:1123
+msgid "Failed to save available time slots to the database."
+msgstr ""
+
+#: includes/admin-appointment-calendar.php:54
+msgid ""
+"This calendar shows currently available time slots and booked appointments."
+msgstr ""
+
+#: includes/admin-appointment-calendar.php:92
+#: includes/admin-manage-time-slots.php:158
+msgid "Slots Shown:"
+msgstr ""
+
+#: includes/admin-appointment-calendar.php:93
+#: includes/admin-manage-time-slots.php:92
+#: includes/admin-manage-time-slots.php:159
+#: includes/admin-manage-time-slots.php:295 includes/appointments.php:291
+#: includes/calendar-helper.php:105
+msgid "Available"
+msgstr ""
+
+#: includes/admin-appointment-calendar.php:94
+#: includes/admin-manage-time-slots.php:160
+#: includes/admin-manage-time-slots.php:295
+msgid "Booked"
+msgstr ""
+
+#: includes/admin-appointment-columns.php:50
+msgid "Appt Date"
+msgstr ""
+
+#: includes/admin-appointment-columns.php:51
+msgid "Appt Time"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:31
+msgid "Field order updated."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:47
+msgid "Field Key is required."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:49
+msgid "Field Key: Lowercase letters, numbers, underscores only."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:53
+msgid "Field Key already exists."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:67
+msgid "Custom field added successfully."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:87
+msgid "Invalid Field Key."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:96
+msgid "Custom field updated successfully."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:112
+msgid "Custom field deleted successfully."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:136
+msgid "Add/Edit Appointment Custom Field"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:138
+msgid ""
+"Define custom fields for appointments (e.g., Reason for Visit, Diagnosis "
+"Code). These will appear when creating/editing an appointment."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:145
+#: includes/admin-appointment-custom-fields.php:204
+#: includes/admin-appointment-custom-fields.php:262
+#: includes/admin-custom-fields.php:55 includes/admin-custom-fields.php:105
+#: includes/admin-custom-fields.php:135
+msgid "Field Key"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:147
+#: includes/admin-custom-fields.php:57
+msgid "Lowercase letters, numbers, and underscores only."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:148
+msgid ""
+"A unique identifier for this field. Only lowercase letters, numbers, and "
+"underscores are allowed (e.g., diagnosis_code). Cannot be changed once "
+"created."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:152
+#: includes/admin-custom-fields.php:62
+msgid "Field Label"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:155
+msgid "The label to display on the appointment details page/form."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:159
+#: includes/admin-custom-fields.php:66
+msgid "Field Type"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:162
+#: includes/admin-custom-fields.php:68
+msgid "Text"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:163
+#: includes/admin-custom-fields.php:69
+msgid "Textarea"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:164
+#: includes/admin-custom-fields.php:70
+msgid "Dropdown Select"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:165
+#: includes/admin-custom-fields.php:71
+msgid "Checkboxes (Allow Multiple)"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:166
+#: includes/admin-custom-fields.php:72
+msgid "Radio Buttons (Select One)"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:168
+msgid "Select the type of field."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:172
+msgid "Field Options"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:174
+msgid "Option1,Option2,Option3"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:175
+msgid "Enter comma separated values for options (if applicable)."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:179
+#: includes/admin-appointment-custom-fields.php:207
+#: includes/admin-appointment-custom-fields.php:265
+#: includes/admin-custom-fields.php:80 includes/admin-custom-fields.php:108
+#: includes/admin-custom-fields.php:135
+msgid "Required"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:183
+#: includes/admin-custom-fields.php:84
+msgid "Make this field mandatory?"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:185
+msgid ""
+"If checked, this field must be filled when creating/editing appointments."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:190
+#: includes/admin-appointment-custom-fields.php:327
+#: includes/admin-custom-fields.php:91 includes/admin-custom-fields.php:233
+msgid "Add Custom Field"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:191
+#: includes/admin-custom-fields.php:92
+msgid "Cancel Edit"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:198
+msgid "Existing Appointment Custom Fields"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:205
+#: includes/admin-appointment-custom-fields.php:263
+#: includes/admin-custom-fields.php:106 includes/admin-custom-fields.php:135
+msgid "Label"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:206
+#: includes/admin-appointment-custom-fields.php:264
+#: includes/admin-custom-fields.php:107 includes/admin-custom-fields.php:135
+msgid "Type"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:208
+#: includes/admin-appointment-custom-fields.php:266
+#: includes/admin-custom-fields.php:76 includes/admin-custom-fields.php:109
+#: includes/admin-custom-fields.php:135
+msgid "Options"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:209
+#: includes/admin-appointment-custom-fields.php:267
+#: includes/admin-custom-fields.php:110 includes/admin-custom-fields.php:135
+#: includes/admin-manage-time-slots.php:278
+#: includes/admin-manage-time-slots.php:320
+msgid "Actions"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:226
+#: includes/admin-custom-fields.php:121
+msgid "Yes"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:226
+#: includes/admin-custom-fields.php:121
+msgid "No"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:230
+#: includes/admin-custom-fields.php:125
+msgid "Edit"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:236
+msgid ""
+"Delete this field permanently? This will NOT delete existing appointment "
+"data for this field."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:236
+#: includes/admin-custom-fields.php:126
+#: includes/admin-manage-time-slots.php:265
+#: includes/admin-manage-time-slots.php:305
+msgid "Delete"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:244
+#: includes/admin-custom-fields.php:127
+msgid "Move Up"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:252
+#: includes/admin-custom-fields.php:128
+msgid "Move Down"
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:272
+msgid "No custom fields defined yet."
+msgstr ""
+
+#: includes/admin-appointment-custom-fields.php:309
+#: includes/admin-custom-fields.php:216
+msgid "Update Custom Field"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:29
+msgid "No appointment custom fields defined."
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:29
+msgid "Define Fields"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:66
+#: includes/admin-custom-fields.php:355 includes/registration.php:194
+#: includes/user-account.php:225
+msgid "-- Select --"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:90
+#: includes/admin-appointment-meta-boxes.php:111
+#: includes/admin-custom-fields.php:386 includes/admin-custom-fields.php:411
+msgid "No options defined."
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:145
+msgid "Select Date:"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:154
+msgid "Loading slots for "
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:160
+msgid "Selected:"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:227
+msgid "Select Client:"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:229
+msgid "-- Select a Client --"
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:238
+msgid "No users found with client roles."
+msgstr ""
+
+#: includes/admin-appointment-meta-boxes.php:244
+#, php-format
+msgid "Assign this appointment to a user with the role(s): %s."
+msgstr ""
+
+#: includes/admin-client-list.php:18
+msgid "You do not have sufficient permissions to access user information."
+msgstr ""
+
+#: includes/admin-client-list.php:23
+msgid ""
+"Your clients are managed through the standard WordPress Users list. We have "
+"added custom columns relevant to client appointments."
+msgstr ""
+
+#: includes/admin-client-list.php:27
+msgid "View Client List (Users)"
+msgstr ""
+
+#: includes/admin-client-list.php:31
+msgid ""
+"You can configure which custom field appears as a column on the Client "
+"Custom Fields tab."
+msgstr ""
+
+#: includes/admin-custom-fields.php:20 includes/admin-manage-time-slots.php:21
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/admin-custom-fields.php:46
+msgid "Add/Edit Client Custom Field"
+msgstr ""
+
+#: includes/admin-custom-fields.php:48
+msgid ""
+"Define custom fields to store extra information about your clients (users). "
+"These fields will appear on the user profile page and registration form."
+msgstr ""
+
+#: includes/admin-custom-fields.php:58
+msgid ""
+"Unique identifier (meta key). Lowercase letters, numbers, underscores only. "
+"Cannot be changed once created."
+msgstr ""
+
+#: includes/admin-custom-fields.php:63
+msgid "Label shown on the user profile and registration forms."
+msgstr ""
+
+#: includes/admin-custom-fields.php:77
+msgid "Option1, Option2, Option3"
+msgstr ""
+
+#: includes/admin-custom-fields.php:77
+msgid "Comma-separated values for Select, Checkboxes, or Radio Buttons."
+msgstr ""
+
+#: includes/admin-custom-fields.php:86
+msgid ""
+"If checked, users must fill this field during registration and profile "
+"updates."
+msgstr ""
+
+#: includes/admin-custom-fields.php:100
+msgid "Existing Client Custom Fields"
+msgstr ""
+
+#: includes/admin-custom-fields.php:126
+msgid ""
+"Delete this field permanently? This will NOT delete existing user data for "
+"this field."
+msgstr ""
+
+#: includes/admin-custom-fields.php:139 includes/admin-custom-fields.php:181
+msgid "No client custom fields defined yet."
+msgstr ""
+
+#: includes/admin-custom-fields.php:146
+msgid "List Table Column Display"
+msgstr ""
+
+#: includes/admin-custom-fields.php:148
+msgid ""
+"Choose which client custom fields appear as columns on the main WordPress "
+"Users list and the Appointments list."
+msgstr ""
+
+#: includes/admin-custom-fields.php:154
+msgid "Users List Column"
+msgstr ""
+
+#: includes/admin-custom-fields.php:155
+msgid "Select <strong>one</strong> field to display on the main Users list."
+msgstr ""
+
+#: includes/admin-custom-fields.php:157
+msgid "-- None --"
+msgstr ""
+
+#: includes/admin-custom-fields.php:160
+msgid "No custom fields defined"
+msgstr ""
+
+#: includes/admin-custom-fields.php:162
+msgid "Save User List Setting"
+msgstr ""
+
+#: includes/admin-custom-fields.php:169
+msgid "Appointments List Columns"
+msgstr ""
+
+#: includes/admin-custom-fields.php:170
+msgid ""
+"Select <strong>multiple</strong> client fields to display on the main "
+"Appointments list."
+msgstr ""
+
+#: includes/admin-custom-fields.php:172
+msgid "Select client fields for appointment list"
+msgstr ""
+
+#: includes/admin-custom-fields.php:183
+msgid "Save Appointment List Settings"
+msgstr ""
+
+#: includes/admin-custom-fields.php:288
+#, php-format
+msgid "<strong>Error:</strong> The field \"%s\" is required."
+msgstr ""
+
+#: includes/admin-custom-fields.php:327
+msgid "Client Sync Custom Information"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:57
+msgid "Save Slots"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:93
+#: includes/admin-manage-time-slots.php:304
+msgid "Are you sure you want to delete this available time slot?"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:94
+msgid "Available slots saved successfully."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:95
+msgid "Error saving available slots."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:97
+#: includes/admin-standard-day-schedule.php:114
+msgid "Saving..."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:98
+msgid "Error"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:99
+msgid "Booked Slot"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:108
+msgid "Manage Available Time Slots"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:126
+msgid "Availability Calendar Editor"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:128
+msgid ""
+"Visually manage your available time slots. Click and drag to create new "
+"slots (green). Drag or resize existing available slots. Click the (×) on an "
+"available slot to delete it. Booked slots (red/pink) are shown for reference "
+"and link to the appointment."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:131
+#: includes/admin-standard-day-schedule.php:147
+msgid "Loading Calendar..."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:177
+msgid "Alternative Slot Management Methods"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:182
+msgid "Generate Slots for Date Range"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:184
+msgid ""
+"Create multiple available slots based on a schedule for a selected date "
+"range. This will replace any existing available slots within that range."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:191
+msgid "Date Range"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:194
+#: includes/admin-manage-time-slots.php:205
+#: includes/admin-manage-time-slots.php:215
+msgid "to"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:196
+msgid "Select the start and end date (inclusive)."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:200
+msgid "Schedule Type"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:201
+msgid "Use Standard Day Schedule"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:201
+msgid "View/Edit Standard Day"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:204
+msgid "Custom Workday"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:205
+msgid "Define the work hours for these dates."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:208
+msgid "Custom Duration"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:211
+msgid "Select the duration for each generated slot."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:214
+msgid "Custom Break (Optional)"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:215
+msgid "Define a break during which no slots will be generated."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:218
+msgid "Generate Slots"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:225
+msgid "Add Individual Slots (Manual)"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:227
+msgid "Manually add specific available time slots."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:233
+msgid "Date:"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:234
+msgid "Start:"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:235
+msgid "End:"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:236
+msgid "Remove"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:239
+msgid "Add Another Row"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:240
+msgid "Add Individual Slots"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:247
+msgid "Manage Existing Available Slots (List View)"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:264
+msgid "Select bulk action"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:265
+msgid "Bulk Actions"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:266
+msgid "Apply"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:274
+#: includes/admin-manage-time-slots.php:316
+msgid "Date"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:275
+#: includes/admin-manage-time-slots.php:317
+msgid "Start Time"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:276
+#: includes/admin-manage-time-slots.php:318
+msgid "End Time"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:277
+#: includes/admin-manage-time-slots.php:319
+msgid "Status"
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:326
+msgid "No available time slots defined yet."
+msgstr ""
+
+#: includes/admin-manage-time-slots.php:359
+msgid "You must have at least one row."
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:109
+msgid "New Available Slot"
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:110
+msgid "Are you sure you want to delete this time slot?"
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:111
+msgid "Standard schedule saved successfully."
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:112
+msgid "Error saving schedule."
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:121
+msgid ""
+"Visually define the default available time slots for a typical day. This "
+"template will be used when generating slots for specific date ranges if the "
+"\"Use Standard Day Schedule\" option is selected on the \"Manage Time "
+"Slots\" tab."
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:136
+msgid "Edit Schedule Visually"
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:138
+msgid ""
+"Click and drag on the calendar to create new available slots. Drag existing "
+"slots to move them, or resize them using the handles. Click the (×) on a "
+"slot to delete it."
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:141
+msgid "Standard Day Template"
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:151
+msgid "Save Visually Edited Schedule"
+msgstr ""
+
+#: includes/admin-standard-day-schedule.php:157
+#, php-format
+msgid ""
+"Note: The break time from %s to %s (greyed out area) is defined in the saved "
+"schedule options. It is not editable here but will prevent slots from being "
+"generated during this time when using the \"Generate Slots\" feature."
+msgstr ""
+
+#: includes/admin-user-columns.php:14
+msgid "Joined"
+msgstr ""
+
+#: includes/admin-user-columns.php:15
+msgid "Last Appointment"
+msgstr ""
+
+#: includes/admin-user-columns.php:16
+msgid "Next Appointment"
+msgstr ""
+
+#: includes/admin-user-columns.php:17
+msgid "Total Appts"
+msgstr ""
+
+#: includes/appointments.php:20
+#, php-format
+msgid "Please <a href=\"%s\">log in</a> to schedule an appointment."
+msgstr ""
+
+#: includes/appointments.php:43
+msgid ""
+"Error: The website timezone setting is invalid. Please contact the site "
+"administrator."
+msgstr ""
+
+#: includes/appointments.php:77
+msgid "Error: Please select a valid appointment time slot from the calendar."
+msgstr ""
+
+#: includes/appointments.php:97 includes/user-account.php:41
+#, php-format
+msgid "Error: Field \"%s\" is required."
+msgstr ""
+
+#: includes/appointments.php:117
+msgid ""
+"Sorry, this time slot was just booked by someone else. Please select another "
+"slot."
+msgstr ""
+
+#: includes/appointments.php:122
+#, php-format
+msgid "Appointment for User %d on %s at %s"
+msgstr ""
+
+#: includes/appointments.php:221
+msgid "Error: Could not save all appointment details. Please try again."
+msgstr ""
+
+#: includes/appointments.php:226
+msgid "Error: Could not schedule appointment. Please try again."
+msgstr ""
+
+#: includes/appointments.php:241
+msgid "Your appointment has been successfully scheduled!"
+msgstr ""
+
+#: includes/appointments.php:287
+msgid "Unavailable"
+msgstr ""
+
+#: includes/appointments.php:341
+msgid ""
+"Appointment scheduling is not configured yet. Please contact the "
+"administrator."
+msgstr ""
+
+#: includes/appointments.php:344
+msgid ""
+"We currently have no available appointment slots. Please check back later."
+msgstr ""
+
+#: includes/appointments.php:346
+msgid "Select an available time slot from the calendar below:"
+msgstr ""
+
+#: includes/appointments.php:350
+msgid "Selected Slot:"
+msgstr ""
+
+#: includes/appointments.php:359
+msgid "Notes / Reason for Appointment (Optional):"
+msgstr ""
+
+#: includes/appointments.php:365 includes/registration.php:140
+msgid "Additional Information"
+msgstr ""
+
+#: includes/appointments.php:385
+msgid "Select"
+msgstr ""
+
+#: includes/appointments.php:404 includes/user-account.php:214
+msgid "required"
+msgstr ""
+
+#: includes/appointments.php:433
+msgid "Schedule Appointment"
+msgstr ""
+
+#: includes/appointments.php:505
+msgid "Error determining appointment duration. Cannot schedule."
+msgstr ""
+
+#: includes/appointments.php:530
+msgid ""
+"Please select an available time slot from the calendar before scheduling."
+msgstr ""
+
+#: includes/appointments.php:541
+msgid "Scheduling..."
+msgstr ""
+
+#: includes/calendar-helper.php:167 includes/manager-calendar.php:80
+msgid "Unknown Client"
+msgstr ""
+
+#: includes/calendar-helper.php:228
+msgid "Calendar Display Settings"
+msgstr ""
+
+#: includes/calendar-helper.php:232
+msgid ""
+"Set the earliest and latest times shown on the calendar's vertical axis."
+msgstr ""
+
+#: includes/calendar-helper.php:239
+msgid "Visible Start Time:"
+msgstr ""
+
+#: includes/calendar-helper.php:243
+msgid "Visible End Time:"
+msgstr ""
+
+#: includes/calendar-helper.php:247
+msgid "Save Display Times"
+msgstr ""
+
+#: includes/manager-calendar.php:22
+msgid "You do not have permission to view this page."
+msgstr ""
+
+#: includes/manager-calendar.php:113
+msgid "No appointments found to display on the calendar."
+msgstr ""
+
+#: includes/registration.php:9
+msgid "You are already registered and logged in."
+msgstr ""
+
+#: includes/registration.php:21
+msgid "User registration is currently not allowed."
+msgstr ""
+
+#: includes/registration.php:36
+msgid "<strong>Error:</strong> Please enter a username."
+msgstr ""
+
+#: includes/registration.php:37
+msgid ""
+"<strong>Error:</strong> This username is invalid because it uses illegal "
+"characters. Please enter a valid username."
+msgstr ""
+
+#: includes/registration.php:38
+msgid ""
+"<strong>Error:</strong> This username is already registered. Please choose "
+"another one."
+msgstr ""
+
+#: includes/registration.php:40
+msgid "<strong>Error:</strong> Please type your email address."
+msgstr ""
+
+#: includes/registration.php:41
+msgid "<strong>Error:</strong> The email address isn’t correct."
+msgstr ""
+
+#: includes/registration.php:42
+msgid ""
+"<strong>Error:</strong> This email is already registered, please choose "
+"another one."
+msgstr ""
+
+#: includes/registration.php:44
+msgid "<strong>Error:</strong> Please enter a password."
+msgstr ""
+
+#: includes/registration.php:100
+msgid "Registration successful! You can now log in."
+msgstr ""
+
+#: includes/registration.php:124
+msgid "Account Details"
+msgstr ""
+
+#: includes/registration.php:126
+msgid "Username"
+msgstr ""
+
+#: includes/registration.php:130 includes/user-account.php:144
+msgid "Email"
+msgstr ""
+
+#: includes/registration.php:134
+msgid "Password"
+msgstr ""
+
+#: includes/registration.php:170 includes/registration.php:185
+#: includes/user-account.php:197 includes/user-account.php:216
+msgid "No options available."
+msgstr ""
+
+#: includes/registration.php:213
+msgid "Register"
+msgstr ""
+
+#: includes/user-account.php:15
+#, php-format
+msgid ""
+"Please <a href=\"%s\">log in</a> to view and update your account information."
+msgstr ""
+
+#: includes/user-account.php:56
+msgid "Error: Email address cannot be empty."
+msgstr ""
+
+#: includes/user-account.php:59
+msgid "Error: Invalid email address."
+msgstr ""
+
+#: includes/user-account.php:65
+msgid "Error: This email address is already in use by another account."
+msgstr ""
+
+#: includes/user-account.php:81
+msgid "Error updating standard details: "
+msgstr ""
+
+#: includes/user-account.php:110
+msgid "Account information updated successfully."
+msgstr ""
+
+#: includes/user-account.php:134
+msgid "Standard Information"
+msgstr ""
+
+#: includes/user-account.php:136
+msgid "First Name"
+msgstr ""
+
+#: includes/user-account.php:140
+msgid "Last Name"
+msgstr ""
+
+#: includes/user-account.php:149
+msgid "Custom Information"
+msgstr ""
+
+#: includes/user-account.php:246
+msgid "Update Account"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "http://example.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"A plugin to manage client registrations, appointments, payments, and "
+"appointment notes."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Joshua Jordan"
+msgstr ""

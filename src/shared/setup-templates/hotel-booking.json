@@ -1,0 +1,184 @@
+[
+  {
+    "template_meta": {
+      "title": "Hotel Booking",
+      "description": "A setup for hotels or motels where customers book a 'Room Type' rather than a specific room number. This template uses the 'Capacity' feature to manage the number of available rooms for each type (12 Queen, 6 King, 2 Suites = 20 total rooms). NOTE: After installing, create a corresponding WooCommerce product for each of the 3 room types to enable payments.",
+      "recommended": false
+    },
+    "options": {
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_room_type": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_room_type"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_room_type": {
+          "singular": "Room Type",
+          "plural": "Room Types",
+          "icon": "dashicons-building",
+          "public": true
+        }
+      }
+    },
+    "cpts": {
+      "clisyc_room_type": [
+        {
+          "post_name": "standard-queen",
+          "post_title": "Standard Queen Room",
+          "post_content": "A comfortable room with two queen-sized beds, perfect for families or groups.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "date_range"
+            ],
+            "_clisyc_capacity": [
+              "12"
+            ],
+            "_clisyc_wc_product_id": [
+              "{{wc_product_standard_queen}}"
+            ],
+            "_clisyc_min_stay": [
+              "1"
+            ],
+            "_clisyc_max_stay": [
+              "0"
+            ],
+            "_clisyc_buffer_days": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#72aee6"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"0\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"1\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"2\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"3\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"4\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"5\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"6\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "deluxe-king",
+          "post_title": "Deluxe King Room",
+          "post_content": "A spacious room featuring a single king-sized bed and a sitting area.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "date_range"
+            ],
+            "_clisyc_capacity": [
+              "6"
+            ],
+            "_clisyc_wc_product_id": [
+              "{{wc_product_deluxe_king}}"
+            ],
+            "_clisyc_min_stay": [
+              "1"
+            ],
+            "_clisyc_max_stay": [
+              "0"
+            ],
+            "_clisyc_buffer_days": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#007cba"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"0\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"1\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"2\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"3\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"4\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"5\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"6\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "executive-suite",
+          "post_title": "Executive Suite",
+          "post_content": "Our premium suite with a king bed, separate living area, and premium amenities. 2-night minimum stay.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "date_range"
+            ],
+            "_clisyc_capacity": [
+              "2"
+            ],
+            "_clisyc_wc_product_id": [
+              "{{wc_product_executive_suite}}"
+            ],
+            "_clisyc_min_stay": [
+              "2"
+            ],
+            "_clisyc_max_stay": [
+              "0"
+            ],
+            "_clisyc_buffer_days": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#dba617"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"0\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"1\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"2\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"3\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"4\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"5\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]},\"6\":{\"slots\":[{\"start\":\"00:00\",\"end\":\"23:59\"}]}}}}"
+            ]
+          }
+        }
+      ]
+    },
+    "relationships": [],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment has been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"If you need to make changes, please contact us at {site_name}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Appointment Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming appointment.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"View details: {appointment_view_link}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"We look forward to seeing you!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment on {appointment_date_formatted} at {appointment_time} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"If this was a mistake or you would like to reschedule, please visit {site_url} or contact us.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your payment!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Payment method: {order_payment_method_title}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Appointment: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_6\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Booking Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New booking received from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Notes: {appointment_notes}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

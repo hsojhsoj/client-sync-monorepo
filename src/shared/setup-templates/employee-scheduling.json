@@ -1,0 +1,202 @@
+[
+  {
+    "template_meta": {
+      "title": "Employee Scheduling",
+      "description": "A powerful setup for coordinating employee availability with service offerings. A booking is only possible when a Service is available AND the selected Employee is also scheduled to work. This template demonstrates the use of a 'Resource Dimension' (a Pro feature).",
+      "recommended": false
+    },
+    "options": {
+      "clisyc_dimension_registry": {
+        "dimensions": {
+          "clisyc_service": {
+            "enabled": true,
+            "primary": true,
+            "frontend_visible": true,
+            "is_resource": false
+          },
+          "clisyc_employee": {
+            "enabled": true,
+            "primary": false,
+            "frontend_visible": true,
+            "is_resource": true
+          }
+        },
+        "relationships": {},
+        "filter_order": [
+          "clisyc_service",
+          "clisyc_employee"
+        ]
+      },
+      "clisyc_custom_dimension_types": {
+        "clisyc_service": {
+          "singular": "Service",
+          "plural": "Services",
+          "icon": "dashicons-clipboard",
+          "public": true
+        },
+        "clisyc_employee": {
+          "singular": "Employee",
+          "plural": "Employees",
+          "icon": "dashicons-businessperson",
+          "public": true
+        }
+      }
+    },
+    "cpts": {
+      "clisyc_service": [
+        {
+          "post_name": "general-consultation",
+          "post_title": "General Consultation",
+          "post_content": "A one-hour consultation session. Available during general business hours.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "slot"
+            ],
+            "_clisyc_capacity": [
+              "1"
+            ],
+            "_clisyc_duration_minutes": [
+              "60"
+            ],
+            "_clisyc_padding_minutes": [
+              "15"
+            ],
+            "_clisyc_color": [
+              "#007cba"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"1\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"17:00\"}]},\"2\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"17:00\"}]},\"3\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"17:00\"}]},\"4\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"17:00\"}]},\"5\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"17:00\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "advanced-workshop",
+          "post_title": "Advanced Workshop",
+          "post_content": "A three-hour intensive workshop only available on Tuesdays.",
+          "post_meta": {
+            "_clisyc_booking_mode": [
+              "slot"
+            ],
+            "_clisyc_capacity": [
+              "1"
+            ],
+            "_clisyc_duration_minutes": [
+              "180"
+            ],
+            "_clisyc_padding_minutes": [
+              "0"
+            ],
+            "_clisyc_color": [
+              "#e53983"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"2\":{\"slots\":[{\"start\":\"13:00\",\"end\":\"16:00\"}]}}}}"
+            ]
+          }
+        }
+      ],
+      "clisyc_employee": [
+        {
+          "post_name": "alex-chen",
+          "post_title": "Alex Chen",
+          "post_content": "Alex works Monday and Wednesday mornings.",
+          "post_meta": {
+            "_clisyc_color": [
+              "#72aee6"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"1\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"12:00\"}]},\"3\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"12:00\"}]}}}}"
+            ]
+          }
+        },
+        {
+          "post_name": "maria-garcia",
+          "post_title": "Maria Garcia",
+          "post_content": "Maria works all day on Tuesdays and Friday afternoons.",
+          "post_meta": {
+            "_clisyc_color": [
+              "#8f34cc"
+            ],
+            "_clisyc_schedule": [
+              "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"2\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"17:00\"}]},\"5\":{\"slots\":[{\"start\":\"13:00\",\"end\":\"17:00\"}]}}}}"
+            ]
+          }
+        }
+      ]
+    },
+    "relationships": [
+      {
+        "parent_type": "clisyc_employee",
+        "parent_slug": "alex-chen",
+        "child_type": "clisyc_service",
+        "child_slug": "general-consultation"
+      },
+      {
+        "parent_type": "clisyc_employee",
+        "parent_slug": "maria-garcia",
+        "child_type": "clisyc_service",
+        "child_slug": "general-consultation"
+      },
+      {
+        "parent_type": "clisyc_employee",
+        "parent_slug": "maria-garcia",
+        "child_type": "clisyc_service",
+        "child_slug": "advanced-workshop"
+      }
+    ],
+    "output_templates": [
+      {
+        "post_title": "Booking Confirmation",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment has been confirmed!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"If you need to make changes, please contact us at {site_name}.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client",
+          "new_appointment_admin"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Appointment Reminder",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, this is a reminder about your upcoming appointment.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Time: {appointment_time}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"View details: {appointment_view_link}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"We look forward to seeing you!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_reminder"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Cancellation Notice",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_first_name}, your appointment on {appointment_date_formatted} at {appointment_time} has been cancelled.\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"If this was a mistake or you would like to reschedule, please visit {site_url} or contact us.\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "appointment_cancelled_admin",
+          "appointment_cancelled_by_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Payment Receipt",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"Hi {client_name}, thank you for your payment!\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Order #: {order_id}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Amount: {order_total}\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Payment method: {order_payment_method_title}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Appointment: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_6\",\"type\":\"text\",\"content\":\"Thank you for choosing {site_name}!\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "payment_successful_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      },
+      {
+        "post_title": "Admin: New Booking Alert",
+        "clisyc_template_json": "{\"sections\":[{\"id\":\"ot_1\",\"type\":\"text\",\"content\":\"New booking received from {client_name} ({client_email}).\",\"fields\":[]},{\"id\":\"ot_2\",\"type\":\"text\",\"content\":\"Date: {appointment_date_formatted} at {appointment_time}\",\"fields\":[]},{\"id\":\"ot_3\",\"type\":\"text\",\"content\":\"Duration: {appointment_duration} minutes\",\"fields\":[]},{\"id\":\"ot_4\",\"type\":\"text\",\"content\":\"Notes: {appointment_notes}\",\"fields\":[]},{\"id\":\"ot_5\",\"type\":\"text\",\"content\":\"Edit: {appointment_edit_link_admin}\",\"fields\":[]}]}",
+        "clisyc_triggers": [
+          "new_appointment_client"
+        ],
+        "clisyc_channels": [
+          "email"
+        ]
+      }
+    ]
+  }
+]

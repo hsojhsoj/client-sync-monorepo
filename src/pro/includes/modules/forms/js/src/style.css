@@ -1,0 +1,38 @@
+/**
+ * File: src/pro/includes/modules/forms/js/src/style.css -> src/pro/includes/modules/forms/js/dist/style-index.css
+ * Styles for the Client Sync Pro Form Builder application.
+ *
+ * @package    ClientSyncPro
+ * @subpackage ClientSyncPro/Modules/Forms/JS
+ */
+
+.clisyc-form-builder { display: flex; gap: 20px; }
+.clisyc-field-palette { width: 220px; flex-shrink: 0; }
+.clisyc-field-palette-btn { display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 5px !important; justify-content: flex-start; }
+.clisyc-form-canvas { flex-grow: 1; min-height: 400px; background: #fff; border: 1px dashed #c3c4c7; padding: 10px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 10px; }
+.clisyc-builder-field { background: #f6f7f7; border: 1px solid #ddd; padding: 15px; margin-bottom: 0; border-radius: 3px; position: relative; box-sizing: border-box; }
+.clisyc-builder-field.is-dragging { opacity: 0.7; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+/* Width classes for builder */
+.clisyc-field-width-full { width: 100%; }
+.clisyc-field-width-half { width: calc(50% - 5px); }
+.clisyc-field-width-one-third { width: calc(33.333% - 7px); }
+.clisyc-field-width-two-thirds { width: calc(66.666% - 3px); }
+.clisyc-field-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; cursor: grab; }
+.clisyc-field-header:hover .clisyc-field-drag-icon { color: #2271b1; }
+.clisyc-field-drag-icon { color: #a7aaad; }
+.clisyc-field-type-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #50575e; flex-grow: 1; text-align: center; }
+.clisyc-field-actions button { cursor: pointer; background: none; border: none; color: #787c82; padding: 0; }
+.clisyc-field-actions button:hover { color: #2271b1; }
+.clisyc-field-actions .clisyc-field-delete:hover { color: #d63638; }
+.clisyc-form-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.clisyc-field-config-item { margin-bottom: 0; }
+.clisyc-field-config-item label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 13px; }
+.clisyc-option-editor { grid-column: 1 / -1; }
+.clisyc-option-editor textarea { width: 100%; height: 80px; font-family: monospace; }
+
+/* ── Confirm Dialog ──────────────────────────────────── */
+.clisyc-confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100000; display: flex; align-items: center; justify-content: center; }
+.clisyc-confirm-dialog { background: #fff; border-radius: 4px; padding: 24px; max-width: 360px; width: 90%; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+.clisyc-confirm-dialog p { margin: 0 0 16px; font-size: 14px; color: #1d2327; }
+.clisyc-confirm-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.clisyc-builder-notice { margin: 0 0 12px; }

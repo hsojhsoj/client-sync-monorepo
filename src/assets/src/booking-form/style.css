@@ -1,0 +1,3276 @@
+/**
+ * File: src/assets/src/booking-form/style.css
+ * Styles for the Frontend Booking Form React application.
+ * 
+ * MODERNIZED:
+ * - Added booking confirmation modal styles
+ * - Removed numbered step styles
+ * - Added selected slot banner
+ * - Improved responsive design
+ * - Enhanced modal close button specificity and color variables
+ * - Unified modal styles (previously imported from _modal.css)
+ * - Google Calendar-style collapsible sidebar (inline CSS)
+ * 
+ * UPDATED (2026-01-09): Sidebar CSS now inlined instead of @import
+ * CLEANED (2026-01-19): Removed redundant timezone/header styles
+ * - Timezone section now in clisyc-collapsible-header.css
+ */
+
+/* Import component-specific styles */
+@import './date-range.css';
+
+/* ==========================================================================
+   SIDEBAR - GOOGLE CALENDAR STYLE (INLINED)
+   High specificity selectors to override legacy styles
+   ========================================================================== */
+
+/* Sidebar Container */
+.clisyc-booking-form-app .clisyc-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    background: #fff !important;
+    border: none !important;
+    border-right: 1px solid #dadce0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    max-width: 256px !important;
+    transition: width 0.2s ease, min-width 0.2s ease, max-width 0.2s ease !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+/* Collapsed State */
+.clisyc-booking-form-app .clisyc-sidebar.clisyc-sidebar--collapsed {
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+}
+
+/* Collapsed Strip */
+.clisyc-booking-form-app .clisyc-sidebar-collapsed-strip {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 12px 0 !important;
+}
+
+/* Inner Content Wrapper */
+.clisyc-booking-form-app .clisyc-sidebar-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+/* ==========================================================================
+   SIDEBAR HEADER
+   ========================================================================== */
+
+.clisyc-booking-form-app .clisyc-sidebar-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 12px !important;
+    border-bottom: 1px solid #f1f3f4 !important;
+    min-height: 48px !important;
+    gap: 8px !important;
+    background: transparent !important;
+}
+
+/* Hamburger Toggle Button */
+.clisyc-booking-form-app .clisyc-sidebar-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    color: #5f6368 !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-toggle:hover {
+    background-color: #f1f3f4 !important;
+    color: #202124 !important;
+}
+
+/* Reset Button */
+.clisyc-booking-form-app .clisyc-sidebar-reset {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 12px !important;
+    font-size: var(--clisyc-font-size-sm, 13px) !important;
+    font-weight: 500 !important;
+    color: #5f6368 !important;
+    background: transparent !important;
+    border: 1px solid #dadce0 !important;
+    border-radius: 16px !important;
+    cursor: pointer !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-reset:hover {
+    background-color: #f8f9fa !important;
+    border-color: #5f6368 !important;
+    color: #202124 !important;
+}
+
+/* ==========================================================================
+   FILTER GROUPS / NAVIGATION
+   ========================================================================== */
+
+.clisyc-booking-form-app .clisyc-sidebar-nav {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 8px 0 !important;
+}
+
+/* Filter Group */
+.clisyc-booking-form-app .clisyc-sidebar-group {
+    margin-bottom: 4px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-group--options {
+    margin-top: 8px !important;
+    padding-top: 8px !important;
+    border-top: 1px solid #f1f3f4 !important;
+}
+
+/* Group Header (Collapsible) */
+.clisyc-booking-form-app .clisyc-sidebar-group-header {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 8px 16px 8px 12px !important;
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: #5f6368 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    gap: 4px !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-group-header:hover {
+    background-color: #f8f9fa !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-group-title {
+    flex: 1 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+/* Chevron Icon */
+.clisyc-booking-form-app .clisyc-sidebar-chevron {
+    flex-shrink: 0 !important;
+    color: #5f6368 !important;
+    transition: transform 0.2s ease !important;
+    transform: rotate(-90deg) !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-chevron--expanded {
+    transform: rotate(0deg) !important;
+}
+
+/* Active Filter Count Badge */
+.clisyc-booking-form-app .clisyc-sidebar-filter-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 6px !important;
+    font-size: calc(var(--clisyc-font-size-xs, 12px) - 1px) !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    background: #4285f4 !important;
+    border-radius: 9px !important;
+    margin-left: auto !important;
+}
+
+/* Group Content (Collapsible Area) */
+.clisyc-booking-form-app .clisyc-sidebar-group-content {
+    display: none !important;
+    padding: 0 8px 8px 8px !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-group-content.clisyc-sidebar-group-content--expanded {
+    display: block !important;
+}
+
+/* ==========================================================================
+   FILTER ITEMS
+   ========================================================================== */
+
+.clisyc-booking-form-app .clisyc-sidebar-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 6px 8px !important;
+    margin: 2px 0 !important;
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+    color: #3c4043 !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Hide actual checkbox/radio input */
+.clisyc-booking-form-app .clisyc-sidebar-input,
+.clisyc-booking-form-app .clisyc-sidebar .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Google Calendar Style Checkbox */
+.clisyc-booking-form-app .clisyc-sidebar-checkbox {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    border: 2px solid !important;
+    border-radius: 3px !important;
+    flex-shrink: 0 !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-checkbox svg {
+    color: #fff !important;
+    opacity: 0 !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar-item.clisyc-sidebar-item--selected .clisyc-sidebar-checkbox svg {
+    opacity: 1 !important;
+}
+
+/* Item Label */
+.clisyc-booking-form-app .clisyc-sidebar-item-label {
+    flex: 1 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    line-height: 1.4 !important;
+}
+
+/* ==========================================================================
+   SIDEBAR LAYOUT INTEGRATION
+   ========================================================================== */
+
+.clisyc-booking-form-app .clisyc-faceted-search-layout {
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    gap: 0 !important;
+    min-height: 600px !important;
+    border: 1px solid #dadce0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.clisyc-booking-form-app .clisyc-faceted-search-layout.clisyc-no-sidebar {
+    grid-template-columns: 1fr !important;
+}
+
+.clisyc-booking-form-app .clisyc-main-content-area {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    padding: 16px !important;
+    overflow: hidden !important;
+}
+
+/* ==========================================================================
+   MINI CALENDAR - Google Calendar Style
+   ========================================================================== */
+
+.clisyc-booking-form-app .clisyc-sidebar-mini-calendar {
+    padding: 8px 12px 16px !important;
+    border-bottom: 1px solid #f1f3f4 !important;
+}
+
+.clisyc-booking-form-app .clisyc-mini-calendar {
+    user-select: none !important;
+}
+
+/* Mini Calendar Header */
+.clisyc-booking-form-app .clisyc-mini-cal-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 8px !important;
+    padding: 4px 0 !important;
+}
+
+.clisyc-booking-form-app .clisyc-mini-cal-title {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+    font-weight: 500 !important;
+    color: #3c4043 !important;
+    flex: 1 !important;
+    text-align: center !important;
+}
+
+.clisyc-booking-form-app .clisyc-mini-cal-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    color: #5f6368 !important;
+}
+
+.clisyc-booking-form-app .clisyc-mini-cal-nav:hover {
+    background-color: #f1f3f4 !important;
+    color: #202124 !important;
+}
+
+/* Weekday Headers */
+.clisyc-booking-form-app .clisyc-mini-cal-weekdays {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    text-align: center !important;
+    margin-bottom: 4px !important;
+}
+
+.clisyc-booking-form-app .clisyc-mini-cal-weekday {
+    font-size: calc(var(--clisyc-font-size-xs, 12px) - 2px) !important;
+    font-weight: 500 !important;
+    color: #70757a !important;
+    text-transform: uppercase !important;
+    padding: 4px 0 !important;
+}
+
+/* Calendar Grid */
+.clisyc-booking-form-app .clisyc-mini-cal-grid {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 1px !important;
+}
+
+/* CRITICAL: Day buttons - transparent by default */
+.clisyc-booking-form-app .clisyc-mini-cal-day {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    margin: 1px auto !important;
+    padding: 0 !important;
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+    font-weight: 400 !important;
+    color: #3c4043 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+}
+
+.clisyc-booking-form-app .clisyc-mini-cal-day:hover {
+    background-color: #f1f3f4 !important;
+}
+
+/* Other month days (dimmed) */
+.clisyc-booking-form-app .clisyc-mini-cal-day.clisyc-mini-cal-day--other {
+    color: #bdc1c6 !important;
+    background: transparent !important;
+}
+
+/* Today - light blue background */
+.clisyc-booking-form-app .clisyc-mini-cal-day.clisyc-mini-cal-day--today {
+    background-color: #e8f0fe !important;
+    color: #1a73e8 !important;
+    font-weight: 500 !important;
+}
+
+/* Selected day - solid blue */
+.clisyc-booking-form-app .clisyc-mini-cal-day.clisyc-mini-cal-day--selected {
+    background-color: #1a73e8 !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+/* ==========================================================================
+   SIDEBAR RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 950px) {
+    .clisyc-booking-form-app .clisyc-sidebar {
+        width: 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
+    }
+    
+    .clisyc-booking-form-app .clisyc-sidebar.clisyc-sidebar--collapsed {
+        width: 48px !important;
+        min-width: 48px !important;
+        max-width: 48px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .clisyc-booking-form-app .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr !important;
+        position: relative !important;
+    }
+    
+    .clisyc-booking-form-app .clisyc-sidebar {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        z-index: 100 !important;
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .clisyc-booking-form-app .clisyc-sidebar.clisyc-sidebar--collapsed {
+        width: 56px !important;
+        min-width: 56px !important;
+        max-width: 56px !important;
+        box-shadow: none !important;
+        position: relative !important;
+    }
+    
+    .clisyc-booking-form-app .clisyc-main-content-area {
+        padding: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-booking-form-app .clisyc-sidebar {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ==========================================================================
+   OVERRIDE OLD FILTER STYLES
+   ========================================================================== */
+
+.clisyc-booking-form-app .clisyc-sidebar button {
+    box-shadow: none !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar input[type="checkbox"],
+.clisyc-booking-form-app .clisyc-sidebar input[type="radio"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+}
+
+.clisyc-booking-form-app .clisyc-sidebar label {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   END SIDEBAR INLINED STYLES
+   ========================================================================== */
+
+/* Rest of your main booking form styles... */
+
+/* ==========================================================================
+   UNIFIED MODAL STYLES
+   ========================================================================== */
+
+/* TEXT SIZE SCALE - Applied via class on modal overlay: .clisyc-text-{size} 
+   Using px values to ensure consistent sizing regardless of theme's root font-size */
+:root {
+    --clisyc-modal-title-size: 24px;
+    --clisyc-modal-text-size: 17px;
+    --clisyc-modal-date-size: 18px;
+    --clisyc-modal-button-size: 17px;
+}
+
+.clisyc-modal-overlay.clisyc-text-small {
+    --clisyc-modal-title-size: 20px;
+    --clisyc-modal-text-size: 15px;
+    --clisyc-modal-date-size: 16px;
+    --clisyc-modal-button-size: 15px;
+}
+
+.clisyc-modal-overlay.clisyc-text-medium {
+    --clisyc-modal-title-size: 24px;
+    --clisyc-modal-text-size: 17px;
+    --clisyc-modal-date-size: 18px;
+    --clisyc-modal-button-size: 17px;
+}
+
+.clisyc-modal-overlay.clisyc-text-large {
+    --clisyc-modal-title-size: 30px;
+    --clisyc-modal-text-size: 20px;
+    --clisyc-modal-date-size: 22px;
+    --clisyc-modal-button-size: 19px;
+}
+
+.clisyc-modal-overlay.clisyc-text-x-large {
+    --clisyc-modal-title-size: 36px;
+    --clisyc-modal-text-size: 24px;
+    --clisyc-modal-date-size: 26px;
+    --clisyc-modal-button-size: 22px;
+}
+
+/* MODAL OVERLAY */
+.clisyc-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important;
+    padding: 1rem !important;
+    animation: clisycModalOverlayFadeIn 0.2s ease-out !important;
+}
+
+@keyframes clisycModalOverlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* MODAL CONTENT CONTAINER */
+.clisyc-modal-overlay .clisyc-modal-content {
+    background: #ffffff !important;
+    border-radius: 16px !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+    max-width: 420px !important;
+    width: 100% !important;
+    padding: 2rem !important;
+    text-align: center !important;
+    animation: clisycModalContentSlideIn 0.3s ease-out !important;
+    color: #1f2937 !important;
+}
+
+@keyframes clisycModalContentSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* MODAL ICON */
+.clisyc-modal-overlay .clisyc-modal-icon {
+    width: 56px !important;
+    height: 56px !important;
+    margin: 0 auto 1.25rem !important;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-icon .dashicons {
+    font-size: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    color: inherit !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-icon svg {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+/* MODAL TYPOGRAPHY */
+.clisyc-modal-overlay .clisyc-modal-content h2,
+.clisyc-modal-overlay .clisyc-modal-content h3,
+.clisyc-modal-overlay .clisyc-modal-title {
+    margin: 0 0 0.75rem !important;
+    font-size: var(--clisyc-modal-title-size, 24px) !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.3 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-content p,
+.clisyc-modal-overlay .clisyc-modal-message {
+    margin: 0 0 1.5rem !important;
+    font-size: var(--clisyc-modal-text-size, 17px) !important;
+    color: #6b7280 !important;
+    line-height: 1.6 !important;
+}
+
+/* HIGHLIGHTED DATE DISPLAY */
+.clisyc-modal-overlay .clisyc-modal-date {
+    display: block !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+    padding: 0.75rem 1rem !important;
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    font-size: var(--clisyc-modal-date-size, 18px) !important;
+}
+
+/* MODAL BUTTONS */
+.clisyc-modal-overlay .clisyc-modal-ok-button,
+.clisyc-modal-overlay .clisyc-modal-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    padding: 0.875rem 1.5rem !important;
+    font-size: var(--clisyc-modal-button-size, 17px) !important;
+    font-weight: 600 !important;
+    color: var(--clisyc-accent-normal-text, #ffffff) !important;
+    background: var(--clisyc-accent-normal-bg, #3b82f6) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:hover,
+.clisyc-modal-overlay .clisyc-modal-button:hover {
+    background: var(--clisyc-accent-hover-bg, #2563eb) !important;
+    color: var(--clisyc-accent-hover-text, #ffffff) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
+    text-decoration: none !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:active,
+.clisyc-modal-overlay .clisyc-modal-button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-ok-button:focus,
+.clisyc-modal-overlay .clisyc-modal-button:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* SECONDARY BUTTON */
+.clisyc-modal-overlay .clisyc-modal-button--secondary {
+    background: transparent !important;
+    color: #6b7280 !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    margin-top: 0.75rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-button--secondary:hover {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+    border-color: #9ca3af !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* BUTTON CONTAINER */
+.clisyc-modal-overlay .clisyc-modal-buttons {
+    display: flex !important;
+    gap: 0.75rem !important;
+    margin-top: 0.5rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-ok-button,
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button {
+    flex: 1 !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button--secondary {
+    margin-top: 0 !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+.clisyc-modal-overlay .clisyc-modal-buttons a.clisyc-modal-ok-button {
+    text-decoration: none !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .clisyc-modal-overlay {
+        padding: 0.75rem !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-content {
+        padding: 1.5rem !important;
+        border-radius: 12px !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-icon {
+        width: 48px !important;
+        height: 48px !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-icon .dashicons,
+    .clisyc-modal-overlay .clisyc-modal-icon svg {
+        font-size: 24px !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .clisyc-modal-overlay .clisyc-modal-buttons {
+        flex-direction: column !important;
+    }
+    
+    .clisyc-modal-overlay .clisyc-modal-buttons .clisyc-modal-button--secondary {
+        width: 100% !important;
+    }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-modal-overlay,
+    .clisyc-modal-overlay .clisyc-modal-content {
+        animation: none !important;
+    }
+
+    .clisyc-modal-overlay .clisyc-modal-ok-button:hover,
+    .clisyc-modal-overlay .clisyc-modal-button:hover {
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
+.clisyc-booking-form-app {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.clisyc-faceted-search-layout { 
+    display: grid; 
+    grid-template-columns: 240px 1fr; 
+    gap: 24px; 
+    margin: 0 auto; 
+    max-width: 1400px; 
+}
+
+.clisyc-main-content-area { 
+    min-width: 0; 
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .clisyc-faceted-search-layout {
+        grid-template-columns: 200px 1fr;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .clisyc-availability-filters-container {
+        margin-bottom: 20px;
+    }
+    
+    .clisyc-filter-group-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .clisyc-filter-group {
+        margin-bottom: 0;
+    }
+    
+    .clisyc-filter-radio-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .clisyc-radio-option {
+        flex: 1 1 auto;
+        margin-bottom: 0;
+        min-width: 140px;
+    }
+    
+    .clisyc-radio-option label {
+        padding: 8px 10px;
+        font-size: var(--clisyc-font-size-sm, 13px);
+    }
+}
+
+/* ==========================================================================
+   FILTER PANEL
+   ========================================================================== */
+
+.clisyc-availability-filters-container { 
+    background: #ffffff; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 12px; 
+    padding: 20px; 
+    position: relative; 
+}
+
+.clisyc-filter-group-label { 
+    margin: 0 0 10px 0; 
+    font-size: var(--clisyc-font-size-base, 14px); 
+    font-weight: 600; 
+    color: #374151; 
+}
+
+/* Checkbox as Button/Chip Style */
+.clisyc-radio-option { 
+    display: block; 
+    margin-bottom: 6px; 
+}
+
+.clisyc-radio-option label { 
+    display: flex; 
+    align-items: center; 
+    padding: 10px 12px; 
+    background: #ffffff; 
+    border: 1px solid #d1d5db; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    margin: 0; 
+    width: 100%; 
+    box-sizing: border-box; 
+    font-weight: 500; 
+    color: #374151; 
+    font-size: var(--clisyc-font-size-base, 14px); 
+    gap: 10px; 
+    transition: all 0.2s ease-in-out; 
+}
+
+.clisyc-radio-option label:hover { 
+    border-color: #9ca3af; 
+    background-color: #f9fafb; 
+}
+
+.clisyc-radio-option input[type="checkbox"] { 
+    position: absolute; 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+}
+
+.clisyc-radio-option input:checked + label {
+    background: var(--clisyc-available-bg, #f9fafb);
+    border-color: var(--clisyc-available-bg, #d1d5db);
+    font-weight: 600;
+    color: var(--clisyc-available-text, #1f2937);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.clisyc-radio-option input:focus-visible + label {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.clisyc-filter-color-indicator { 
+    display: inline-block; 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+    border: 1.5px solid rgba(0, 0, 0, 0.2); 
+    order: -1; 
+    flex-shrink: 0; 
+}
+
+.clisyc-reset-all-container { 
+    margin-bottom: 15px; 
+}
+
+.clisyc-reset-all-filters-btn { 
+    background: none; 
+    border: none; 
+    color: #3b82f6; 
+    cursor: pointer; 
+    font-size: var(--clisyc-font-size-sm, 13px); 
+    font-weight: 600; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 4px; 
+    padding: 0; 
+}
+
+.clisyc-reset-all-filters-btn .dashicons { 
+    font-size: 16px; 
+}
+
+/* ==========================================================================
+   TIMEZONE SELECTOR
+   ========================================================================== */
+
+.clisyc-timezone-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.clisyc-timezone-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f9fafb;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.clisyc-timezone-selector .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: #6b7280;
+}
+
+/* ==========================================================================
+   SELECTED SLOT BANNER
+   ========================================================================== */
+
+.clisyc-selected-slot-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--clisyc-available-bg, #d1fae5) 0%, #ffffff 100%);
+    border: 2px solid var(--clisyc-available-bg, #10b981);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    animation: clisyc-slide-in 0.3s ease-out;
+}
+
+@keyframes clisyc-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.clisyc-selected-slot-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.clisyc-selected-slot-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--clisyc-available-bg, #10b981);
+    color: var(--clisyc-available-text, #ffffff);
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.clisyc-selected-slot-text {
+    font-size: var(--clisyc-font-size-base, 14px);
+    color: #374151;
+}
+
+.clisyc-selected-slot-text strong {
+    color: #111827;
+}
+
+.clisyc-selected-slot-book-btn {
+    padding: 10px 20px;
+    background: var(--clisyc-available-bg, #10b981);
+    color: var(--clisyc-available-text, #ffffff);
+    border: none;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.clisyc-selected-slot-book-btn:hover {
+    filter: brightness(0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 600px) {
+    .clisyc-selected-slot-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .clisyc-selected-slot-book-btn {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   CALENDAR HELP TEXT
+   ========================================================================== */
+
+.clisyc-calendar-help-text {
+    text-align: center;
+    padding: 16px;
+    color: #6b7280;
+    font-size: var(--clisyc-font-size-base, 14px);
+}
+
+.clisyc-calendar-help-text p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   LOADING & EMPTY STATES
+   ========================================================================== */
+
+.clisyc-calendar-wrapper { 
+    position: relative; 
+}
+
+.clisyc-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 48px;
+}
+
+.clisyc-spinner, 
+.clisyc-filters-loading::after { 
+    width: 40px; 
+    height: 40px; 
+    border: 4px solid rgba(59, 130, 246, 0.2); 
+    border-top-color: #3b82f6; 
+    border-radius: 50%; 
+    animation: clisyc-spinner-spin 0.8s linear infinite; 
+}
+
+.clisyc-filters-loading::after { 
+    content: ''; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    width: 32px; 
+    height: 32px; 
+    margin: -16px 0 0 -16px; 
+    z-index: 20; 
+}
+
+@keyframes clisyc-spinner-spin { 
+    to { transform: rotate(360deg); } 
+}
+
+.clisyc-empty-state { 
+    text-align: center; 
+    padding: 80px 20px; 
+    color: #6b7280; 
+    background-color: #f9fafb; 
+    border: 1px dashed #d1d5db; 
+    border-radius: 8px; 
+}
+
+.clisyc-empty-state-icon { 
+    font-size: 4em; 
+    margin-bottom: 20px; 
+    opacity: 0.5; 
+}
+
+.clisyc-empty-state-message { 
+    font-size: var(--clisyc-font-size-lg, 16px); 
+    font-weight: 600; 
+    margin-bottom: 12px; 
+    color: #374151; 
+}
+
+.clisyc-empty-state-description { 
+    font-size: var(--clisyc-font-size-base, 14px); 
+    line-height: 1.6; 
+    max-width: 400px; 
+    margin: 0 auto; 
+}
+
+/* ==========================================================================
+   CALENDAR TEXT SIZE
+   Controlled by admin setting: Settings > Appearance > Calendar Text Size
+   Uses CSS variables: --clisyc-font-size-xs, --clisyc-font-size-sm, --clisyc-font-size-base
+   ========================================================================== */
+
+/* Time axis labels (08:00am, 09:00am, etc.) */
+.clisyc-booking-form-app .fc-timegrid-slot-label,
+.clisyc-booking-form-app .fc-timegrid-axis {
+    font-size: var(--clisyc-font-size-sm, 13px) !important;
+}
+
+/* Day headers (Sun 1/11, Mon 1/12, etc.) */
+.clisyc-booking-form-app .fc-col-header-cell {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+}
+
+.clisyc-booking-form-app .fc-col-header-cell-cushion {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+}
+
+/* Calendar toolbar title (Jan 11 - 17, 2026) */
+.clisyc-booking-form-app .fc-toolbar-title {
+    font-size: var(--clisyc-font-size-xl, 20px) !important;
+}
+
+/* View buttons (month, week, day, list) */
+.clisyc-booking-form-app .fc-button {
+    font-size: var(--clisyc-font-size-sm, 13px) !important;
+}
+
+/* Event time display */
+.clisyc-booking-form-app .fc-event-time {
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+}
+
+/* Event title */
+.clisyc-booking-form-app .fc-event-title {
+    font-size: var(--clisyc-font-size-sm, 13px) !important;
+}
+
+/* List view */
+.clisyc-booking-form-app .fc-list-event-time,
+.clisyc-booking-form-app .fc-list-event-title {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+}
+
+.clisyc-booking-form-app .fc-list-day-text,
+.clisyc-booking-form-app .fc-list-day-side-text {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+}
+
+/* Month view day numbers */
+.clisyc-booking-form-app .fc-daygrid-day-number {
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+}
+
+/* "all-day" text */
+.clisyc-booking-form-app .fc-timegrid-axis-cushion {
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+}
+
+/* ==========================================================================
+   CALENDAR EVENT STYLES
+   ========================================================================== */
+
+.clisyc-booking-form-app .fc-event { 
+    padding: 4px 6px !important; 
+    border-width: 1px !important; 
+    border-style: solid !important; 
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07) !important; 
+    line-height: 1.4; 
+    overflow: hidden; 
+}
+
+.clisyc-booking-form-app .fc-event-main-frame { 
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+}
+
+/* Available Slots */
+.clisyc-booking-form-app .fc-event.clisyc-available-slot { 
+    background-color: var(--clisyc-available-bg, #21aad3) !important; 
+    border-color: var(--clisyc-available-bg, #21aad3) !important; 
+    color: var(--clisyc-available-text, #ffffff) !important; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-available-slot:hover { 
+    filter: brightness(0.95); 
+    transform: translateY(-1px); 
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1) !important; 
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .fc-event-time,
+.clisyc-booking-form-app .fc-event.clisyc-available-slot .clisyc-event-detail-label { 
+    color: var(--clisyc-available-text, #ffffff) !important; 
+}
+
+/* Selected Slot */
+.clisyc-booking-form-app .fc-event.clisyc-slot-selected,
+.clisyc-booking-form-app .fc-event.fc-event-selected {
+    background-color: var(--clisyc-available-bg, #3b82f6) !important;
+    border-color: var(--clisyc-available-text, #ffffff) !important;
+    border-width: 3px !important;
+    color: var(--clisyc-available-text, #ffffff) !important;
+    font-weight: 600;
+    filter: brightness(1.1);
+    box-shadow: 0 0 0 3px var(--clisyc-available-bg, #2563eb), 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    transform: scale(1.02);
+    z-index: 10 !important;
+}
+
+/* Unavailable Slots */
+.clisyc-booking-form-app .fc-event.clisyc-booked-event,
+.clisyc-booking-form-app .fc-event.clisyc-unavailable-slot,
+.clisyc-booking-form-app .fc-event.clisyc-blocked-slot { 
+    background-color: var(--clisyc-unavailable-bg, #f3f4f6) !important; 
+    border-color: var(--clisyc-unavailable-bg, #e5e7eb) !important; 
+    color: var(--clisyc-unavailable-text, #9ca3af) !important; 
+    cursor: not-allowed; 
+    opacity: 0.7 !important; 
+}
+
+.clisyc-booking-form-app .fc-event.clisyc-unavailable-slot * { 
+    color: var(--clisyc-unavailable-text, #9ca3af) !important; 
+}
+
+/* Event Content */
+.clisyc-booking-form-app .fc-event-time { 
+    font-weight: 600; 
+    margin-bottom: 4px; 
+    font-size: var(--clisyc-font-size-sm, 13px); 
+}
+
+.clisyc-booking-form-app .clisyc-event-details-stack { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 4px; 
+    font-size: var(--clisyc-font-size-xs, 12px); 
+}
+
+.clisyc-booking-form-app .clisyc-event-detail-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+.clisyc-booking-form-app .clisyc-event-detail-label { 
+    opacity: 0.9; 
+}
+
+.clisyc-booking-form-app .clisyc-event-color-dot { 
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%; 
+    border: 1px solid rgba(0,0,0,0.1); 
+    flex-shrink: 0; 
+}
+
+/* Urgency badge */
+.clisyc-booking-form-app .clisyc-urgency-badge {
+    display: inline-block;
+    font-size: var(--clisyc-font-size-xs, 10px);
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 5px;
+    margin-top: 2px;
+    border-radius: 3px;
+    background: rgba(214, 54, 56, 0.12);
+    color: #d63638;
+    white-space: nowrap;
+}
+
+/* Compact view */
+.clisyc-booking-form-app .fc-event-compact .fc-event-time {
+    font-weight: 700;
+    margin-bottom: 3px;
+    font-size: var(--clisyc-font-size-xs, 11px);
+    line-height: 1.2;
+}
+
+.clisyc-booking-form-app .clisyc-event-details-compact {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: var(--clisyc-font-size-xs, 11px);
+    line-height: 1.3;
+}
+
+.clisyc-booking-form-app .clisyc-event-compact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ==========================================================================
+   WEEK/DAY VIEW - IMPROVED TIME SLOT DISPLAY
+   Prioritizes service/practitioner names over redundant time display
+   Increased slot height for better readability
+   Duration-aware styling for short events
+   ========================================================================== */
+
+/* ==========================================================================
+   CALENDAR SLOT HEIGHT
+   Controlled by admin setting: Settings > Appearance > Calendar Slot Height
+   CSS variable --clisyc-slot-height is injected by PHP based on:
+   - Slot Height Per Hour setting
+   - Calendar Grid Precision (slotDuration) setting
+   
+   The CSS controls the visual slot height, while CalendarView.js manually
+   calculates event heights to match (since FullCalendar v6 doesn't have
+   a slotMinHeight option).
+   ========================================================================== */
+
+.clisyc-booking-form-app .fc-timegrid-slot {
+    height: var(--clisyc-slot-height, 40px) !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-slot-lane {
+    height: var(--clisyc-slot-height, 40px) !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-slot-label {
+    vertical-align: top !important;
+    padding-top: 2px !important;
+}
+
+/* ==========================================================================
+   BASE EVENT STYLING
+   ========================================================================== */
+
+/* Add gap between side-by-side events in timegrid */
+.clisyc-booking-form-app .fc-timegrid-event-harness {
+    margin-right: 2px !important;
+}
+
+/* Ensure last event in a group doesn't have extra margin */
+.clisyc-booking-form-app .fc-timegrid-event-harness:last-child {
+    margin-right: 0 !important;
+}
+
+/* Base timegrid event styling */
+.clisyc-booking-form-app .fc-timegrid-event {
+    border-left: 3px solid rgba(0, 0, 0, 0.15) !important;
+    border-radius: 3px !important;
+    margin-left: 1px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: filter 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+/* Override for available slots - use UI Accent Color for left border */
+.clisyc-booking-form-app .fc-timegrid-event.clisyc-available-slot {
+    border-left-color: var(--clisyc-accent-bg, #3b82f6) !important;
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Climbing animation overlay - uses service color from custom post type */
+.clisyc-booking-form-app .fc-timegrid-event.clisyc-available-slot::before {
+    content: '';
+    position: absolute;
+    left: -3px; /* Position over the border */
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--event-service-color, var(--clisyc-accent-bg, #3b82f6));
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease-out;
+    border-radius: 3px 0 0 3px;
+    z-index: 1;
+}
+
+/* On hover, the service color climbs up from the bottom */
+.clisyc-booking-form-app .fc-timegrid-event.clisyc-available-slot:hover::before {
+    transform: scaleY(1);
+}
+
+/* Event main content area - REDUCED PADDING */
+.clisyc-booking-form-app .fc-timegrid-event .fc-event-main {
+    padding: 2px 4px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+/* HIDE the time in week/day view - grid position already shows it */
+.clisyc-booking-form-app .fc-timegrid-event .fc-event-time {
+    display: none !important;
+}
+
+/* Service/Title - show prominently */
+.clisyc-booking-form-app .fc-timegrid-event .fc-event-title,
+.clisyc-booking-form-app .fc-timegrid-event .fc-event-title-container {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.3 !important;
+    margin-bottom: 1px !important;
+}
+
+/* Event details - color dots and labels */
+.clisyc-booking-form-app .fc-timegrid-event .clisyc-event-details-stack,
+.clisyc-booking-form-app .fc-timegrid-event .clisyc-event-details-compact {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 3px !important;
+    margin-top: 1px !important;
+    overflow: hidden !important;
+    align-items: center !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-event .clisyc-event-detail-item,
+.clisyc-booking-form-app .fc-timegrid-event .clisyc-event-compact-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+    font-size: var(--clisyc-font-size-xs, 12px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.2 !important;
+}
+
+/* Color dots - smaller for compactness */
+.clisyc-booking-form-app .fc-timegrid-event .clisyc-event-color-dot {
+    width: 6px !important;
+    height: 6px !important;
+    min-width: 6px !important;
+    min-height: 6px !important;
+    flex-shrink: 0 !important;
+    border-radius: 50% !important;
+}
+
+/* Column spacing */
+.clisyc-booking-form-app .fc-timegrid-col-events {
+    margin: 0 1px !important;
+}
+
+/* Minimum width for events */
+.clisyc-booking-form-app .fc-timegrid-event-harness-inset .fc-timegrid-event {
+    min-width: 24px !important;
+}
+
+/* ==========================================================================
+   DURATION-BASED EVENT STYLING
+   Uses data-duration attribute added by CalendarView.js
+   ========================================================================== */
+
+/* ----- VERY SHORT EVENTS (under 15 min) - Compact styling ----- */
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="5"],
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="10"] {
+    border-left-width: 2px !important;
+    border-radius: 2px !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="5"] .fc-event-main,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="10"] .fc-event-main {
+    padding: 1px 3px !important;
+}
+
+/* ----- SHORT EVENTS (15-30 min) - Compact styling ----- */
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="15"],
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="20"],
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="25"],
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="30"] {
+    border-left-width: 2px !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="15"] .fc-event-main,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="20"] .fc-event-main,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="25"] .fc-event-main,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="30"] .fc-event-main {
+    padding: 1px 3px !important;
+}
+
+/* ----- FALLBACK: FullCalendar's fc-short class ----- */
+/* For events FullCalendar deems visually short */
+.clisyc-booking-form-app .fc-timegrid-event.fc-short .fc-event-main {
+    padding: 1px 3px !important;
+}
+
+/* ==========================================================================
+   MEDIUM EVENTS (45-60 min) - Full display with compact layout
+   ========================================================================== */
+
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="45"] .fc-event-main,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="60"] .fc-event-main {
+    padding: 2px 4px !important;
+}
+
+/* ==========================================================================
+   LONG EVENTS (90+ min) - Full display with comfortable spacing
+   ========================================================================== */
+
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="90"] .fc-event-main,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="120"] .fc-event-main {
+    padding: 3px 5px !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="90"] .clisyc-event-details-stack,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="90"] .clisyc-event-details-compact,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="120"] .clisyc-event-details-stack,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="120"] .clisyc-event-details-compact {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="90"] .clisyc-event-detail-label,
+.clisyc-booking-form-app .fc-timegrid-event[data-duration="120"] .clisyc-event-detail-label {
+    display: inline !important;
+}
+
+/* ==========================================================================
+   HOVER STATE - Subtle highlight only (no expansion)
+   Click to see full details in booking modal
+   ========================================================================== */
+
+.clisyc-booking-form-app .fc-timegrid-event:hover {
+    z-index: 10 !important;
+    filter: brightness(0.92) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    cursor: pointer !important;
+}
+
+/* Improve text contrast */
+.clisyc-booking-form-app .fc-timegrid-event .fc-event-title {
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================================================
+   EVENT TOOLTIP - Floating info card on hover
+   ========================================================================== */
+
+.clisyc-event-tooltip {
+    position: fixed;
+    z-index: 100000;
+    pointer-events: none;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.clisyc-event-tooltip-content {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 12px 14px;
+    min-width: 180px;
+    max-width: 260px;
+}
+
+/* Tooltip arrow */
+.clisyc-event-tooltip-arrow {
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-right-color: #ffffff;
+    filter: drop-shadow(-2px 0 1px rgba(0, 0, 0, 0.1));
+}
+
+/* Title row */
+.clisyc-event-tooltip-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+/* Detail rows */
+.clisyc-event-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    color: #5f6368;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.clisyc-event-tooltip-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Color dots */
+.clisyc-event-tooltip-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.clisyc-event-tooltip-label {
+    flex: 1;
+}
+
+/* Time row */
+.clisyc-event-tooltip-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--clisyc-font-size-xs, 12px);
+    color: #80868b;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f3f4;
+}
+
+.clisyc-event-tooltip-time svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+/* ==========================================================================
+   BOOKING CONFIRMATION MODAL
+   ========================================================================== */
+
+.clisyc-booking-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    padding: 20px;
+    animation: clisyc-fade-in 0.2s ease-out;
+}
+
+@keyframes clisyc-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.clisyc-booking-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: clisyc-modal-slide-up 0.3s ease-out;
+}
+
+@keyframes clisyc-modal-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 
+ * MODAL CLOSE BUTTON 
+ * Using high specificity to beat theme styles 
+ */
+body .clisyc-booking-form-app .clisyc-booking-modal button.clisyc-booking-modal-close {
+    /* Layout & Positioning */
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    
+    /* Settings-based Colors */
+    background: var(--clisyc-icon-bg, #f3f4f6);
+    color: var(--clisyc-icon-text, #6b7280);
+    
+    /* Reset Theme Styles */
+    border: none;
+    border-radius: 50%;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    line-height: 1;
+    text-shadow: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover state */
+body .clisyc-booking-form-app .clisyc-booking-modal button.clisyc-booking-modal-close:hover {
+    filter: brightness(0.9);
+    background: var(--clisyc-icon-bg, #e5e7eb);
+}
+
+/* The 'Jump' Fix: Lock positioning on Click/Focus */
+body .clisyc-booking-form-app .clisyc-booking-modal button.clisyc-booking-modal-close:active,
+body .clisyc-booking-form-app .clisyc-booking-modal button.clisyc-booking-modal-close:focus {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    outline: none;
+    transform: scale(0.95);
+}
+
+/* Force the Dashicon inside to follow settings color */
+body .clisyc-booking-form-app .clisyc-booking-modal .clisyc-booking-modal-close .dashicons {
+    color: inherit; /* Inherits from the button's var(--clisyc-icon-text) */
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+/* Modal Header */
+.clisyc-booking-modal-header {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.clisyc-booking-modal-datetime {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.clisyc-booking-modal-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.clisyc-booking-modal-date {
+    font-size: var(--clisyc-font-size-lg, 18px);
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.clisyc-booking-modal-time {
+    font-size: var(--clisyc-font-size-md, 15px);
+    color: #6b7280;
+}
+
+.clisyc-booking-modal-duration {
+    color: #9ca3af;
+}
+
+/* Modal Summary (date/time block) */
+.clisyc-booking-modal-summary {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Modal Recurring Section */
+.clisyc-recurring-section {
+    padding: 0 24px;
+}
+
+/* Widen modal when seat selection is present */
+.clisyc-booking-modal:has(.clisyc-seat-map) {
+    max-width: 640px;
+}
+
+/* Modal Seat Selection (Pro — not when expanded fullscreen) */
+.clisyc-booking-modal .clisyc-seat-map:not(.clisyc-seat-map--expanded) {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Modal Details */
+.clisyc-booking-modal-details {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.clisyc-booking-modal-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.clisyc-booking-modal-detail-row:not(:last-child) {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.clisyc-booking-modal-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.clisyc-booking-modal-detail-content {
+    flex: 1;
+}
+
+.clisyc-booking-modal-detail-label {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.clisyc-booking-modal-detail-value {
+    font-size: var(--clisyc-font-size-md, 15px);
+    color: #111827;
+    font-weight: 500;
+    display: block;
+}
+
+/* Modal Form */
+.clisyc-booking-modal-form {
+    padding: 20px 24px 24px;
+}
+
+.clisyc-booking-modal-guest-fields,
+.clisyc-booking-modal-custom-fields {
+    margin-bottom: 16px;
+}
+
+.clisyc-booking-modal-field {
+    margin-bottom: 16px;
+}
+
+.clisyc-booking-modal-field label {
+    display: block;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.clisyc-booking-modal-field label .required {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+.clisyc-booking-modal-field input,
+.clisyc-booking-modal-field textarea,
+.clisyc-booking-modal-field select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: var(--clisyc-font-size-md, 15px);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.clisyc-booking-modal-field input:focus,
+.clisyc-booking-modal-field textarea:focus,
+.clisyc-booking-modal-field select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.clisyc-booking-modal-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Modal Error */
+.clisyc-booking-modal-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: var(--clisyc-font-size-base, 14px);
+    margin: 0 24px 16px;
+}
+
+.clisyc-booking-modal-error .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Modal Actions */
+.clisyc-booking-modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.clisyc-booking-modal-btn-cancel,
+.clisyc-booking-modal-btn-confirm {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: var(--clisyc-font-size-md, 15px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.clisyc-booking-modal-btn-cancel {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    color: #374151;
+}
+
+.clisyc-booking-modal-btn-cancel:hover {
+    background: #e5e7eb;
+}
+
+.clisyc-booking-modal-btn-confirm {
+    background: var(--clisyc-available-bg, #10b981);
+    border: none;
+    color: var(--clisyc-available-text, #ffffff);
+}
+
+.clisyc-booking-modal-btn-confirm:hover:not(:disabled) {
+    filter: brightness(0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.clisyc-booking-modal-btn-confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Button spinner */
+.clisyc-btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: clisyc-spinner-spin 0.8s linear infinite;
+}
+
+/* Modal Success State */
+.clisyc-booking-modal-success {
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.clisyc-success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #ffffff;
+    animation: clisyc-success-pop 0.4s ease-out;
+}
+
+@keyframes clisyc-success-pop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.clisyc-booking-modal-success h2 {
+    font-size: var(--clisyc-font-size-2xl, 24px);
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 8px;
+}
+
+.clisyc-booking-modal-success p {
+    font-size: var(--clisyc-font-size-lg, 16px);
+    color: #6b7280;
+    margin: 0;
+}
+
+.clisyc-redirect-notice {
+    margin-top: 16px !important;
+    font-size: var(--clisyc-font-size-base, 14px) !important;
+    color: #9ca3af !important;
+}
+
+/* Mobile modal adjustments */
+@media (max-width: 600px) {
+    .clisyc-booking-modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+    }
+    
+    .clisyc-booking-modal {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 90vh;
+    }
+    
+    .clisyc-booking-modal-actions {
+        flex-direction: column;
+    }
+    
+    .clisyc-booking-modal-btn-cancel {
+        order: 2;
+    }
+}
+
+/* ==========================================================================
+   SMART DATE MODAL (Heads Up Modal)
+   Styles now provided by @import '../shared/_modal.css'
+   ========================================================================== */
+
+/* Body scroll lock */
+body.clisyc-modal-open {
+    overflow: hidden !important;
+}
+
+/* ==========================================================================
+   GOOGLE CALENDAR-STYLE FILTER CHECKBOXES
+   ========================================================================== */
+
+/* Container for each filter option */
+.clisyc-checkbox-option,
+.clisyc-radio-option {
+    display: block;
+    margin-bottom: 4px;
+    position: relative;
+}
+
+/* Hide the native checkbox completely */
+.clisyc-checkbox-option input[type="checkbox"],
+.clisyc-checkbox-option input[type="radio"],
+.clisyc-radio-option input[type="checkbox"],
+.clisyc-radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Label - Google Calendar style: simple, clean */
+.clisyc-checkbox-option label,
+.clisyc-radio-option label {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+    gap: 12px;
+    font-size: var(--clisyc-font-size-base, 14px);
+    font-weight: 400;
+    color: #3c4043;
+    background: transparent;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Hover state - subtle gray background like Google */
+.clisyc-checkbox-option label:hover,
+.clisyc-radio-option label:hover {
+    background-color: rgba(60, 64, 67, 0.08);
+}
+
+/* The color indicator becomes the checkbox */
+.clisyc-filter-color-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 3px;
+    border-width: 2px;
+    border-style: solid;
+    position: relative;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    order: -1;
+    flex-shrink: 0;
+}
+
+/* Checkmark - hidden by default */
+.clisyc-filter-color-indicator::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.15s ease;
+    top: 1px;
+    left: 5px;
+}
+
+/* CHECKED STATE - Show the checkmark */
+.clisyc-checkbox-option input:checked + label .clisyc-filter-color-indicator::after,
+.clisyc-radio-option input:checked + label .clisyc-filter-color-indicator::after,
+.clisyc-option-selected .clisyc-filter-color-indicator::after {
+    transform: rotate(45deg) scale(1);
+}
+
+/* Keep the label style simple when checked */
+.clisyc-checkbox-option input:checked + label,
+.clisyc-radio-option input:checked + label {
+    background: transparent;
+    font-weight: 500;
+    color: #202124;
+}
+
+/* Focus state for accessibility */
+.clisyc-checkbox-option input:focus-visible + label,
+.clisyc-radio-option input:focus-visible + label {
+    outline: 2px solid #1a73e8;
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+/* FILTER GROUP LABELS - Google Style */
+.clisyc-filter-group-label {
+    font-size: var(--clisyc-font-size-xs, 11px);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #5f6368;
+    margin: 16px 0 8px 10px;
+    padding: 0;
+}
+
+.clisyc-filter-group:first-child .clisyc-filter-group-label {
+    margin-top: 0;
+}
+
+/* RESET BUTTON - Google Style */
+.clisyc-reset-all-filters-btn {
+    background: none;
+    border: none;
+    color: #1a73e8;
+    cursor: pointer;
+    font-size: var(--clisyc-font-size-sm, 13px);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    margin: 0 0 8px 0;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.clisyc-reset-all-filters-btn:hover {
+    background-color: rgba(26, 115, 232, 0.08);
+}
+
+/* FILTER CONTAINER - Clean Google Look */
+.clisyc-availability-filters-container {
+    background: #ffffff;
+    border: none;
+    border-right: 1px solid #dadce0;
+    border-radius: 0;
+    padding: 12px 8px;
+    position: relative;
+}
+
+/* VIEW OPTIONS / SHOW BOOKED TOGGLE */
+.clisyc-view-options {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #dadce0;
+}
+
+.clisyc-booked-indicator::after {
+    border-color: var(--clisyc-booked-text, #991b1b);
+}
+
+/**
+ * Calendar Legend & Notice Styles
+ * 
+ * The legend colors are controlled by CSS variables injected by 
+ * class-frontend.php from Settings → Appearance tab.
+ * 
+ * Variables used:
+ *   --clisyc-available-bg / --clisyc-available-text
+ *   --clisyc-booked-bg / --clisyc-booked-text
+ *   --clisyc-blocked-bg / --clisyc-blocked-text
+ */
+
+/* ============================================
+   CALENDAR LEGEND
+   ============================================ */
+
+.clisyc-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: var(--clisyc-font-size-sm, 13px);
+}
+
+.clisyc-legend-title {
+    font-weight: 600;
+    color: #374151;
+    margin-right: 0.5rem;
+}
+
+.clisyc-legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+}
+
+.clisyc-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.clisyc-legend-indicator {
+    flex-shrink: 0;
+}
+
+/* Regular slot indicator (rounded rectangle like calendar events) */
+.clisyc-legend-indicator.clisyc-legend-slot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    border: 2px solid;
+}
+
+/* Today highlight indicator (square with border) */
+.clisyc-legend-indicator.clisyc-legend-highlight {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.125rem;
+    border: 1px solid;
+}
+
+/* Current time indicator (horizontal line) */
+.clisyc-legend-indicator.clisyc-legend-line {
+    width: 1.25rem;
+    height: 2px;
+    border-radius: 1px;
+}
+
+.clisyc-legend-label {
+    color: #4b5563;
+    white-space: nowrap;
+}
+
+/* ============================================
+   LEGEND COLOR CLASSES (CSS Variable Based)
+   
+   These use the same CSS variables as the calendar,
+   ensuring legend colors always match the events.
+   
+   Variable names from class-frontend.php inject_css_variables():
+   - --clisyc-available-bg / --clisyc-available-text
+   - --clisyc-booked-bg / --clisyc-booked-text  
+   - --clisyc-blocked-bg / --clisyc-blocked-text
+   ============================================ */
+
+/* Available slot - uses --clisyc-available-bg/text from Appearance settings */
+.clisyc-legend-item[data-type="available"] .clisyc-legend-slot {
+    background-color: var(--clisyc-available-bg, #d1fae5);
+    border-color: var(--clisyc-available-bg, #d1fae5);
+}
+
+/* Booked slot - uses --clisyc-booked-bg/text from Appearance settings */
+.clisyc-legend-item[data-type="booked"] .clisyc-legend-slot {
+    background-color: var(--clisyc-booked-bg, #fee2e2);
+    border-color: var(--clisyc-booked-bg, #fee2e2);
+}
+
+/* Blocked/Unavailable - uses --clisyc-blocked-bg/text from Appearance settings */
+.clisyc-legend-item[data-type="blocked"] .clisyc-legend-slot {
+    background-color: var(--clisyc-blocked-bg, #e5e7eb);
+    border-color: var(--clisyc-blocked-bg, #e5e7eb);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+    .clisyc-calendar-legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .clisyc-legend-title {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+    
+    .clisyc-legend-items {
+        gap: 0.5rem 1rem;
+    }
+}
+
+/* ============================================
+   ADMIN NOTICE - SLOTS OUTSIDE VISIBLE RANGE
+   ============================================ */
+
+.clisyc-calendar-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    font-size: var(--clisyc-font-size-base, 14px);
+    line-height: 1.5;
+}
+
+.clisyc-calendar-notice.clisyc-notice-warning {
+    background-color: #fffbeb;
+    border: 1px solid #fcd34d;
+    color: #92400e;
+}
+
+.clisyc-calendar-notice.clisyc-notice-info {
+    background-color: #eff6ff;
+    border: 1px solid #93c5fd;
+    color: #1e40af;
+}
+
+.clisyc-calendar-notice .clisyc-notice-icon {
+    flex-shrink: 0;
+    font-size: 1.125rem;
+    line-height: 1;
+}
+
+.clisyc-calendar-notice .clisyc-notice-content {
+    flex: 1;
+}
+
+.clisyc-calendar-notice .clisyc-notice-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.clisyc-calendar-notice .clisyc-notice-message {
+    opacity: 0.9;
+}
+
+.clisyc-calendar-notice .clisyc-notice-dismiss {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+    color: inherit;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.clisyc-calendar-notice .clisyc-notice-dismiss:hover {
+    opacity: 1;
+}
+
+/* Admin-only notice styling */
+.clisyc-calendar-notice.clisyc-admin-notice {
+    background-color: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #78350f;
+}
+
+.clisyc-calendar-notice.clisyc-admin-notice .clisyc-notice-badge {
+    display: inline-block;
+    background-color: #f59e0b;
+    color: #ffffff;
+    font-size: var(--clisyc-font-size-xs, 11px);
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* TIMEZONE SECTION REMOVED - Now in clisyc-collapsible-header.css */
+
+/**
+ * RESPONSIVE IMPROVEMENTS for clisyc_booking_form
+ * 
+ * Add this CSS to: src/assets/src/booking-form/style.css
+ * 
+ * KEY CHANGES:
+ * 1. Added 950px breakpoint - switches to single column earlier
+ * 2. Added 850px breakpoint - compacts the timezone bar
+ * 3. Reduced padding/margins progressively at smaller sizes
+ * 4. Hidden world map at 850px (was 400px)
+ * 5. Improved calendar toolbar responsiveness
+ * 6. Better filter panel stacking on tablets
+ * 
+ * INSTRUCTIONS:
+ * Replace the existing responsive sections in style.css with this code,
+ * or append these rules after the existing responsive rules (they will override).
+ */
+
+/* ==========================================================================
+   RESPONSIVE IMPROVEMENTS - TABLET & MOBILE
+   ========================================================================== */
+
+/* --------------------------------------
+   BREAKPOINT: 1100px - Reduce sidebar, tighten spacing
+   -------------------------------------- */
+@media (max-width: 1100px) {
+    .clisyc-faceted-search-layout {
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+    }
+    
+    .clisyc-availability-filters-container {
+        padding: 16px;
+    }
+    
+    
+    
+    }
+
+/* --------------------------------------
+   BREAKPOINT: 950px - SWITCH TO SINGLE COLUMN
+   This is the key fix - stack earlier to prevent cramping
+   -------------------------------------- */
+@media (max-width: 950px) {
+    .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    /* Filter panel becomes horizontal strip on tablet */
+    .clisyc-availability-filters-container {
+        padding: 16px;
+        margin-bottom: 16px;
+        position: static; /* Remove sticky positioning */
+        max-height: none;
+    }
+    
+    /* Horizontal filter layout for tablet */
+    .clisyc-filter-group-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .clisyc-filter-group {
+        flex: 1 1 200px;
+        min-width: 160px;
+        margin-bottom: 0;
+    }
+    
+    .clisyc-filter-group-label {
+        margin-bottom: 8px;
+        font-size: var(--clisyc-font-size-sm, 13px);
+    }
+    
+    /* Filter options in horizontal scroll on tablet */
+    .clisyc-checkbox-container,
+    .clisyc-filter-options-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .clisyc-filter-option,
+    .clisyc-radio-option,
+    .clisyc-checkbox-option {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+    }
+    
+    .clisyc-filter-option label,
+    .clisyc-radio-option label,
+    .clisyc-checkbox-option label {
+        padding: 8px 12px;
+        font-size: var(--clisyc-font-size-sm, 13px);
+        white-space: nowrap;
+    }
+    
+    /* Compact reset button */
+    .clisyc-reset-all-container {
+        margin-bottom: 12px;
+    }
+    
+    .clisyc-reset-all-filters-btn {
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+}
+
+/* --------------------------------------
+   BREAKPOINT: 850px - Compact timezone bar, hide map
+   -------------------------------------- */
+@media (max-width: 850px) {
+    /* Compact the selected slot banner */
+    .clisyc-selected-slot-banner {
+        padding: 10px 14px;
+        gap: 12px;
+    }
+    
+    .clisyc-selected-slot-text {
+        font-size: var(--clisyc-font-size-sm, 13px);
+    }
+    
+    .clisyc-selected-slot-book-btn {
+        padding: 8px 16px;
+        font-size: var(--clisyc-font-size-sm, 13px);
+    }
+}
+
+/* --------------------------------------
+   BREAKPOINT: 768px - Mobile-ish tablet
+   -------------------------------------- */
+@media (max-width: 768px) {
+    .clisyc-faceted-search-layout {
+        gap: 12px;
+    }
+    
+    /* Stack filter groups vertically on smaller tablets */
+    .clisyc-filter-group-wrapper {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .clisyc-filter-group {
+        flex: 1 1 auto;
+        min-width: unset;
+    }
+    
+    /* Filter options scroll horizontally */
+    .clisyc-checkbox-container,
+    .clisyc-filter-options-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: -8px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .clisyc-filter-option,
+    .clisyc-radio-option,
+    .clisyc-checkbox-option {
+        flex-shrink: 0;
+    }
+    
+    /* Timezone wrapper stacks */
+    
+    
+    
+    
+    
+    
+    .clisyc-clock-display {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    /* Calendar legend wraps better */
+    .clisyc-calendar-legend {
+        padding: 10px 12px;
+        gap: 8px;
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+    
+    .clisyc-legend-items {
+        gap: 6px 12px;
+    }
+    
+    /* Help text smaller */
+    .clisyc-calendar-help-text {
+        padding: 12px;
+        font-size: var(--clisyc-font-size-sm, 13px);
+    }
+}
+
+/* --------------------------------------
+   BREAKPOINT: 600px - Mobile
+   -------------------------------------- */
+@media (max-width: 600px) {
+    .clisyc-availability-filters-container {
+        padding: 12px;
+        border-radius: 8px;
+    }
+    
+    .clisyc-filter-group-label {
+        font-size: var(--clisyc-font-size-xs, 12px);
+        margin-bottom: 6px;
+    }
+    
+    .clisyc-filter-option label,
+    .clisyc-radio-option label,
+    .clisyc-checkbox-option label {
+        padding: 6px 10px;
+        font-size: var(--clisyc-font-size-xs, 12px);
+        border-radius: 6px;
+    }
+    
+    .clisyc-filter-color-indicator {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .clisyc-timezone-label .dashicons {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+    }
+    
+    
+    
+    
+    
+    .clisyc-clock-label {
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+    
+    
+    
+    
+    
+    /* Selected slot banner stacks */
+    .clisyc-selected-slot-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 12px;
+        gap: 10px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .clisyc-selected-slot-info {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .clisyc-selected-slot-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+    
+    .clisyc-selected-slot-text {
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+    
+    .clisyc-selected-slot-book-btn {
+        width: 100%;
+        padding: 10px 16px;
+        font-size: var(--clisyc-font-size-base, 14px);
+    }
+    
+    /* Calendar legend compact */
+    .clisyc-calendar-legend {
+        padding: 8px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .clisyc-legend-items {
+        flex-wrap: wrap;
+        gap: 4px 10px;
+    }
+    
+    .clisyc-legend-item {
+        font-size: var(--clisyc-font-size-xs, 11px);
+    }
+    
+    /* Calendar help text */
+    .clisyc-calendar-help-text {
+        padding: 10px;
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+}
+
+/* --------------------------------------
+   BREAKPOINT: 480px - Small mobile
+   -------------------------------------- */
+@media (max-width: 480px) {
+    .clisyc-faceted-search-layout {
+        gap: 10px;
+    }
+    
+    .clisyc-availability-filters-container {
+        padding: 10px;
+    }
+    
+    .clisyc-filter-group-wrapper {
+        gap: 10px;
+    }
+    
+    /* Make filter labels tappable */
+    .clisyc-filter-option label,
+    .clisyc-radio-option label,
+    .clisyc-checkbox-option label {
+        padding: 8px 10px;
+        min-height: 36px;
+    }
+    
+    
+    
+    /* Hide clock icon container on very small screens */
+    .clisyc-clock-icon-container,
+    .clisyc-clock-icon-simple {
+        display: none;
+    }
+    
+    
+    
+    .clisyc-clock-label {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    
+}
+
+/* ==========================================================================
+   FULLCALENDAR RESPONSIVE FIXES
+   ========================================================================== */
+
+/* Compact toolbar on smaller screens */
+@media (max-width: 850px) {
+    .clisyc-booking-form-app .fc .fc-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-toolbar-title {
+        font-size: 1.1em;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .clisyc-booking-form-app .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-toolbar-chunk {
+        flex: none;
+        width: 100%;
+    }
+    
+    /* Center the navigation buttons */
+    .clisyc-booking-form-app .fc .fc-toolbar-chunk:first-child {
+        order: 2;
+        justify-content: center;
+    }
+    
+    /* Title in the middle */
+    .clisyc-booking-form-app .fc .fc-toolbar-chunk:nth-child(2) {
+        order: 1;
+        text-align: center;
+    }
+    
+    /* View buttons at bottom, centered */
+    .clisyc-booking-form-app .fc .fc-toolbar-chunk:last-child {
+        order: 3;
+        justify-content: center;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-toolbar-title {
+        font-size: 1em;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-button {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    
+    /* Smaller events on mobile */
+    .clisyc-booking-form-app .fc-event {
+        padding: 2px 4px !important;
+        font-size: 11px;
+    }
+    
+    .clisyc-booking-form-app .fc-event-time {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Even smaller calendar elements */
+    .clisyc-booking-form-app .fc .fc-col-header-cell-cushion {
+        font-size: 11px;
+        padding: 4px 2px;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-timegrid-slot-label-cushion {
+        font-size: 10px;
+    }
+    
+    .clisyc-booking-form-app .fc .fc-button {
+        padding: 6px 8px;
+    }
+    
+    /* Hide button text, show only icons where possible */
+    .clisyc-booking-form-app .fc .fc-today-button {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}
+
+/* ==========================================================================
+   MODAL RESPONSIVE IMPROVEMENTS
+   ========================================================================== */
+
+@media (max-width: 600px) {
+    .clisyc-booking-modal-overlay {
+        padding: 10px;
+        align-items: flex-end; /* Slide up from bottom on mobile */
+    }
+    
+    .clisyc-booking-modal {
+        border-radius: 16px 16px 0 0;
+        max-height: 85vh;
+    }
+    
+    /* Close button positioning */
+    body .clisyc-booking-form-app .clisyc-booking-modal button.clisyc-booking-modal-close {
+        width: 32px;
+        height: 32px;
+        right: 12px;
+        top: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-booking-modal {
+        max-height: 90vh;
+    }
+}
+
+/* ==========================================================================
+   VIEW OPTIONS / SHOW BOOKED TOGGLE RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 950px) {
+    .clisyc-view-options {
+        flex: 1 1 100%;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 12px;
+        margin-top: 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    .clisyc-view-options .clisyc-filter-group-label {
+        font-size: var(--clisyc-font-size-xs, 12px);
+    }
+}
+
+/* ==========================================================================
+   PRINT STYLES (Bonus)
+   ========================================================================== */
+
+@media print {
+    .clisyc-availability-filters-container,
+    .clisyc-time-selection-wrapper,
+    .clisyc-selected-slot-banner,
+    .clisyc-reset-all-container,
+    .clisyc-calendar-help-text {
+        display: none !important;
+    }
+    
+    .clisyc-faceted-search-layout {
+        display: block;
+    }
+    
+    .clisyc-main-content-area {
+        width: 100%;
+    }
+}
+/**
+ * FIXES for reported issues - December 28, 2025
+ * 
+ * Issue 1: Checkboxes cut off at bottom on mobile
+ * Issue 2: Large empty spaces in filter area on tablet
+ * Issue 3: Move analog clock to icon position (CSS-only partial fix)
+ * 
+ * Add these rules to the END of style.css (after the previous improvements)
+ */
+
+/* ==========================================================================
+   FIX 1: CHECKBOX CUTOFF ON MOBILE
+   The filter option labels were being clipped at the bottom
+   ========================================================================== */
+
+/* Ensure checkbox indicators have enough space */
+.clisyc-filter-option label,
+.clisyc-radio-option label,
+.clisyc-checkbox-option label {
+    min-height: 40px; /* Ensure minimum tap target */
+    padding: 10px 12px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* The color indicator (checkbox visual) needs proper sizing */
+.clisyc-filter-color-indicator {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    flex-shrink: 0;
+    border-radius: 4px; /* Square with rounded corners for checkbox look */
+    border-width: 2px;
+    box-sizing: border-box;
+}
+
+/* Ensure the option content doesn't get squished */
+.clisyc-option-content,
+.clisyc-option-label {
+    line-height: 1.4;
+    padding: 2px 0;
+}
+
+/* Mobile-specific fixes for checkbox cutoff */
+@media (max-width: 600px) {
+    .clisyc-filter-option label,
+    .clisyc-radio-option label,
+    .clisyc-checkbox-option label {
+        min-height: 44px; /* iOS recommended tap target */
+        padding: 10px 12px;
+        gap: 10px;
+    }
+    
+    .clisyc-filter-color-indicator {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        min-height: 20px;
+        border-radius: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clisyc-filter-option label,
+    .clisyc-radio-option label,
+    .clisyc-checkbox-option label {
+        min-height: 44px;
+        padding: 8px 10px;
+        font-size: var(--clisyc-font-size-base, 14px);
+    }
+    
+    .clisyc-filter-color-indicator {
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+        min-height: 18px;
+    }
+}
+
+/* ==========================================================================
+   FIX 2: LARGE EMPTY SPACES IN FILTER AREA
+   Filter groups were stretching to fill available space
+   ========================================================================== */
+
+/* Reset filter group wrapper to not stretch items */
+.clisyc-filter-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+}
+
+/* Filter groups should not grow to fill space */
+.clisyc-filter-group {
+    flex: 0 0 auto; /* Don't grow, don't shrink, auto size */
+    margin-bottom: 0;
+}
+
+/* On tablet (stacked layout), keep groups compact */
+@media (max-width: 950px) {
+    .clisyc-filter-group-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    
+    .clisyc-filter-group {
+        flex: 0 0 auto;
+    }
+    
+    /* Filter options container - horizontal wrap */
+    .clisyc-checkbox-container,
+    .clisyc-filter-options-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: flex-start;
+        align-content: flex-start;
+    }
+    
+    .clisyc-filter-option,
+    .clisyc-radio-option,
+    .clisyc-checkbox-option {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .clisyc-filter-group-wrapper {
+        gap: 14px;
+    }
+    
+    .clisyc-checkbox-container,
+    .clisyc-filter-options-container {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 600px) {
+    .clisyc-filter-group-wrapper {
+        gap: 12px;
+    }
+    
+    .clisyc-filter-group-label {
+        margin-bottom: 8px;
+    }
+}
+
+/* ==========================================================================
+   FIX 3: ANALOG CLOCK IN ICON POSITION
+   Shrink analog clock and position it as a small icon
+   ========================================================================== */
+
+/* Make the clock icon container smaller and inline with label */
+
+/* Shrink the analog clock to icon size */
+
+.clisyc-clock-hand-hour {
+    width: 2px;
+    height: 8px;
+}
+
+.clisyc-clock-hand-minute {
+    width: 1.5px;
+    height: 11px;
+}
+
+.clisyc-clock-center-dot {
+    width: 4px;
+    height: 4px;
+}
+
+/* Reorder: icon first, then label, then digital time */
+.clisyc-clock-display {
+    display: contents; /* Let children participate in parent flex */
+}
+
+/* Alternative layout: Label with small clock icon, then digital display */
+
+.clisyc-clock-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    order: 1;
+}
+
+/* Desktop: Horizontal layout with small clock icon in label */
+@media (min-width: 851px) {
+    
+    
+    /* Group the label and small clock together */
+    .clisyc-clock-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    /* Small clock icon size */
+    
+    
+    .clisyc-clock-hand-hour {
+        width: 2px;
+        height: 7px;
+    }
+    
+    .clisyc-clock-hand-minute {
+        width: 1.5px;
+        height: 10px;
+    }
+    
+    .clisyc-clock-center-dot {
+        width: 3px;
+        height: 3px;
+    }
+}
+
+/* Tablet and mobile: Even smaller */
+@media (max-width: 850px) {
+    
+    
+    .clisyc-clock-hand-hour {
+        width: 2px;
+        height: 6px;
+    }
+    
+    .clisyc-clock-hand-minute {
+        width: 1px;
+        height: 8px;
+    }
+    
+    .clisyc-clock-center-dot {
+        width: 3px;
+        height: 3px;
+    }
+}
+
+@media (max-width: 600px) {
+    
+    
+    .clisyc-clock-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    
+    
+    .clisyc-clock-hand-hour {
+        width: 1.5px;
+        height: 5px;
+    }
+    
+    .clisyc-clock-hand-minute {
+        width: 1px;
+        height: 7px;
+    }
+}
+
+/* Hide the separate clock display wrapper if using inline approach */
+/* This moves the clock to be part of the label area */
+@media (min-width: 601px) {
+    .clisyc-clock-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+}

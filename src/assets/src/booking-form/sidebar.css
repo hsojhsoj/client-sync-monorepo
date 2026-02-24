@@ -1,0 +1,749 @@
+/**
+ * File: src/assets/src/booking-form/sidebar.css
+ * Google Calendar-inspired collapsible sidebar styles.
+ * 
+ * Import this file in your main style.css or bundle it separately.
+ * These styles replace the old .clisyc-availability-filters-container styles.
+ */
+
+/* ==========================================================================
+   SIDEBAR - GOOGLE CALENDAR STYLE
+   ========================================================================== */
+
+/* Sidebar Container */
+.clisyc-sidebar {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-right: 1px solid #dadce0;
+    width: 256px;
+    min-width: 256px;
+    max-width: 256px;
+    transition: width 0.2s ease, min-width 0.2s ease, max-width 0.2s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Collapsed State */
+.clisyc-sidebar--collapsed {
+    width: 56px;
+    min-width: 56px;
+    max-width: 56px;
+}
+
+/* Collapsed Strip (hamburger only) */
+.clisyc-sidebar-collapsed-strip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+}
+
+/* Inner Content Wrapper */
+.clisyc-sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   SIDEBAR HEADER
+   ========================================================================== */
+
+.clisyc-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid #f1f3f4;
+    min-height: 48px;
+    gap: 8px;
+}
+
+/* Hamburger Toggle Button */
+.clisyc-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #5f6368;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.clisyc-sidebar-toggle:hover {
+    background-color: #f1f3f4;
+    color: #202124;
+}
+
+.clisyc-sidebar-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4285f4;
+}
+
+.clisyc-sidebar-toggle:active {
+    background-color: #e8eaed;
+}
+
+.clisyc-sidebar-toggle svg {
+    flex-shrink: 0;
+}
+
+/* Reset Button */
+.clisyc-sidebar-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #5f6368;
+    background: transparent;
+    border: 1px solid #dadce0;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.clisyc-sidebar-reset:hover {
+    background-color: #f8f9fa;
+    border-color: #5f6368;
+    color: #202124;
+}
+
+.clisyc-sidebar-reset:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4285f4;
+}
+
+.clisyc-sidebar-reset svg {
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   FILTER GROUPS / NAVIGATION
+   ========================================================================== */
+
+.clisyc-sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+
+/* Scrollbar Styling */
+.clisyc-sidebar-nav::-webkit-scrollbar {
+    width: 8px;
+}
+
+.clisyc-sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.clisyc-sidebar-nav::-webkit-scrollbar-thumb {
+    background-color: #dadce0;
+    border-radius: 4px;
+    border: 2px solid #fff;
+}
+
+.clisyc-sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background-color: #bdc1c6;
+}
+
+/* Filter Group */
+.clisyc-sidebar-group {
+    margin-bottom: 4px;
+}
+
+.clisyc-sidebar-group--primary {
+    /* Primary dimension can have special styling if needed */
+}
+
+.clisyc-sidebar-group--options {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f3f4;
+}
+
+/* Group Header (Collapsible) */
+.clisyc-sidebar-group-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 16px 8px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #5f6368;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease;
+    gap: 4px;
+}
+
+.clisyc-sidebar-group-header:hover {
+    background-color: #f8f9fa;
+}
+
+.clisyc-sidebar-group-header:focus {
+    outline: none;
+    background-color: #f1f3f4;
+}
+
+.clisyc-sidebar-group-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Chevron Icon */
+.clisyc-sidebar-chevron {
+    flex-shrink: 0;
+    color: #5f6368;
+    transition: transform 0.2s ease;
+    transform: rotate(-90deg);
+}
+
+.clisyc-sidebar-chevron--expanded {
+    transform: rotate(0deg);
+}
+
+/* Active Filter Count Badge */
+.clisyc-sidebar-filter-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: #4285f4;
+    border-radius: 9px;
+    margin-left: auto;
+}
+
+/* Group Content (Collapsible Area) */
+.clisyc-sidebar-group-content {
+    display: none;
+    padding: 0 8px 8px 8px;
+}
+
+.clisyc-sidebar-group-content--expanded {
+    display: block;
+}
+
+/* ==========================================================================
+   FILTER ITEMS
+   ========================================================================== */
+
+.clisyc-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 8px;
+    margin: 2px 0;
+    font-size: 14px;
+    color: #3c4043;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+    user-select: none;
+}
+
+.clisyc-sidebar-item:hover {
+    background-color: #f8f9fa;
+}
+
+.clisyc-sidebar-item--selected {
+    /* Optionally add a subtle background for selected items */
+}
+
+/* Hide actual checkbox/radio input (screen reader accessible) */
+.clisyc-sidebar-input,
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Google Calendar Style Checkbox */
+.clisyc-sidebar-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid currentColor;
+    border-radius: 3px;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.clisyc-sidebar-checkbox svg {
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.clisyc-sidebar-item--selected .clisyc-sidebar-checkbox svg {
+    opacity: 1;
+}
+
+/* Focus state for accessibility */
+.clisyc-sidebar-input:focus + .clisyc-sidebar-checkbox,
+.clisyc-sidebar-item:focus-within .clisyc-sidebar-checkbox {
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+}
+
+/* Item Label */
+.clisyc-sidebar-item-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+/* Price Badge (for date range mode) */
+.clisyc-sidebar-item-price {
+    font-size: 12px;
+    color: #5f6368;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   SIDEBAR INFO / FOOTER
+   ========================================================================== */
+
+.clisyc-sidebar-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 16px;
+    margin: 8px;
+    font-size: 12px;
+    color: #5f6368;
+    background: #f8f9fa;
+    border-radius: 8px;
+    line-height: 1.5;
+}
+
+.clisyc-sidebar-info svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #9aa0a6;
+}
+
+/* ==========================================================================
+   LOADING STATE
+   ========================================================================== */
+
+.clisyc-sidebar--loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.clisyc-sidebar-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 16px;
+}
+
+.clisyc-loading-dot {
+    width: 6px;
+    height: 6px;
+    background: #dadce0;
+    border-radius: 50%;
+    animation: clisyc-loading-pulse 1.4s ease-in-out infinite both;
+}
+
+.clisyc-loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.clisyc-loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.clisyc-loading-dot:nth-child(3) { animation-delay: 0; }
+
+@keyframes clisyc-loading-pulse {
+    0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ==========================================================================
+   LAYOUT INTEGRATION - Update main layout grid
+   ========================================================================== */
+
+/* Main Layout Grid - Sidebar + Content */
+.clisyc-faceted-search-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    min-height: 600px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.clisyc-faceted-search-layout.clisyc-no-sidebar {
+    grid-template-columns: 1fr;
+}
+
+/* When sidebar is collapsed */
+.clisyc-faceted-search-layout:has(.clisyc-sidebar--collapsed) {
+    /* Grid adjusts automatically due to auto column */
+}
+
+/* Main Content Area */
+.clisyc-main-content-area {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Prevent overflow */
+    padding: 16px;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 950px) {
+    .clisyc-sidebar {
+        width: 220px;
+        min-width: 220px;
+        max-width: 220px;
+    }
+    
+    .clisyc-sidebar--collapsed {
+        width: 48px;
+        min-width: 48px;
+        max-width: 48px;
+    }
+}
+
+/* Mobile - Sidebar becomes overlay */
+@media (max-width: 768px) {
+    .clisyc-faceted-search-layout {
+        grid-template-columns: 1fr;
+        position: relative;
+    }
+    
+    .clisyc-sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+        transform: translateX(0);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    
+    .clisyc-sidebar--collapsed {
+        width: 56px;
+        min-width: 56px;
+        max-width: 56px;
+        box-shadow: none;
+        position: relative;
+        transform: none;
+    }
+    
+    /* On mobile, collapsed means just the strip is visible */
+    .clisyc-sidebar--collapsed .clisyc-sidebar-collapsed-strip {
+        position: relative;
+    }
+    
+    .clisyc-main-content-area {
+        padding: 12px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .clisyc-sidebar {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+    }
+    
+    .clisyc-sidebar-header {
+        padding: 8px;
+    }
+    
+    .clisyc-sidebar-group-header {
+        padding: 10px 12px;
+    }
+    
+    .clisyc-sidebar-item {
+        padding: 10px 12px;
+    }
+}
+
+/* ==========================================================================
+   DATE RANGE MODE SPECIFIC
+   ========================================================================== */
+
+.clisyc-sidebar--date-range .clisyc-sidebar-item {
+    padding: 10px 12px;
+}
+
+.clisyc-sidebar--date-range .clisyc-sidebar-item-label {
+    font-weight: 500;
+}
+
+.clisyc-sidebar--date-range .clisyc-sidebar-item-price {
+    font-size: 13px;
+    color: #1a73e8;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   MINI CALENDAR - Google Calendar Style
+   ========================================================================== */
+
+.clisyc-sidebar-mini-calendar {
+    padding: 8px 12px 16px;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.clisyc-mini-calendar {
+    user-select: none;
+}
+
+/* Mini Calendar Header */
+.clisyc-mini-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 4px 0;
+}
+
+.clisyc-mini-cal-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3c4043;
+    flex: 1;
+    text-align: center;
+}
+
+.clisyc-mini-cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #5f6368;
+    transition: background-color 0.15s ease;
+}
+
+.clisyc-mini-cal-nav:hover {
+    background-color: #f1f3f4;
+    color: #202124;
+}
+
+.clisyc-mini-cal-nav:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+}
+
+/* Weekday Headers */
+.clisyc-mini-cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.clisyc-mini-cal-weekday {
+    font-size: 10px;
+    font-weight: 500;
+    color: #70757a;
+    text-transform: uppercase;
+    padding: 4px 0;
+}
+
+/* Calendar Grid */
+.clisyc-mini-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+.clisyc-mini-cal-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 1px auto;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 400;
+    color: #3c4043;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.clisyc-mini-cal-day:hover {
+    background-color: #f1f3f4;
+}
+
+.clisyc-mini-cal-day:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+}
+
+/* Other month days (dimmed) */
+.clisyc-mini-cal-day--other {
+    color: #bdc1c6;
+}
+
+.clisyc-mini-cal-day--other:hover {
+    background-color: #f8f9fa;
+}
+
+/* Today */
+.clisyc-mini-cal-day--today {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    font-weight: 500;
+}
+
+.clisyc-mini-cal-day--today:hover {
+    background-color: #d2e3fc;
+}
+
+/* Selected day */
+.clisyc-mini-cal-day--selected {
+    background-color: #1a73e8 !important;
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.clisyc-mini-cal-day--selected:hover {
+    background-color: #1967d2 !important;
+}
+
+/* Today + Selected */
+.clisyc-mini-cal-day--today.clisyc-mini-cal-day--selected {
+    background-color: #1a73e8 !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   DARK MODE SUPPORT (optional)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .clisyc-sidebar {
+        background: #202124;
+        border-color: #3c4043;
+    }
+    
+    .clisyc-sidebar-header {
+        border-color: #3c4043;
+    }
+    
+    .clisyc-sidebar-toggle {
+        color: #9aa0a6;
+    }
+    
+    .clisyc-sidebar-toggle:hover {
+        background-color: #3c4043;
+        color: #e8eaed;
+    }
+    
+    .clisyc-sidebar-reset {
+        color: #9aa0a6;
+        border-color: #5f6368;
+    }
+    
+    .clisyc-sidebar-reset:hover {
+        background-color: #3c4043;
+        color: #e8eaed;
+    }
+    
+    .clisyc-sidebar-group-header {
+        color: #9aa0a6;
+    }
+    
+    .clisyc-sidebar-group-header:hover {
+        background-color: #3c4043;
+    }
+    
+    .clisyc-sidebar-item {
+        color: #e8eaed;
+    }
+    
+    .clisyc-sidebar-item:hover {
+        background-color: #3c4043;
+    }
+    
+    .clisyc-sidebar-info {
+        background: #3c4043;
+        color: #9aa0a6;
+    }
+    
+    .clisyc-sidebar-nav::-webkit-scrollbar-thumb {
+        background-color: #5f6368;
+        border-color: #202124;
+    }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-sidebar,
+    .clisyc-sidebar-chevron,
+    .clisyc-sidebar-checkbox,
+    .clisyc-sidebar-toggle {
+        transition: none;
+    }
+    
+    .clisyc-loading-dot {
+        animation: none;
+        opacity: 0.6;
+    }
+}
