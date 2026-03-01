@@ -237,7 +237,52 @@ const DateStep = ({ selectedDate, onSelect, availableDates, isLoading }) => {
         // Start with selected date's month or today
         return selectedDate ? new Date(selectedDate) : new Date();
     });
-    
+
+    // Compute available months and their range from the availableDates array.
+    const { availableMonths, minMonth, maxMonth } = useMemo(() => {
+        if (!availableDates || availableDates.length === 0) {
+            return { availableMonths: new Set(), minMonth: null, maxMonth: null };
+        }
+        const months = new Set();
+        availableDates.forEach(dateStr => {
+            // dateStr is "YYYY-MM-DD"
+            months.add(dateStr.substring(0, 7)); // "YYYY-MM"
+        });
+        const sorted = Array.from(months).sort();
+        return {
+            availableMonths: months,
+            minMonth: sorted[0],
+            maxMonth: sorted[sorted.length - 1],
+        };
+    }, [availableDates]);
+
+    // Auto-navigate to the first month with availability when data loads.
+    useEffect(() => {
+        if (selectedDate) return; // Don't override if user already picked a date
+        if (minMonth) {
+            const [year, month] = minMonth.split('-').map(Number);
+            setCurrentMonth(new Date(year, month - 1, 1));
+        }
+    }, [minMonth, selectedDate]);
+
+    // Helper: get "YYYY-MM" key for a Date object.
+    const getMonthKey = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        return `${y}-${m}`;
+    };
+
+    // Check if navigation in a given direction is allowed.
+    const canNavigate = (direction) => {
+        if (!availableDates || availableDates.length === 0) return true; // No restriction data
+        const targetMonth = new Date(currentMonth);
+        targetMonth.setMonth(targetMonth.getMonth() + direction);
+        const targetKey = getMonthKey(targetMonth);
+        if (direction < 0 && minMonth) return targetKey >= minMonth;
+        if (direction > 0 && maxMonth) return targetKey <= maxMonth;
+        return true;
+    };
+
     const getDaysInMonth = (date) => {
         const year = date.getFullYear();
         const month = date.getMonth();
@@ -245,108 +290,120 @@ const DateStep = ({ selectedDate, onSelect, availableDates, isLoading }) => {
         const lastDay = new Date(year, month + 1, 0);
         const daysInMonth = lastDay.getDate();
         const startingDay = firstDay.getDay();
-        
+
         const days = [];
-        
+
         // Previous month days
         for (let i = 0; i < startingDay; i++) {
             const prevDate = new Date(year, month, -startingDay + i + 1);
             days.push({ date: prevDate, isCurrentMonth: false });
         }
-        
+
         // Current month days
         for (let i = 1; i <= daysInMonth; i++) {
             days.push({ date: new Date(year, month, i), isCurrentMonth: true });
         }
-        
+
         // Next month days to fill grid
         const remaining = 42 - days.length;
         for (let i = 1; i <= remaining; i++) {
             days.push({ date: new Date(year, month + 1, i), isCurrentMonth: false });
         }
-        
+
         return days;
     };
-    
+
     const formatDateKey = (date) => {
         return date.toISOString().split('T')[0];
     };
-    
+
     const isDateAvailable = (date) => {
         if (!availableDates) return true; // If no restriction data, allow all
         const key = formatDateKey(date);
         return availableDates.includes(key);
     };
-    
+
     const isDatePast = (date) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         return date < today;
     };
-    
+
     const isDateSelected = (date) => {
         if (!selectedDate) return false;
         return formatDateKey(date) === formatDateKey(selectedDate);
     };
-    
+
     const handleDateClick = (date, isCurrentMonth) => {
         if (!isCurrentMonth || isDatePast(date)) return;
         if (availableDates && !isDateAvailable(date)) return;
         onSelect(date);
     };
-    
+
     const navigateMonth = (direction) => {
+        if (!canNavigate(direction)) return;
         setCurrentMonth(prev => {
             const newMonth = new Date(prev);
             newMonth.setMonth(newMonth.getMonth() + direction);
             return newMonth;
         });
     };
-    
+
     const days = getDaysInMonth(currentMonth);
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                        'July', 'August', 'September', 'October', 'November', 'December'];
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    
+
+    // When availableDates is explicitly empty (not null/loading), show a clear message.
+    const hasNoAvailability = Array.isArray(availableDates) && availableDates.length === 0;
+
     return (
         <div className="clisyc-wizard-step-content">
             <h3 className="clisyc-wizard-step-title">Select a Date</h3>
             <p className="clisyc-wizard-step-subtitle">
                 {availableDates === null
                     ? 'Choose your preferred appointment date'
-                    : availableDates.length === 0
+                    : hasNoAvailability
                         ? 'No available dates found for your selections. Please go back and try different options.'
                         : `${availableDates.length} date${availableDates.length === 1 ? '' : 's'} with availability`
                 }
             </p>
-            
+
+            {hasNoAvailability ? (
+                <div className="clisyc-wizard-empty" style={{ textAlign: 'center', padding: '32px 16px' }}>
+                    <CalendarIcon />
+                    <p>No dates with availability. Try selecting different options in the previous steps.</p>
+                </div>
+            ) : (
             <div className="clisyc-wizard-calendar">
                 <div className="clisyc-wizard-calendar-header">
-                    <button 
+                    <button
                         type="button"
-                        className="clisyc-wizard-calendar-nav"
+                        className={`clisyc-wizard-calendar-nav ${!canNavigate(-1) ? 'disabled' : ''}`}
                         onClick={() => navigateMonth(-1)}
+                        disabled={!canNavigate(-1)}
                     >
                         <ChevronLeft />
                     </button>
                     <span className="clisyc-wizard-calendar-month">
                         {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                     </span>
-                    <button 
+                    <button
                         type="button"
-                        className="clisyc-wizard-calendar-nav"
+                        className={`clisyc-wizard-calendar-nav ${!canNavigate(1) ? 'disabled' : ''}`}
                         onClick={() => navigateMonth(1)}
+                        disabled={!canNavigate(1)}
                     >
                         <ChevronRight />
                     </button>
                 </div>
-                
+
                 <div className="clisyc-wizard-calendar-weekdays">
                     {dayNames.map(day => (
                         <div key={day} className="clisyc-wizard-calendar-weekday">{day}</div>
                     ))}
                 </div>
-                
+
                 <div className="clisyc-wizard-calendar-days">
                     {isLoading ? (
                         <div className="clisyc-wizard-calendar-loading">
@@ -359,14 +416,14 @@ const DateStep = ({ selectedDate, onSelect, availableDates, isLoading }) => {
                             const isSelected = isDateSelected(date);
                             const isToday = formatDateKey(date) === formatDateKey(new Date());
                             const isDisabled = !isCurrentMonth || isPast || (availableDates && !isAvailable);
-                            
+
                             return (
                                 <div
                                     key={index}
-                                    className={`clisyc-wizard-calendar-day 
-                                        ${!isCurrentMonth ? 'other-month' : ''} 
-                                        ${isPast ? 'past' : ''} 
-                                        ${isDisabled ? 'disabled' : 'available'} 
+                                    className={`clisyc-wizard-calendar-day
+                                        ${!isCurrentMonth ? 'other-month' : ''}
+                                        ${isPast ? 'past' : ''}
+                                        ${isDisabled ? 'disabled' : 'available'}
                                         ${isSelected ? 'selected' : ''}
                                         ${isToday ? 'today' : ''}`}
                                     onClick={() => !isDisabled && handleDateClick(date, isCurrentMonth)}
@@ -378,16 +435,17 @@ const DateStep = ({ selectedDate, onSelect, availableDates, isLoading }) => {
                     )}
                 </div>
             </div>
-            
+            )}
+
             {selectedDate && (
                 <div className="clisyc-wizard-selected-date">
                     <CalendarIcon />
                     <span>
-                        {selectedDate.toLocaleDateString('en-US', { 
-                            weekday: 'long', 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
+                        {selectedDate.toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
                         })}
                     </span>
                 </div>
@@ -840,7 +898,7 @@ const BookingWizard = ({ config }) => {
             type: 'dimension',
             dimension: dim
         }));
-        
+
         // Add fixed steps: Date, Time, Details, Confirm
         return [
             ...dynamicSteps,
@@ -850,7 +908,33 @@ const BookingWizard = ({ config }) => {
             { id: 'confirm', label: 'Confirm', type: 'confirm' }
         ];
     }, [dimensions]);
-    
+
+    // Pre-selection from [clisyc_dimension_grid] CTA links.
+    // If a dimension was pre-selected via URL (e.g., ?select_clisyc_service=376),
+    // auto-select it and advance past that step.
+    useEffect(() => {
+        const preselected = config?.preselectedDimension;
+        if (!preselected || !preselected.key || !preselected.id) return;
+
+        // Find the matching item in dimensionData.
+        const items = dimensionData[preselected.key] || [];
+        const matchedItem = items.find(item => Number(item.id) === Number(preselected.id));
+        if (!matchedItem) return;
+
+        // Only apply once — check if already selected.
+        if (dimensionSelections[preselected.key]?.id === matchedItem.id) return;
+
+        // Set the selection.
+        setDimensionSelections(prev => ({ ...prev, [preselected.key]: matchedItem }));
+
+        // Find the step index for this dimension and advance past it.
+        const stepIndex = steps.findIndex(s => s.type === 'dimension' && s.dimension.key === preselected.key);
+        if (stepIndex >= 0 && currentStep <= stepIndex) {
+            setCurrentStep(stepIndex + 1);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [config?.preselectedDimension, dimensionData, steps]);
+
     // Fetch available dates when entering the date step (after all dimensions selected)
     useEffect(() => {
         const dateStepIndex = steps.findIndex(s => s.type === 'date');

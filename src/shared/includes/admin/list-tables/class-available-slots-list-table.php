@@ -23,6 +23,13 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 class Available_Slots_List_Table extends \WP_List_Table {
 
 	/**
+	 * Total items count — exposed for the view to display a summary.
+	 *
+	 * @var int
+	 */
+	public $total_items_count = 0;
+
+	/**
 	 * Cached labels for dimension CPTs.
 	 *
 	 * @var array e.g., ['clisyc_service' => 'Services', 'clisyc_practitioner' => 'Engineers']
@@ -199,9 +206,26 @@ class Available_Slots_List_Table extends \WP_List_Table {
 		$valid_orderby = [ 'start_time', 'is_block' ];
 		$orderby_col   = in_array( $orderby_request, $valid_orderby, true ) ? 's.' . $orderby_request : 's.start_time';
 
+		// --- Count query (separate from the main query for reliability across MySQL versions) ---
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$count_query = "SELECT COUNT(DISTINCT s.slot_id)
+            FROM {$slots_table} s
+            LEFT JOIN {$dims_table} d ON s.slot_id = d.slot_id
+            {$where_sql}";
+
+		if ( ! empty( $params ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$total_items = (int) $wpdb->get_var( $wpdb->prepare( $count_query, ...$params ) );
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$total_items = (int) $wpdb->get_var( $count_query );
+		}
+		$this->total_items_count = $total_items;
+
+		// --- Main data query ---
 		// The dynamic parts are interpolated before prepare, but they are sanitized and from internal sources, not user input.
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$main_query = "SELECT SQL_CALC_FOUND_ROWS s.slot_id, s.start_time, s.end_time, s.is_block, s.booking_count,
+		$main_query = "SELECT s.slot_id, s.start_time, s.end_time, s.is_block, s.booking_count,
             GROUP_CONCAT(CONCAT(d.dimension_key, ':::', d.dimension_value) SEPARATOR '|||') AS dimensions_concat
             FROM {$slots_table} s
             LEFT JOIN {$dims_table} d ON s.slot_id = d.slot_id
@@ -245,12 +269,9 @@ class Available_Slots_List_Table extends \WP_List_Table {
 		// --- FIX: Pre-cache booked slots from appointment post meta ---
 		$this->cache_booked_slots( $query_start_utc, $query_end_utc );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery -- This is for pagination counting.
-		$total_items = $wpdb->get_var( 'SELECT FOUND_ROWS()' );
-
 		$this->set_pagination_args(
 			[
-				'total_items' => (int) $total_items,
+				'total_items' => $total_items,
 				'per_page'    => $per_page,
 			]
 		);

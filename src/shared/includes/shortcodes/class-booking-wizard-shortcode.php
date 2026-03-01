@@ -235,6 +235,27 @@ class Booking_Wizard_Shortcode {
 				] : null,
 			];
 
+			// Pre-selection from [clisyc_dimension_grid] CTA links.
+			// URL params use "select_" prefix (e.g., ?select_clisyc_service=376).
+			if ( ! empty( $filter_order ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$unslashed_get = wp_unslash( $_GET );
+				foreach ( $filter_order as $slug ) {
+					$param_key = 'select_' . $slug;
+					if ( ! empty( $unslashed_get[ $param_key ] ) ) {
+						$item_id = absint( $unslashed_get[ $param_key ] );
+						if ( $item_id > 0 ) {
+							$wizard_data['preselectedDimension'] = [
+								'key'  => $slug,
+								'id'   => $item_id,
+								'name' => get_the_title( $item_id ),
+							];
+							break; // Only one pre-selection at a time.
+						}
+					}
+				}
+			}
+
 			// Localize script with data.
 			wp_localize_script( 'clisyc-booking-wizard', 'clisycBookingWizardData', $wizard_data );
 

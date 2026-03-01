@@ -15,8 +15,8 @@ test.describe('Admin Settings — Tab Navigation', () => {
 	test('loads the settings page', async ({ page }) => {
 		await page.goto(SETTINGS_URL + '&tab=appearance');
 		await expect(page).toHaveURL(/page=clisyc-settings/);
-		// Should show the settings heading or form
-		await expect(page.locator('text=Client Sync Settings')).toBeVisible();
+		// Should show the settings heading
+		await expect(page.getByRole('heading', { name: 'Client Sync Settings' })).toBeVisible();
 	});
 
 	test('can navigate between settings tabs', async ({ page }) => {

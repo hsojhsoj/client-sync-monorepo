@@ -26,7 +26,23 @@ $clisyc_list_table->prepare_items();
 ?>
 <div class="wrap">
     <h1><?php esc_html_e( 'Available & Blocked Time Slots', 'client-sync' ); ?></h1>
-    <p><?php esc_html_e( 'This table lists all defined future available time slots and all blocked time slots (past and future) from the custom database tables.', 'client-sync' ); ?></p>
+
+    <?php
+    $clisyc_pagination = $clisyc_list_table->get_pagination_arg( 'total_items' );
+    $clisyc_total_pages = $clisyc_list_table->get_pagination_arg( 'total_pages' );
+    $clisyc_current_page = $clisyc_list_table->get_pagenum();
+    ?>
+    <p>
+        <?php
+        printf(
+            /* translators: 1: total slot count, 2: current page, 3: total pages */
+            esc_html__( '%1$s total time slots (page %2$d of %3$d)', 'client-sync' ),
+            '<strong>' . number_format_i18n( $clisyc_pagination ) . '</strong>',
+            $clisyc_current_page,
+            max( 1, $clisyc_total_pages )
+        );
+        ?>
+    </p>
 
     <?php
     // *** REFACTORED ***: Updated transient name for feedback messages.
@@ -57,7 +73,7 @@ $clisyc_list_table->prepare_items();
     </div>
 
     <!-- The main form for the list table, which handles bulk actions AND filtering -->
-    <form method="post" id="clisyc-available-slots-list-form">
+    <form method="get" id="clisyc-available-slots-list-form">
         <?php // *** REFACTORED ***: Updated page slug value. ?>
         <input type="hidden" name="page" value="<?php echo isset( $_REQUEST['page'] ) ? esc_attr( sanitize_key( wp_unslash( $_REQUEST['page'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>" />
         

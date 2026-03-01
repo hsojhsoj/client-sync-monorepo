@@ -150,19 +150,27 @@ const HybridApp = ({ displayOptions: propDisplayOptions = {} }) => {
         generateDateRange(dateRange.start);
     }, [isMobileView]);
 
+    // Pre-selected filters from [clisyc_dimension_grid] CTA links.
+    const preselectedFilters = hybridData.preselectedFilters || null;
+
     // Fetch all available filter options
     const fetchAllFilterOptions = useCallback(async () => {
         setIsLoadingFilters(true);
         try {
             const response = await apiFetch({ path: `/clisyc/v1/filter-options?_wpnonce=${restNonce}` });
             setAllFilterOptions(response);
-            setSelectedFilters({});
+            // Apply pre-selected filters from dimension grid, or start empty.
+            if (preselectedFilters && typeof preselectedFilters === 'object') {
+                setSelectedFilters(preselectedFilters);
+            } else {
+                setSelectedFilters({});
+            }
         } catch (error) {
             console.error("Failed to fetch filter options:", error);
         } finally {
             setIsLoadingFilters(false);
         }
-    }, [restNonce]);
+    }, [restNonce, preselectedFilters]);
 
     // Initialize filters and date range on mount
     useEffect(() => {
