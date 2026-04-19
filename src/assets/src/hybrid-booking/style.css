@@ -1293,8 +1293,10 @@
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 10px;
-    min-width: 24px;
+    min-width: 28px;
     text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .clisyc-filter-slot-count.clisyc-count-zero {

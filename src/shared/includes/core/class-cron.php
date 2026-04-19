@@ -496,10 +496,17 @@ class Cron {
 			}
 		}
 
+		// Match the admin UI's default: when the duration meta is unset (e.g. services created
+		// by the onboarding wizard that never got persisted through the meta-box save path),
+		// treat the appointment duration as 60 min — which is what the service edit screen
+		// displays. Without this, SlotCalculator falls back to the global
+		// clisyc_calendar_slot_duration (often 15 min), silently subdividing the scheduled
+		// blocks into much shorter slots than the admin UI implied.
+		$duration_meta_raw    = get_post_meta( $primary_post->ID, Constants::META_DURATION_MINUTES, true );
+		$duration_minutes_val = ( '' !== $duration_meta_raw && false !== $duration_meta_raw ) ? (int) $duration_meta_raw : 60;
+
 		return [
-			// Note: a value of 0 is handled gracefully by SlotCalculator, which
-			// falls back to the global clisyc_calendar_slot_duration option.
-			'duration_minutes'         => (int) get_post_meta( $primary_post->ID, Constants::META_DURATION_MINUTES, true ),
+			'duration_minutes'         => $duration_minutes_val,
 			'padding_minutes'          => (int) get_post_meta( $primary_post->ID, Constants::META_PADDING_MINUTES, true ),
 			'buffer_before'            => (int) get_post_meta( $primary_post->ID, Constants::META_BUFFER_BEFORE, true ),
 			'buffer_after'             => (int) get_post_meta( $primary_post->ID, Constants::META_BUFFER_AFTER, true ),

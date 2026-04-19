@@ -10,7 +10,7 @@ This document provides everything a new AI session needs to work on the Client S
 - **Free plugin** (`client-sync`) — listed on WordPress.org
 - **Pro add-on** (`client-sync-pro`) — distributed separately, requires Free to be active
 
-**Current Versions:** Free `3.7.0` / Pro `1.6.0`
+**Current Versions:** Free `3.7.1` / Pro `1.6.1`
 
 **Local project path:**
 ```
@@ -27,6 +27,7 @@ This document provides everything a new AI session needs to work on the Client S
 | **GitHub Wiki (documentation)** | https://github.com/hsojhsoj/client-sync-monorepo/wiki |
 | **WordPress.org listing** | https://wordpress.org/plugins/client-sync/ |
 | **Test site** | https://testblankwp.dependentmedia.com/ |
+| **Demo site (Therapist)** | https://clientsync-therapist.dependentmedia.com/ |
 | **Plugin homepage** | https://dependentmedia.com/client-sync/ |
 
 ---
@@ -74,7 +75,7 @@ build.sh               # Master build/deploy/test script
 **Test site:** https://testblankwp.dependentmedia.com/
 **Server:** Plesk on `44.240.240.195`
 **SSH user:** `testblan`
-**SSH password:** `aP9sp7p*jcN3dA@z`
+**SSH auth:** publickey only (password auth disabled on the server). Your local `~/.ssh/id_ed25519` is authorized — no `-i` flag needed.
 **Remote project path:** `~/projects/client-sync-monorepo`
 **WP plugins dir:** `/var/www/vhosts/testblankwp.dependentmedia.com/httpdocs/wp-content/plugins/`
 
@@ -122,6 +123,102 @@ ssh -o StrictHostKeyChecking=no testblan@44.240.240.195 \
 - Webpack main build: compiles with **3 pre-existing size warnings** (vendor-fullcalendar, manage-slots, booking-form, timeline-viewer exceed 244 KiB). These are expected.
 - Webpack block build: compiles with **0 warnings**
 - Total build time: ~2 minutes end-to-end
+
+---
+
+## Demo Site: Therapist (Serenity Counseling)
+
+A fully configured demo site showcasing Client Sync for a therapy/counseling practice. Uses the naming pattern `clientsync-{market}.dependentmedia.com` for future market-specific demos.
+
+### Connection Details
+
+| Detail | Value |
+|--------|-------|
+| **URL** | https://clientsync-therapist.dependentmedia.com/ |
+| **WP Admin** | https://clientsync-therapist.dependentmedia.com/administratordmedia |
+| **Admin user** | `cs-admin` |
+| **Admin pass** | `BmEHiFkd7#9qPnhXXNT*8XVc` |
+| **SSH user** | `clientsync-therapist_v1ddy1srhqf` |
+| **SSH host** | `44.240.240.195` |
+| **SSH key** | `~/.ssh/clientsync_demo` (ed25519, no passphrase) |
+| **PHP path** | `/opt/plesk/php/8.3/bin/php` |
+| **WP-CLI path** | `/usr/local/bin/wp` |
+| **WP path** | `/var/www/vhosts/clientsync-therapist.dependentmedia.com/httpdocs/` |
+| **Login URL plugin** | WPS Hide Login (login at `/administratordmedia`, not `/wp-admin`) |
+
+### SSH Command Pattern
+
+```bash
+ssh -o StrictHostKeyChecking=no -i ~/.ssh/clientsync_demo \
+  clientsync-therapist_v1ddy1srhqf@44.240.240.195 \
+  '/opt/plesk/php/8.3/bin/php /usr/local/bin/wp --path=/var/www/vhosts/clientsync-therapist.dependentmedia.com/httpdocs <command>'
+```
+
+**Important:** No password-based SSH — publickey only. The key `~/.ssh/clientsync_demo` must exist on the local machine. The server does NOT have the same SSH user as the test site (`testblan`). Each vhost has its own isolated SSH user.
+
+### Deploying Plugin Updates to Demo Site
+
+The demo site does NOT use `build.sh deploy`. Plugins were installed manually. To update:
+
+```bash
+# 1. Build on test server first:
+bash build.sh deploy   # builds on testblan server
+
+# 2. Tar the built plugins on the test server and copy to demo site:
+ssh testblan@44.240.240.195 'cd ~/projects/client-sync-monorepo/build && \
+  tar czf /tmp/cs-plugins.tar.gz client-sync client-sync-pro'
+
+# 3. Copy from /tmp (shared filesystem between vhosts) and extract:
+ssh -i ~/.ssh/clientsync_demo clientsync-therapist_v1ddy1srhqf@44.240.240.195 \
+  'cd /var/www/vhosts/clientsync-therapist.dependentmedia.com/httpdocs/wp-content/plugins && \
+   tar xzf /tmp/cs-plugins.tar.gz'
+```
+
+Or update individual files via `scp`:
+
+```bash
+scp -i ~/.ssh/clientsync_demo <local-file> \
+  clientsync-therapist_v1ddy1srhqf@44.240.240.195:<remote-path>
+```
+
+### Demo Site Configuration
+
+- **Brand:** "Serenity Counseling" — therapy/counseling practice
+- **Theme:** Beaver Builder Theme (`bb-theme`) with BB Theme Builder header/footer layouts
+- **HIPAA mode:** Enabled
+- **Dimensions:** `clisyc_service` (primary) + `clisyc_therapist`
+- **Services:** Initial Assessment ($200/90min), Individual Therapy ($150/50min), Couples Counseling ($225/80min), Group Therapy ($65/90min, 8 capacity), EMDR Therapy ($175/60min)
+- **Therapists:** Dr. Sarah Mitchell PsyD, James Rivera LMFT, Dr. Anika Patel PhD
+- **Membership Plans:** Monthly Wellness ($149/mo), Intensive Care ($349/mo)
+- **SEO:** Slim SEO plugin with custom meta titles/descriptions for all pages, services, therapists, and plans. JSON-LD schema markup (MedicalBusiness, Person, Service, BreadcrumbList). Site set to noindex (`blog_public = 0`) since it's a demo.
+
+### Must-Use Plugins (mu-plugins)
+
+Custom functionality deployed as must-use plugins to survive theme/plugin updates:
+
+| File | Purpose |
+|------|---------|
+| `serenity-demo-enqueue.php` | Enqueues custom CSS from `wp-content/uploads/serenity-demo-style.css` |
+| `serenity-demo-lockdown.php` | Demo lockdown: `demo_viewer` role, auto-login (`?demo-login=1`), read-only admin, hidden sensitive menus, frontend demo bar with CTA, Client Sync plugin deactivation protection |
+| `serenity-demo-schema.php` | JSON-LD structured data (MedicalBusiness on homepage, Person on therapists, Service on services, BreadcrumbList on all inner pages) |
+| `serenity-fix-membership-shortcode.php` | Workaround for CPT load-order bug (fixed in v3.7.1 source but mu-plugin remains as safety net) |
+
+### Demo Bar & Auto-Login
+
+- **Frontend demo bar:** Fixed bottom bar on all pages with "Get Client Sync Free" and "Try Admin Demo" buttons. Dismissible.
+- **Auto-login URL:** `https://clientsync-therapist.dependentmedia.com/?demo-login=1` — instantly logs visitor in as `demo-visitor` user with `demo_viewer` role (read-only admin access).
+- **Demo viewer restrictions:** No POST requests in admin (except AJAX), hidden Plugins/Themes/Users/Settings menus, can see Client Sync admin pages but not change anything.
+
+### Key Pages
+
+| Page | URL | Shortcode |
+|------|-----|-----------|
+| Home | `/` | Custom HTML (hero, services, therapists, HIPAA banner, CTA) |
+| Book a Session | `/book/` | `[clisyc_booking_form]` |
+| Our Therapists | `/our-therapists/` | Custom HTML (therapist cards with bios) |
+| Membership Plans | `/membership-plans/` | `[clisyc_membership_plans columns="2"]` |
+| My Account | `/my-account/` | `[clisyc_user_account]` |
+| My Appointments | `/my-appointments/` | `[clisyc_appointments_cards]` |
 
 ---
 
@@ -198,6 +295,65 @@ When releasing a new version, update ALL of these locations:
 | `src/free/readme.txt` line 7 | `Stable tag: X.Y.Z` |
 | `src/free/readme.txt` changelog | Add new `= X.Y.Z =` entry at top of changelog |
 | `src/pro/client-sync-pro.php` line 9 | `Version: X.Y.Z` (if Pro changed) |
+| `src/pro/readme.txt` line 6 | `Stable tag: X.Y.Z` (if Pro changed) |
+| `src/pro/readme.txt` changelog | Add new `= X.Y.Z =` entry at top of changelog (if Pro changed) |
+| `src/free/client-sync.php` line 34 | `CLISYC_VERSION` constant |
+| `src/pro/update-server/update-info.php` | `version`, `last_updated`, and `sections.changelog` |
+
+---
+
+## Pro Plugin Auto-Update Server
+
+Client Sync Pro uses a self-hosted update server at `pass.dependentmedia.com` for automatic updates in WordPress. The update system follows the same pattern as the DM Mobile Location plugin.
+
+### Server Connection
+
+| Detail | Value |
+|--------|-------|
+| **Update endpoint** | https://pass.dependentmedia.com/plugin-updates/client-sync-pro/update-info.php |
+| **Zip download URL** | https://pass.dependentmedia.com/plugin-updates/client-sync-pro/client-sync-pro.zip |
+| **SSH user** | `updates.dependentmedia.com_43485` |
+| **SSH host** | `44.240.240.195` |
+| **SSH key** | `~/.ssh/pass_dm` (ed25519, no passphrase) |
+| **Web root** | `/var/www/vhosts/pass.dependentmedia.com/httpdocs/` |
+| **Update files dir** | `httpdocs/plugin-updates/client-sync-pro/` |
+
+### How It Works
+
+1. WordPress checks for plugin updates (every 12 hours or on "Check Again")
+2. `Update_Manager` in the Pro plugin fetches JSON from the endpoint above
+3. If remote version > installed version, WordPress shows an update notice
+4. If the site has an **active license**: one-click update works (download URL provided)
+5. If **no active license**: update notice shows but download is blocked (empty package URL)
+
+### Deploying a Pro Plugin Update
+
+```bash
+# 1. Build the Pro plugin zip (on the test server):
+ssh testblan@44.240.240.195 'cd ~/projects/client-sync-monorepo && ./build.sh zip'
+# Creates: build/client-sync-pro.zip
+
+# 2. Copy the zip to /tmp (shared filesystem):
+ssh testblan@44.240.240.195 'cp ~/projects/client-sync-monorepo/build/client-sync-pro.zip /tmp/'
+
+# 3. Move to the update server directory:
+ssh -i ~/.ssh/pass_dm updates.dependentmedia.com_43485@44.240.240.195 \
+  'cp /tmp/client-sync-pro.zip httpdocs/plugin-updates/client-sync-pro/'
+
+# 4. Update update-info.php with new version/changelog:
+scp -i ~/.ssh/pass_dm src/pro/update-server/update-info.php \
+  updates.dependentmedia.com_43485@44.240.240.195:httpdocs/plugin-updates/client-sync-pro/
+
+# 5. Verify endpoint:
+curl -s https://pass.dependentmedia.com/plugin-updates/client-sync-pro/update-info.php | python3 -m json.tool
+```
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `src/pro/update-server/update-info.php` | Server-side JSON endpoint (uploaded to pass.dependentmedia.com). Update version + changelog here on each release |
+| `src/pro/includes/class-update-manager.php` | Client-side update checker. Hooks `site_transient_update_plugins` + `plugins_api`. Caches for 12 hours. Requires active license for downloads |
 
 ---
 
@@ -237,12 +393,15 @@ WordPress.org SVN credentials are separate from the test server and GitHub crede
 When releasing a new version to all three targets:
 
 1. **Bump versions** in all locations (see Version Bumping above)
-2. **Update changelog** in `src/free/readme.txt`
-3. **Build & deploy to test site:** `bash build.sh deploy`
-4. **Test on the test site** at https://testblankwp.dependentmedia.com/
-5. **Push to GitHub:** `git add . && git commit -m "Release vX.Y.Z" && git push`
-6. **Update wiki** if features/settings/shortcodes changed (see wiki update steps above)
-7. **Publish to WordPress.org** via SVN (see SVN steps above)
+2. **Update changelogs** in `src/free/readme.txt` and `src/pro/readme.txt`
+3. **Update Pro update server** — bump version + changelog in `src/pro/update-server/update-info.php`
+4. **Build & deploy to test site:** `bash build.sh deploy`
+5. **Test on the test site** at https://testblankwp.dependentmedia.com/
+6. **Push to GitHub:** `git add . && git commit -m "Release vX.Y.Z" && git push`
+7. **Update wiki** if features/settings/shortcodes changed (see wiki update steps above)
+8. **Publish Free to WordPress.org** via SVN (see SVN steps above)
+9. **Publish Pro to update server** — upload zip + update-info.php (see Pro Auto-Update Server above)
+10. **Update demo site** if needed (see Demo Site section above)
 
 ---
 
@@ -358,13 +517,19 @@ Managed by `class-menu-manager.php` with a `$desired_order` array controlling su
 - **GitHub Wiki:** Created 13-page documentation wiki covering all features, shortcodes, settings, payments, memberships, and Pro modules
 - **Documentation Links:** Added wiki link to `readme.txt` description/installation sections and admin Guide page
 
+### Session 10: Demo Site & Bug Fix (v3.7.1 / v1.6.1)
+- **Demo Site Built:** Created `clientsync-therapist.dependentmedia.com` — a fully configured therapy practice demo showcasing Client Sync. Includes 5 services, 3 therapists, 2 membership plans, custom-styled homepage and therapist pages, HIPAA mode, calming teal/lavender palette
+- **Demo Lockdown:** Created `demo_viewer` role with read-only admin access, auto-login URL (`?demo-login=1`), frontend demo bar with "Get Client Sync Free" CTA, plugin deactivation protection
+- **SEO Setup:** Installed Slim SEO, set custom meta titles/descriptions for all 13 pages + 5 services + 3 therapists + 2 plans. Added JSON-LD schema markup (MedicalBusiness, Person, Service, BreadcrumbList). Set utility pages to noindex
+- **Bug Fix — Membership Plans Shortcode:** Fixed load-order bug where `[clisyc_membership_plans]` shortcode failed to register because `post_type_exists('clisyc_member_plan')` returned false during the free plugin's shortcode initialization (Pro hadn't registered the CPT yet). Removed the guard in `class-shortcodes.php`
+
 ---
 
 ## Common Gotchas
 
 1. **No PHP locally** — All PHP tests and composer operations must happen on the server
 2. **`CLISYC_PRO_DIR` is NOT defined by the Pro plugin** — Don't rely on it for Pro detection. Use `is_plugin_active('client-sync-pro/client-sync-pro.php')` or check `WP_PLUGIN_DIR`
-3. **`CLISYC_VERSION` is referenced but never defined** — The webhook service uses it but it's not set anywhere. It's a latent bug
+3. **`CLISYC_VERSION` constant** — Defined in `src/free/client-sync.php`. Must be bumped alongside the plugin header version
 4. **Build warnings are expected** — 3 webpack size warnings for FullCalendar bundles are normal
 5. **File ownership on server** — The build script sets `testblan:psacln` ownership. If you manually copy files, run `chown -R testblan:psacln` on them
 6. **The `build/` directory is ephemeral** — It's wiped at the start of each build. Never put anything important there
@@ -372,3 +537,9 @@ Managed by `class-menu-manager.php` with a `$desired_order` array controlling su
 8. **Wiki is a separate git repo** — The GitHub Wiki has its own git repository (`*.wiki.git`). Edit files in `docs/wiki/`, then clone the wiki repo and copy them over to push
 9. **GitHub auth via `gh` CLI** — Installed via Homebrew (`brew install gh`). Authenticated with `gh auth login`. Uses HTTPS protocol
 10. **WordPress.org readme.txt** — The `src/free/readme.txt` file is what drives the WordPress.org listing page. It contains the plugin description, FAQ, changelog, and external service disclosures. Update it for any user-facing changes
+11. **Demo site SSH is key-only** — The demo site at `clientsync-therapist.dependentmedia.com` uses SSH key auth only (no password). The private key is at `~/.ssh/clientsync_demo`. Each Plesk vhost has its own isolated SSH user — do NOT use the `testblan` user for the demo site
+12. **Demo site login URL is hidden** — WPS Hide Login plugin moves `wp-login.php` to `/administratordmedia`. Standard `/wp-admin` will 404 for logged-out users
+13. **Demo site cross-vhost file transfer** — The `testblan` SSH user cannot access the demo site's directory. Use the shared `/tmp` directory to transfer files between vhosts (tar on testblan, extract on demo user)
+14. **Membership plans shortcode load-order** — The `[clisyc_membership_plans]` shortcode in `class-shortcodes.php` must NOT be gated behind `post_type_exists()` — the Pro plugin registers the CPT after the free plugin's shortcode init. Fixed in v3.7.1
+15. **Pro update server is separate from WHMCS** — The auto-update endpoint at `pass.dependentmedia.com` is a simple JSON file, not connected to WHMCS. When releasing a new Pro version, you must manually update `update-info.php` AND upload the zip. The client-side `Update_Manager` handles license gating independently via `License_Manager::is_license_active()`
+16. **pass.dependentmedia.com SSH key** — At `~/.ssh/pass_dm`. Different vhost user than testblan or the demo site. Use the cross-vhost `/tmp` trick to move built zips from testblan's build output to the update server directory

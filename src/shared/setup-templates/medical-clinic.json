@@ -254,6 +254,9 @@
             ],
             "_clisyc_schedule": [
               "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"1\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"10:00\"}]},\"3\":{\"slots\":[{\"start\":\"14:00\",\"end\":\"15:00\"}]}}}}"
+            ],
+            "_clisyc_duration_minutes": [
+              "60"
             ]
           }
         },
@@ -271,6 +274,9 @@
             ],
             "_clisyc_schedule": [
               "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"0\":{\"slots\":[{\"start\":\"09:00\",\"end\":\"09:20\"}]}}}}"
+            ],
+            "_clisyc_duration_minutes": [
+              "20"
             ]
           }
         }

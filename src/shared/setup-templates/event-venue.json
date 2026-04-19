@@ -54,6 +54,9 @@
             "_clisyc_booking_mode": [
               "slot"
             ],
+            "_clisyc_duration_minutes": [
+              "180"
+            ],
             "_clisyc_schedule": [
               "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"5\":{\"slots\":[{\"start\":\"19:00\",\"end\":\"22:00\"}]},\"6\":{\"slots\":[{\"start\":\"14:00\",\"end\":\"17:00\"},{\"start\":\"19:00\",\"end\":\"22:00\"}]}}}}"
             ]
@@ -75,6 +78,9 @@
             ],
             "_clisyc_booking_mode": [
               "slot"
+            ],
+            "_clisyc_duration_minutes": [
+              "150"
             ],
             "_clisyc_schedule": [
               "{\"pattern_enabled\":false,\"pattern_start_date\":\"\",\"pattern_sequence\":\"A\",\"templates\":{\"A\":{\"6\":{\"slots\":[{\"start\":\"14:00\",\"end\":\"16:30\"}]}}}}"

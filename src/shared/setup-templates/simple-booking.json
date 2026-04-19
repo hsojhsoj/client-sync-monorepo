@@ -46,6 +46,9 @@
             ],
             "_clisyc_capacity": [
               "1"
+            ],
+            "_clisyc_duration_minutes": [
+              "60"
             ]
           }
         }
