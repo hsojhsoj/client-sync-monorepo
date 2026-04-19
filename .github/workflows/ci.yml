@@ -6,9 +6,7 @@
 #   2. PHP build validation (syntax check + Composer install)
 #   3. ESLint / Prettier (JS code quality)
 #   4. Webpack build verification
-#
-# PHPUnit is excluded from CI because it requires a live WordPress + MySQL
-# test environment. Run locally with: composer test
+#   5. PHPUnit against an ephemeral MySQL + WP test-suite install
 #
 # Playwright E2E tests run on a separate nightly schedule (see e2e-nightly.yml)
 # because they hit the live test site and take several minutes.
@@ -148,15 +146,43 @@ jobs:
         with:
           php-version: '8.3'
           tools: composer:v2
-          extensions: openssl, mbstring, json, xml, mysqli
+          extensions: openssl, mbstring, json, xml, mysqli, curl, gd, zip, dom
+
+      - name: Install subversion (needed by install-wp-tests.sh)
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress
 
       - name: Install WP Test Framework
-        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
-        env:
-          WP_TESTS_DB_HOST: 127.0.0.1:3306
+        run: bash install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
+
+      - name: Write wp-tests-config.php (used by bootstrap.php)
+        run: |
+          cat > wp-tests-config.php <<'EOF'
+          <?php
+          define( 'ABSPATH', dirname( __FILE__ ) . '/tmp/wordpress/' );
+          define( 'WP_TESTS_DIR', dirname( __FILE__ ) . '/tmp/wordpress-tests-lib/' );
+          define( 'DB_NAME',     'wordpress_test' );
+          define( 'DB_USER',     'root' );
+          define( 'DB_PASSWORD', 'root' );
+          define( 'DB_HOST',     '127.0.0.1' );
+          define( 'DB_CHARSET',  'utf8' );
+          define( 'DB_COLLATE',  '' );
+          $table_prefix = 'wptests_';
+          define( 'WP_TESTS_DOMAIN', 'example.org' );
+          define( 'WP_TESTS_EMAIL', 'admin@example.org' );
+          define( 'WP_TESTS_TITLE', 'Test Blog' );
+          define( 'WP_PHP_BINARY', 'php' );
+          define( 'WPLANG', '' );
+          EOF
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit --colors=always
