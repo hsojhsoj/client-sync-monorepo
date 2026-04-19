@@ -51,14 +51,23 @@ install_wp() {
 install_test_suite() {
     # Sourced from https://develop.svn.wordpress.org/trunk/tests/phpunit/bin/install-wp-tests.sh
     # fetch the latest tags
-    local LATEST_TAG=$(svn ls "https://develop.svn.wordpress.org/tags/" | grep '^[0-9.]\+$' | sort -V | tail -n 1)
+    # --non-interactive / --trust-server-cert so this works on CI runners
+    # with strict SSL defaults (otherwise svn prompts to accept the cert
+    # and this script hangs or emits an empty LATEST_TAG).
+    local SVN_OPTS="--non-interactive --trust-server-cert"
+    local LATEST_TAG=$(svn ls $SVN_OPTS "https://develop.svn.wordpress.org/tags/" | grep '^[0-9.]\+/$' | sed 's:/$::' | sort -V | tail -n 1)
+
+    if [ -z "$LATEST_TAG" ]; then
+        echo "ERROR: Could not determine latest WP test-suite tag from develop.svn.wordpress.org" >&2
+        exit 1
+    fi
 
     if [ -d "$WP_TESTS_DIR" ]; then
          echo "WordPress test suite already exists in local tmp. Skipping download."
     else
-        echo "Downloading WordPress test suite to local tmp directory..."
+        echo "Downloading WordPress test suite ${LATEST_TAG} to local tmp directory..."
         # install the test suite
-        svn co "https://develop.svn.wordpress.org/tags/${LATEST_TAG}/tests/phpunit/" "$WP_TESTS_DIR"
+        svn co $SVN_OPTS "https://develop.svn.wordpress.org/tags/${LATEST_TAG}/tests/phpunit/" "$WP_TESTS_DIR"
     fi
 
     # The wp-tests-config.php file is now created in the local tests dir
