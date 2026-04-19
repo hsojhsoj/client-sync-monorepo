@@ -68,5 +68,20 @@ export default defineConfig({
 				storageState: AUTH_FILE,
 			},
 		},
+
+		// ── End-to-end journey tests (admin → guest booking → admin verify) ─
+		// These specs spawn their own unauthenticated browser context for the
+		// guest-booking portion, so the authenticated storageState here is
+		// used only for the admin precondition check, post-booking
+		// verification, and cleanup teardown.
+		{
+			name: 'journey',
+			testMatch: /journey\/.+\.spec\.js$/,
+			dependencies: ['auth-setup'],
+			use: {
+				...devices['Desktop Chrome'],
+				storageState: AUTH_FILE,
+			},
+		},
 	],
 });
