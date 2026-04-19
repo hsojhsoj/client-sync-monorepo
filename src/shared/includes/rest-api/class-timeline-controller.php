@@ -18,6 +18,7 @@ namespace DependentMedia\ClientSync\RestAPI;
 use DependentMedia\ClientSync\Constants;
 use DependentMedia\ClientSync\Utility\Debug_Logger;
 use DependentMedia\ClientSync\Utility\Security_Helper;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 use WP_REST_Controller;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -682,7 +683,10 @@ class Timeline_Controller extends WP_REST_Controller {
 
 		foreach ( $query->posts as $post ) {
 			$time_slot  = get_post_meta( $post->ID, Constants::META_TIME_SLOT, true );
-			$duration   = (int) get_post_meta( $post->ID, '_clisyc_duration', true ) ?: 60;
+			// Previously read the wrong meta key (`_clisyc_duration`) — a ghost key
+			// that was never written, so the reader always fell back to 60. Routed
+			// through Service_Helper to read the canonical `_clisyc_duration_minutes`.
+			$duration   = Service_Helper::get_duration_minutes( (int) $post->ID );
 			$client_id  = get_post_meta( $post->ID, Constants::META_CLIENT_ID, true );
 			$dimensions = get_post_meta( $post->ID, Constants::META_SLOT_DIMENSIONS, true ) ?: [];
 

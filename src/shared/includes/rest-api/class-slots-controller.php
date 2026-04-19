@@ -14,6 +14,7 @@ use DependentMedia\ClientSync\Core\Database_Manager;
 use DependentMedia\ClientSync\Services\CalendarDataProvider;
 use DependentMedia\ClientSync\Utility\Debug_Logger;
 use DependentMedia\ClientSync\Utility\Security_Helper;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -317,7 +318,7 @@ class Slots_Controller extends \WP_REST_Controller {
 
 		foreach ( $appointments as $appointment ) {
 			$time_slot = get_post_meta( $appointment->ID, Constants::META_TIME_SLOT, true );
-			$duration  = get_post_meta( $appointment->ID, Constants::META_DURATION_MINUTES, true );
+			$duration  = Service_Helper::get_duration_minutes( (int) $appointment->ID );
 			$slot_dims = get_post_meta( $appointment->ID, Constants::META_SLOT_DIMENSIONS, true );
 
 			if ( empty( $time_slot ) ) {
@@ -345,7 +346,7 @@ class Slots_Controller extends \WP_REST_Controller {
 			try {
 				$start_dt = new \DateTime( $time_slot );
 				$end_dt   = clone $start_dt;
-				$duration = ! empty( $duration ) ? absint( $duration ) : 60;
+				// $duration already defaulted via Service_Helper above.
 				$end_dt->modify( '+' . $duration . ' minutes' );
 
 				// Build service details from slot dimensions

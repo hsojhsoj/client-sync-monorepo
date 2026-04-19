@@ -14,6 +14,7 @@ namespace DependentMedia\ClientSync\Core;
 
 use DependentMedia\ClientSync\Constants;
 use DependentMedia\ClientSync\Utility\SlotCalculator;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 use DependentMedia\ClientSync\Utility\Debug_Logger;
 use DependentMedia\ClientSync\Core\Generation_State_Manager;
 use DependentMedia\ClientSync\Repositories\Slot_Repository;
@@ -496,17 +497,13 @@ class Cron {
 			}
 		}
 
-		// Match the admin UI's default: when the duration meta is unset (e.g. services created
-		// by the onboarding wizard that never got persisted through the meta-box save path),
-		// treat the appointment duration as 60 min — which is what the service edit screen
-		// displays. Without this, SlotCalculator falls back to the global
-		// clisyc_calendar_slot_duration (often 15 min), silently subdividing the scheduled
-		// blocks into much shorter slots than the admin UI implied.
-		$duration_meta_raw    = get_post_meta( $primary_post->ID, Constants::META_DURATION_MINUTES, true );
-		$duration_minutes_val = ( '' !== $duration_meta_raw && false !== $duration_meta_raw ) ? (int) $duration_meta_raw : 60;
-
 		return [
-			'duration_minutes'         => $duration_minutes_val,
+			// Routed through Service_Helper so the effective duration matches what the
+			// admin UI displays (default 60) when the meta is unset. Without this, the
+			// SlotCalculator fallback path uses the global clisyc_calendar_slot_duration
+			// option (often 15 min), silently subdividing scheduled blocks into much
+			// shorter slots than the admin UI implied.
+			'duration_minutes'         => Service_Helper::get_duration_minutes( $primary_post->ID ),
 			'padding_minutes'          => (int) get_post_meta( $primary_post->ID, Constants::META_PADDING_MINUTES, true ),
 			'buffer_before'            => (int) get_post_meta( $primary_post->ID, Constants::META_BUFFER_BEFORE, true ),
 			'buffer_after'             => (int) get_post_meta( $primary_post->ID, Constants::META_BUFFER_AFTER, true ),

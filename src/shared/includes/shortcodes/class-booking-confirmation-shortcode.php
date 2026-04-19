@@ -14,6 +14,7 @@ namespace DependentMedia\ClientSync\Shortcodes;
 
 use DependentMedia\ClientSync\Constants;
 use DependentMedia\ClientSync\Utility\Debug_Logger;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -287,8 +288,9 @@ class Booking_Confirmation_Shortcode {
 			}
 		}
 
-		// Get duration
-		$duration = get_post_meta( $appointment_id, Constants::META_DURATION_MINUTES, true );
+		// Get duration. Pass 0 as default so we can preserve the existing "hide the
+		// duration line when unset" behavior via the truthy check below.
+		$duration = Service_Helper::get_duration_minutes( (int) $appointment_id, 0 );
 		if ( $duration ) {
 			$hours = floor( $duration / 60 );
 			$mins  = $duration % 60;
@@ -363,7 +365,7 @@ class Booking_Confirmation_Shortcode {
 	 */
 	private function get_calendar_links( $appointment_id ) {
 		$time_slot = get_post_meta( $appointment_id, Constants::META_TIME_SLOT, true );
-		$duration  = get_post_meta( $appointment_id, Constants::META_DURATION_MINUTES, true ) ?: 60;
+		$duration  = Service_Helper::get_duration_minutes( (int) $appointment_id );
 		$title     = get_the_title( $appointment_id );
 
 		if ( ! $time_slot ) {

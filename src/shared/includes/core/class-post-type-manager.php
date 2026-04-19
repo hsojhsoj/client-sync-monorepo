@@ -13,6 +13,7 @@ use DependentMedia\ClientSync\Constants;
 use DependentMedia\ClientSync\Admin\Relationship_Manager;
 use DependentMedia\ClientSync\Services\FormRenderer;
 use DependentMedia\ClientSync\Services\Encryption_Service;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -332,8 +333,12 @@ class PostType_Manager {
 		$buffer_after       = get_post_meta( $post->ID, Constants::META_BUFFER_AFTER, true );
 		$capacity           = get_post_meta( $post->ID, Constants::META_CAPACITY, true );
 		$booking_mode       = get_post_meta( $post->ID, Constants::META_BOOKING_MODE, true ) ?: 'slot';
-		$duration_minutes_raw = get_post_meta( $post->ID, Constants::META_DURATION_MINUTES, true );
-		$duration_minutes     = ( '' !== $duration_minutes_raw && false !== $duration_minutes_raw ) ? $duration_minutes_raw : 60;
+		// Render the raw stored value — don't inject a 60 fallback into the input's
+		// `value` attribute, which previously made the form look configured even when
+		// nothing was saved. The placeholder below surfaces the 60-min default as a
+		// visual hint without lying about what's persisted. Slot generation still
+		// treats an unset value as 60 (see Service_Helper::get_duration_minutes).
+		$duration_minutes     = get_post_meta( $post->ID, Constants::META_DURATION_MINUTES, true );
 		$padding_minutes      = get_post_meta( $post->ID, Constants::META_PADDING_MINUTES, true );
 		// REMOVED: Price retrieval - now in WooCommerce Integration meta box
 		?>
@@ -889,7 +894,7 @@ class PostType_Manager {
 		}
 		$primary_dim_key = $post->post_type;
 		$booking_page_url = get_permalink( $booking_page_id );
-		$direct_link_url  = add_query_arg( $primary_dim_key, $post->ID, $booking_page_url );
+		$direct_link_url  = add_query_arg( 'select_' . $primary_dim_key, $post->ID, $booking_page_url );
 		$color            = get_post_meta( $post->ID, Constants::META_COLOR, true );
 		$html_snippet     = sprintf(
 			'<a href="#" class="clisyc-service-filter-link button cs-service-filter-key-item" data-service-id="%1$s">%2$s<span class="clisyc-key-item-label">%3$s</span></a>',

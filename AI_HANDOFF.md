@@ -285,20 +285,27 @@ git add -A && git commit -m "Update documentation" && git push
 
 ## Version Bumping
 
-When releasing a new version, update ALL of these locations:
+Use the `bump-version.sh` script — it rewrites every version location atomically and fails loudly if any file is out of sync before editing:
 
-| File | What to update |
+```bash
+bash bump-version.sh --free 3.7.4 --pro 1.6.3   # bump both
+bash bump-version.sh --free 3.7.4                # free only
+bash bump-version.sh --pro 1.6.3                 # pro only
+bash bump-version.sh --free 3.7.4 --dry-run      # preview, no writes
+```
+
+The script handles all 8 version locations (see `bash bump-version.sh --help`). What it does NOT do: write changelog entries — prose doesn't automate well, so you still need to manually add a `= X.Y.Z =` block to the relevant `readme.txt` and an `<h4>X.Y.Z</h4>` block to `src/pro/update-server/update-info.php`.
+
+Locations the script manages (kept here for reference in case the script is ever unavailable):
+
+| File | What it updates |
 |------|---------------|
-| `build.sh` line 12 | `PLUGIN_VERSION="X.Y.Z"` |
-| `build.sh` line 13 | `PRO_VERSION="X.Y.Z"` (if Pro changed) |
-| `src/free/client-sync.php` line 13 | `Version: X.Y.Z` (plugin header) |
-| `src/free/readme.txt` line 7 | `Stable tag: X.Y.Z` |
-| `src/free/readme.txt` changelog | Add new `= X.Y.Z =` entry at top of changelog |
-| `src/pro/client-sync-pro.php` line 9 | `Version: X.Y.Z` (if Pro changed) |
-| `src/pro/readme.txt` line 6 | `Stable tag: X.Y.Z` (if Pro changed) |
-| `src/pro/readme.txt` changelog | Add new `= X.Y.Z =` entry at top of changelog (if Pro changed) |
-| `src/free/client-sync.php` line 34 | `CLISYC_VERSION` constant |
-| `src/pro/update-server/update-info.php` | `version`, `last_updated`, and `sections.changelog` |
+| `build.sh` | `PLUGIN_VERSION` and/or `PRO_VERSION` |
+| `src/free/client-sync.php` | plugin-header `Version:` and `CLISYC_VERSION` constant |
+| `src/free/readme.txt` | `Stable tag:` |
+| `src/pro/client-sync-pro.php` | plugin-header `Version:` |
+| `src/pro/readme.txt` | `Stable tag:` |
+| `src/pro/update-server/update-info.php` | `version`, `last_updated` (set to today) |
 
 ---
 

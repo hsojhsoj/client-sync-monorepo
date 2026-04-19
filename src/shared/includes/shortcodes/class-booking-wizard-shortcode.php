@@ -12,6 +12,7 @@ namespace DependentMedia\ClientSync\Shortcodes;
 
 use DependentMedia\ClientSync\Constants;
 use DependentMedia\ClientSync\Utility\Debug_Logger;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -167,10 +168,13 @@ class Booking_Wizard_Shortcode {
 						$item['subtitle'] = $subtitle;
 					}
 
-					// Add duration if available.
-					$duration = get_post_meta( $post->ID, '_clisyc_duration', true );
+					// Add duration if available. Previously read the wrong meta key
+					// (`_clisyc_duration`) which was never written, so this branch
+					// was effectively dead. Routed through Service_Helper with a 0
+					// default to preserve the "omit duration when unset" behavior.
+					$duration = Service_Helper::get_duration_minutes( (int) $post->ID, 0 );
 					if ( $duration ) {
-						$item['duration'] = intval( $duration );
+						$item['duration'] = $duration;
 					}
 
 					// Add price if enabled and available.

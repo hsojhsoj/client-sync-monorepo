@@ -14,6 +14,7 @@ use DependentMedia\ClientSync\Admin\Relationship_Manager;
 use DependentMedia\ClientSync\Integrations\Stripe_Integration;
 use DependentMedia\ClientSync\Services\FormRenderer;
 use DependentMedia\ClientSync\Services\Encryption_Service;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -674,8 +675,10 @@ class Appointment_Meta_Box_Renderer {
 		$buffer_after       = get_post_meta( $post->ID, Constants::META_BUFFER_AFTER, true );
 		$capacity           = get_post_meta( $post->ID, Constants::META_CAPACITY, true );
 		$booking_mode       = get_post_meta( $post->ID, Constants::META_BOOKING_MODE, true ) ?: 'slot';
-		$duration_minutes_raw = get_post_meta( $post->ID, Constants::META_DURATION_MINUTES, true );
-		$duration_minutes     = ( '' !== $duration_minutes_raw && false !== $duration_minutes_raw ) ? $duration_minutes_raw : 60;
+		// Same rationale as the service meta box: render the raw stored value, let
+		// the placeholder surface the 60-min hint. See Service_Helper for the
+		// canonical defaulted-reader used everywhere outside admin renderers.
+		$duration_minutes     = get_post_meta( $post->ID, Constants::META_DURATION_MINUTES, true );
 		$padding_minutes      = get_post_meta( $post->ID, Constants::META_PADDING_MINUTES, true );
 		// REMOVED: Price retrieval - now in WooCommerce Integration meta box
 		?>
@@ -794,7 +797,7 @@ class Appointment_Meta_Box_Renderer {
 		}
 		$primary_dim_key = $post->post_type;
 		$booking_page_url = get_permalink( $booking_page_id );
-		$direct_link_url  = add_query_arg( $primary_dim_key, $post->ID, $booking_page_url );
+		$direct_link_url  = add_query_arg( 'select_' . $primary_dim_key, $post->ID, $booking_page_url );
 		$color            = get_post_meta( $post->ID, Constants::META_COLOR, true );
 		$html_snippet     = sprintf(
 			'<a href="#" class="clisyc-service-filter-link button cs-service-filter-key-item" data-service-id="%1$s">%2$s<span class="clisyc-key-item-label">%3$s</span></a>',

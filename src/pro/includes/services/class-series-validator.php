@@ -15,6 +15,7 @@ namespace ClientSyncPro\Services;
 
 use DependentMedia\ClientSync\Core\Database_Manager;
 use DependentMedia\ClientSync\Constants;
+use DependentMedia\ClientSync\Utility\Service_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +125,12 @@ class Series_Validator {
 		$slots_table    = $this->db_manager->get_slots_table_name();
 		$series_id      = time() . '-' . wp_rand( 100, 999 );
 		$new_post_ids   = [];
-		$duration       = (int) get_post_meta( $primary_dim_id, Constants::META_DURATION_MINUTES, true ) ?: 30;
+		// Preserving the historical 30-min fallback for series validation specifically.
+		// This differs from the UI default (60) — if a service has no duration meta,
+		// the series validator previously assumed 30 min. Flagged for follow-up: the
+		// more principled fix is to make this 60 too, but that's a behavior change
+		// that needs separate verification.
+		$duration       = Service_Helper::get_duration_minutes( (int) $primary_dim_id, 30 );
 
 		// ── Start Transaction ──────────────────────────────────────────
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Transaction control required for atomic series creation.
