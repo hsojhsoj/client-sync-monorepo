@@ -7,8 +7,6 @@
  */
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import apiFetch from '@wordpress/api-fetch';
-import { SkeletonTable } from '../shared/SkeletonLoader';
-import '../shared/skeleton-loader.css';
 
 const CompactTimeSlotGrid = ({
     selectedFilters,
@@ -329,7 +327,16 @@ const CompactTimeSlotGrid = ({
     return (
         <div className="clisyc-compact-timeslot-grid-container">
             {isLoading ? (
-                <div className="clisyc-compact-grid-loading"><SkeletonTable rows={8} columns={isMobileView ? 3 : 7} /></div>
+                // Same pattern as HybridApp's outer loader — the SkeletonTable
+                // collapses to a narrow vertical column in this container
+                // because the grid-template-columns `auto-fit` fallback doesn't
+                // know the intended column count. Use a standard spinner
+                // instead, matching the outer loader so the two loading
+                // states feel continuous.
+                <div className="clisyc-compact-grid-loading" role="status" aria-label="Loading time slots">
+                    <div className="clisyc-spinner" aria-hidden="true"></div>
+                    <span className="screen-reader-text">Loading time slots</span>
+                </div>
             ) : (
                 <div className={`clisyc-compact-grid-layout ${isMobileView ? 'mobile-view' : ''}`}>
                     <div className="clisyc-compact-time-gutter" ref={timeGutterRef} style={{ height: `${totalHours * 60}px` }}>
