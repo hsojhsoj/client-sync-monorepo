@@ -12,6 +12,7 @@
 namespace DependentMedia\ClientSync\Admin;
 
 use DependentMedia\ClientSync\Constants;
+use DependentMedia\ClientSync\Utility\Security_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -182,7 +183,7 @@ class HIPAA_Compliance_Manager {
 		$output = fopen( 'php://output', 'w' );
 
 		// Header row.
-		fputcsv( $output, [
+		fputcsv( $output, Security_Helper::csv_escape_row( [
 			'Log ID',
 			'Timestamp (UTC)',
 			'User ID',
@@ -193,11 +194,14 @@ class HIPAA_Compliance_Manager {
 			'IP Address',
 			'Request URI',
 			'Metadata',
-		] );
+		] ) );
 
-		// Data rows.
+		// Data rows. Guard every cell against CSV formula injection —
+		// username, request_uri, and meta_data are user-influenced and
+		// audit-log exports are frequently opened in Excel by compliance
+		// reviewers.
 		foreach ( $logs as $log ) {
-			fputcsv( $output, [
+			fputcsv( $output, Security_Helper::csv_escape_row( [
 				$log['log_id'],
 				$log['created_at'],
 				$log['user_id'],
@@ -208,7 +212,7 @@ class HIPAA_Compliance_Manager {
 				$log['ip_address'],
 				$log['request_uri'],
 				$log['meta_data'],
-			] );
+			] ) );
 		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose

@@ -16,6 +16,7 @@ namespace DependentMedia\ClientSync\Admin;
 use DependentMedia\ClientSync\Core\Database_Manager;
 use DependentMedia\ClientSync\Services\Importer;
 use DependentMedia\ClientSync\Constants;
+use DependentMedia\ClientSync\Utility\Security_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -574,7 +575,7 @@ class Data_Export_Import_Handler {
 		}
 		$headers[] = __( 'Notes', 'client-sync' );
 
-		fputcsv( $output, $headers );
+		fputcsv( $output, Security_Helper::csv_escape_row( $headers ) );
 
 		foreach ( $appointments as $appt ) {
 			$post_id    = $appt->ID;
@@ -610,7 +611,9 @@ class Data_Export_Import_Handler {
 
 			$row[] = $notes ?: '';
 
-			fputcsv( $output, $row );
+			// Guard against CSV formula injection — $notes and dimension
+			// titles can be attacker-controlled. See Security_Helper.
+			fputcsv( $output, Security_Helper::csv_escape_row( $row ) );
 		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Writing to php://output stream, not a file.

@@ -17,6 +17,7 @@ namespace DependentMedia\ClientSync\Frontend;
 use DependentMedia\ClientSync\Services\FormRenderer;
 use DependentMedia\ClientSync\Constants;
 use DependentMedia\ClientSync\Shortcodes\Shortcode_Helpers;
+use DependentMedia\ClientSync\Utility\Security_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -161,7 +162,9 @@ class Manager_Shortcodes {
 		header( 'Content-Disposition: attachment; filename=clisyc-appointments-export-' . wp_date( 'Y-m-d' ) . '.csv' );
 
 		$output = fopen( 'php://output', 'w' );
-		fputcsv( $output, [ 'Client Name', 'Client Email', 'Appointment Date', 'Appointment Time', 'Status', 'Service' ] );
+		// Guard every cell against CSV formula injection (OWASP) — display_name,
+		// user_email, and service title are all effectively user-supplied.
+		fputcsv( $output, Security_Helper::csv_escape_row( [ 'Client Name', 'Client Email', 'Appointment Date', 'Appointment Time', 'Status', 'Service' ] ) );
 
 		if ( $appointments_query->have_posts() ) {
 			while ( $appointments_query->have_posts() ) {
@@ -191,14 +194,14 @@ class Manager_Shortcodes {
 
 				fputcsv(
 					$output,
-					[
+					Security_Helper::csv_escape_row( [
 						$client ? $client->display_name : 'N/A',
 						$client ? $client->user_email : 'N/A',
 						$time_info['date'],
 						$time_info['time'],
 						$status_obj ? $status_obj->label : get_post_status( $appt_id ),
 						$service,
-					]
+					] )
 				);
 			}
 		}

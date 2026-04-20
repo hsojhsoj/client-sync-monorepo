@@ -80,4 +80,48 @@ class Security_Helper {
         }
         return false;
     }
+
+    /**
+     * Neutralize CSV formula injection in a single cell value.
+     *
+     * A booking form user can submit a custom-field / notes value starting
+     * with `=`, `+`, `-`, `@`, `\t`, or `\r`. When the admin exports those
+     * records to CSV and opens the file in Excel / Google Sheets, the cell
+     * is interpreted as a formula — enabling =HYPERLINK() phishing,
+     * =WEBSERVICE() cell exfiltration, or (with Excel's DDE enabled)
+     * command execution. This preventative prefixes a single quote so the
+     * spreadsheet app treats the value as plain text.
+     *
+     * Apply to every cell value fed into `fputcsv()` that could contain
+     * user-submitted data (client names, notes, custom-field values, etc.).
+     * Header cells and integer IDs don't need this but passing them through
+     * is harmless — the guard is a no-op on non-danger-character input.
+     *
+     * See OWASP "CSV Injection" (a.k.a. Formula Injection).
+     *
+     * @param mixed $value Cell value. Non-strings are stringified.
+     * @return string      Safe cell value.
+     */
+    public static function csv_escape_cell( $value ): string {
+        $str = (string) $value;
+        if ( '' === $str ) {
+            return $str;
+        }
+        $first = $str[0];
+        if ( '=' === $first || '+' === $first || '-' === $first || '@' === $first || "\t" === $first || "\r" === $first ) {
+            return "'" . $str;
+        }
+        return $str;
+    }
+
+    /**
+     * Map `csv_escape_cell` over an entire row. Convenience for the common
+     * `fputcsv( $output, Security_Helper::csv_escape_row( $row ) )` pattern.
+     *
+     * @param array $row
+     * @return array
+     */
+    public static function csv_escape_row( array $row ): array {
+        return array_map( [ self::class, 'csv_escape_cell' ], $row );
+    }
 }

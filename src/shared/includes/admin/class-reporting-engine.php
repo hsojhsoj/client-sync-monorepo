@@ -12,6 +12,7 @@
 namespace DependentMedia\ClientSync\Admin;
 
 use DependentMedia\ClientSync\Constants;
+use DependentMedia\ClientSync\Utility\Security_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -197,9 +198,10 @@ class Reporting_Engine {
 		header( 'Content-Disposition: attachment; filename=' . $filename );
 
 		$output = fopen( 'php://output', 'w' );
-		fputcsv( $output, $headers );
+		// Guard every cell against CSV formula injection (OWASP).
+		fputcsv( $output, Security_Helper::csv_escape_row( $headers ) );
 		foreach ( $data as $row ) {
-			fputcsv( $output, $row );
+			fputcsv( $output, Security_Helper::csv_escape_row( $row ) );
 		}
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Writing to php://output stream, not a file.
 		fclose( $output );
