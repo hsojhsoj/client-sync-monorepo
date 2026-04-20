@@ -11,3 +11,8 @@
 /tests/e2e/.auth/
 /test-results/
 /playwright-report/
+
+# Local test-harness secrets (DB password, etc. — see build.sh)
+.env.test
+.env.local
+.env

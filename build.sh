@@ -9,16 +9,29 @@ SECONDS=0
 # --- Configuration ---
 LOCAL_WP_PLUGINS_DIR="/var/www/vhosts/testblankwp.dependentmedia.com/httpdocs/wp-content/plugins"
 LOCAL_WP_OWNER_GROUP="testblan:psacln"
-PLUGIN_VERSION="3.7.0"
-PRO_VERSION="1.6.0"
+PLUGIN_VERSION="3.7.3"
+PRO_VERSION="1.6.2"
 SRC_DIR="src"
 BUILD_DIR="build"
 
-# Test environment settings
-TEST_DB_NAME="client-sync-monorepo"
-TEST_DB_USER="test-cs-monorepo"
-TEST_DB_PASS="Ie7Fi1Na^kdkfa9*"
-TEST_WP_VERSION="latest"
+# Test environment settings.
+#
+# TEST_DB_PASS is read from the environment (or from a local, git-ignored
+# `.env.test` file if present) rather than being hard-coded here — this
+# repo is public on GitHub, and even a local-dev password has no business
+# being committed. The test harness only needs a value; what it is doesn't
+# matter. Override for your local setup by either:
+#     export TEST_DB_PASS='whatever'
+# or by creating a `.env.test` file with:
+#     TEST_DB_PASS=whatever
+if [ -z "${TEST_DB_PASS:-}" ] && [ -f "${SCRIPT_DIR:-$(dirname "$0")}/.env.test" ]; then
+    # shellcheck disable=SC1091
+    . "${SCRIPT_DIR:-$(dirname "$0")}/.env.test"
+fi
+TEST_DB_NAME="${TEST_DB_NAME:-client-sync-monorepo}"
+TEST_DB_USER="${TEST_DB_USER:-test-cs-monorepo}"
+TEST_DB_PASS="${TEST_DB_PASS:-}"
+TEST_WP_VERSION="${TEST_WP_VERSION:-latest}"
 TEST_TMP_DIR="tmp"
 
 # Build mode (sequential or parallel)
