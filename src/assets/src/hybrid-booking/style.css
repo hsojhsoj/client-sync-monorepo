@@ -401,6 +401,30 @@
     justify-content: center;
     padding: 80px 20px;
     gap: 16px;
+    min-height: 200px;
+}
+
+/* Standard circular spinner. Sized to read clearly but not dominate while
+   the initial slot fetch (usually < 2s) completes. */
+.clisyc-hybrid-booking-app .clisyc-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid rgba(59, 130, 246, 0.18);
+    border-top-color: var(--clisyc-accent-normal-bg, #3b82f6);
+    border-radius: 50%;
+    animation: clisyc-spinner-rotate 0.9s linear infinite;
+}
+
+@keyframes clisyc-spinner-rotate {
+    to { transform: rotate(360deg); }
+}
+
+/* Respect the reduced-motion preference: keep the circle visible but stop
+   the animation so it doesn't burn CPU or disorient the viewer. */
+@media (prefers-reduced-motion: reduce) {
+    .clisyc-hybrid-booking-app .clisyc-spinner {
+        animation: none;
+    }
 }
 
 .clisyc-hybrid-spinner {

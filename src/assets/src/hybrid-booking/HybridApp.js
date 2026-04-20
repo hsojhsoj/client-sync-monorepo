@@ -11,7 +11,6 @@ import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import FilterPanel from './HybridFilterPanel';
 import CompactTimeSlotGrid from '../compact-timeslot-grid/CompactTimeSlotGrid';
 import apiFetch from '@wordpress/api-fetch';
-import { SkeletonFilters, SkeletonTable } from '../shared/SkeletonLoader';
 import '../shared/skeleton-loader.css';
 
 // Shared utilities
@@ -507,8 +506,14 @@ const HybridApp = ({ displayOptions: propDisplayOptions = {} }) => {
                                 showBlocked={showBlocked}
                             />
                         ) : (
-                            <div className="clisyc-hybrid-grid-loading">
-                                <SkeletonTable rows={6} columns={isMobileView ? 3 : 7} />
+                            // Standard centered spinner while the initial slot
+                            // fetch completes. Replaces a SkeletonTable that
+                            // rendered as a tall narrow column because the
+                            // grid-template-columns auto-fit fell back to a
+                            // single 80px column inside this wrapper.
+                            <div className="clisyc-hybrid-grid-loading" role="status" aria-label={l10n?.loading || 'Loading time slots'}>
+                                <div className="clisyc-spinner" aria-hidden="true"></div>
+                                <span className="screen-reader-text">{l10n?.loading || 'Loading time slots'}</span>
                             </div>
                         )}
 
