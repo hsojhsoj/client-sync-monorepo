@@ -78,6 +78,7 @@ const App = () => {
         restNonce,
         filterOrder,
         formNonce,
+        waitlistNonce,
         isGuest,
         customFieldDefinitions,
         successPageUrl,
@@ -620,6 +621,7 @@ const App = () => {
                 selectedFilters={selectedFilters}
                 selectedPrimaryItem={selectedPrimaryItem}
                 formNonce={formNonce}
+                waitlistNonce={waitlistNonce}
                 isGuest={isGuest}
                 customFieldDefinitions={customFieldDefinitions}
                 successPageUrl={successPageUrl}

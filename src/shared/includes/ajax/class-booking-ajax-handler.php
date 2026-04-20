@@ -660,8 +660,17 @@ class Booking_Ajax_Handler {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified below via check_ajax_referer.
-		check_ajax_referer( 'clisyc_appointment', 'clisyc_appointment_nonce' );
+		// Accept the new waitlist-specific nonce (preferred) or the older
+		// appointment nonce (transitional, so a booking form rendered just
+		// before a plugin upgrade can still complete a waitlist join). Both
+		// pathways require nopriv-equivalent access — nonce-action splitting
+		// here is defense-in-depth, not a privilege boundary.
+		$nonce = isset( $_POST['clisyc_appointment_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['clisyc_appointment_nonce'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified below via wp_verify_nonce.
+		if ( ! $nonce || ( ! wp_verify_nonce( $nonce, 'clisyc_join_waitlist' ) && ! wp_verify_nonce( $nonce, Constants::POST_TYPE_APPOINTMENT ) ) ) {
+			wp_send_json_error( [ 'message' => __( 'Security verification failed. Please refresh the page and try again.', 'client-sync' ) ] );
+			return;
+		}
 
 		if ( ! \DependentMedia\ClientSync\Core\Waitlist_Manager::is_enabled() ) {
 			wp_send_json_error( [ 'message' => __( 'The waitlist is not available.', 'client-sync' ) ] );

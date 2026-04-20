@@ -29,6 +29,7 @@ const BookingModal = ({
     selectedFilters,
     selectedPrimaryItem,
     formNonce,
+    waitlistNonce,
     isGuest,
     customFieldDefinitions,
     successPageUrl,
@@ -420,7 +421,11 @@ const BookingModal = ({
 
         const formData = new FormData();
         formData.append('action', 'clisyc_join_waitlist');
-        formData.append('clisyc_appointment_nonce', formNonce);
+        // Use the waitlist-specific nonce when present; fall back to the
+        // booking formNonce so in-flight sessions during a plugin upgrade
+        // don't 403. The server accepts either action transitionally (see
+        // ajax_join_waitlist).
+        formData.append('clisyc_appointment_nonce', waitlistNonce || formNonce);
         formData.append('clisyc_timestamp', Math.floor(Date.now() / 1000));
         formData.append('slot_id', waitlistOffer.slot_id);
 

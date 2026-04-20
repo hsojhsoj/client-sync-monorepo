@@ -59,10 +59,14 @@ class Shortcodes {
 		// Timeline view — registers via constructor (add_shortcode in __construct)
 		new \DependentMedia\ClientSync\Shortcodes\Timeline_Shortcode();
 
-		// Membership Plans pricing cards (Pro — requires CPT to exist).
-		if ( post_type_exists( 'clisyc_member_plan' ) ) {
-			( new \DependentMedia\ClientSync\Shortcodes\Membership_Plans_Shortcode() )->register();
-		}
+		// Membership Plans pricing cards.
+		// NOTE: Always register the shortcode — the handler itself checks for
+		// plans at render time. Gating on post_type_exists() caused a load-order
+		// bug when Pro registers the CPT after the free plugin's register_all().
+		( new \DependentMedia\ClientSync\Shortcodes\Membership_Plans_Shortcode() )->register();
+
+		// Dimension Grid — auto-lists dimension items with booking links.
+		( new \DependentMedia\ClientSync\Shortcodes\Dimension_Grid_Shortcode() )->register();
 	}
 
 	/**
@@ -145,7 +149,12 @@ class Shortcodes {
 		);
 
 		$data_to_localize = $this->get_appointment_calendar_data();
-		$data_to_localize['formNonce'] = wp_create_nonce( Constants::POST_TYPE_APPOINTMENT );
+		$data_to_localize['formNonce']     = wp_create_nonce( Constants::POST_TYPE_APPOINTMENT );
+		// Distinct action name for the waitlist POST so a nonce captured from
+		// a booking form can't be replayed against the waitlist endpoint
+		// (defense-in-depth; both endpoints require the same privilege level,
+		// so this isn't an escalation vector, just hygiene).
+		$data_to_localize['waitlistNonce'] = wp_create_nonce( 'clisyc_join_waitlist' );
 
 		// --- NEW: Add registry data for booking mode detection ---
 		$data_to_localize['registry'] = get_option( Constants::OPTION_DIMENSION_REGISTRY, [] );
@@ -317,6 +326,7 @@ class Shortcodes {
 					$data_to_localize,
 					[
 						'formNonce'         => wp_create_nonce( Constants::POST_TYPE_APPOINTMENT ),
+						'waitlistNonce'     => wp_create_nonce( 'clisyc_join_waitlist' ),
 						'showBookedToggle'  => filter_var( $atts['show_booked_toggle'], FILTER_VALIDATE_BOOLEAN ),
 						'showBookedDefault' => filter_var( $atts['show_booked_default'], FILTER_VALIDATE_BOOLEAN ),
 						'isAdmin'           => current_user_can( 'manage_options' ),
@@ -654,15 +664,19 @@ class Shortcodes {
 			],
 		];
 
-		// START: NEW LOGIC - Check for pre-selected item in URL to pass its name to JS
+		// START: NEW LOGIC - Check for pre-selected item in URL to pass its name + ID to JS
+		// URL params use "select_" prefix to avoid conflict with CPT query vars.
+		// e.g., ?select_clisyc_service=376 → preselects service ID 376
 		if ( ! empty( $registry['filter_order'] ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$unslashed_get = wp_unslash( $_GET );
 			foreach ( $registry['filter_order'] as $slug ) {
-				if ( ! empty( $unslashed_get[ $slug ] ) ) {
-					$item_id = absint( $unslashed_get[ $slug ] );
+				$param_key = 'select_' . $slug;
+				if ( ! empty( $unslashed_get[ $param_key ] ) ) {
+					$item_id = absint( $unslashed_get[ $param_key ] );
 					if ( $item_id > 0 ) {
-						$data['primaryItemName'] = get_the_title( $item_id );
+						$data['primaryItemName']      = get_the_title( $item_id );
+						$data['preselectedServiceId'] = $item_id;
 						break; // Found the first pre-selected item, stop looking.
 					}
 				}

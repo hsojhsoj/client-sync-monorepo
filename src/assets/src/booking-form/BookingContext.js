@@ -18,6 +18,7 @@ const bookingConfig = (() => {
         restNonce: raw.restNonce,
         filterOrder: raw.filterOrder,
         formNonce: raw.formNonce,
+        waitlistNonce: raw.waitlistNonce,
         isGuest: raw.isGuest,
         customFieldDefinitions: raw.customFieldDefinitions,
         successPageUrl: raw.successPageUrl,
