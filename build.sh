@@ -673,19 +673,45 @@ case "$COMMAND" in
         ;;
 
     release)
-        # Top-level orchestrator. Prompts for new versions, runs the full
-        # release pipeline for either free, pro, or both. Intentionally stops
-        # at the final interactive commits (secret-key paste, SVN password) —
-        # everything else is automated.
-        echo "[release] step: prompt for versions"
-        CURRENT_FREE="$PLUGIN_VERSION"
-        CURRENT_PRO="$PRO_VERSION"
-        echo "   Current free: $CURRENT_FREE"
-        echo "   Current pro : $CURRENT_PRO"
-        printf "New free version (Enter to skip): "
-        read -r NEW_FREE
-        printf "New pro  version (Enter to skip): "
-        read -r NEW_PRO
+        # Top-level orchestrator. By default prompts for new versions + opens
+        # $EDITOR on a changelog. Non-interactive alternative (for GUI / CI
+        # automation):
+        #   bash build.sh release --free 3.7.4 --pro 1.6.4 --changelog-file notes.md
+        # Both --free and --pro are optional; at least one must be supplied.
+        # --changelog-file is required when either --free or --pro is passed
+        # (avoids falling back to the editor in a non-interactive context).
+        NEW_FREE=""
+        NEW_PRO=""
+        CHANGELOG_FILE=""
+        # Skip $1 which is "release" itself.
+        i=2
+        while [ $i -le $# ]; do
+            arg="${!i}"
+            case "$arg" in
+                --free)
+                    i=$((i+1)); NEW_FREE="${!i}" ;;
+                --pro)
+                    i=$((i+1)); NEW_PRO="${!i}" ;;
+                --changelog-file)
+                    i=$((i+1)); CHANGELOG_FILE="${!i}" ;;
+                *)
+                    echo "❌ ERROR: [release] unknown arg: $arg"
+                    echo "   Usage: bash build.sh release [--free X.Y.Z] [--pro X.Y.Z] [--changelog-file FILE]"
+                    exit 1
+                    ;;
+            esac
+            i=$((i+1))
+        done
+
+        if [ -z "$NEW_FREE" ] && [ -z "$NEW_PRO" ]; then
+            echo "[release] step: prompt for versions"
+            echo "   Current free: $PLUGIN_VERSION"
+            echo "   Current pro : $PRO_VERSION"
+            printf "New free version (Enter to skip): "
+            read -r NEW_FREE
+            printf "New pro  version (Enter to skip): "
+            read -r NEW_PRO
+        fi
 
         if [ -z "$NEW_FREE" ] && [ -z "$NEW_PRO" ]; then
             echo "❌ ERROR: [release] must specify at least one new version"
@@ -696,9 +722,17 @@ case "$COMMAND" in
         [ -n "$NEW_FREE" ] && BUMP_ARGS="$BUMP_ARGS --free $NEW_FREE"
         [ -n "$NEW_PRO"  ] && BUMP_ARGS="$BUMP_ARGS --pro $NEW_PRO"
 
-        echo "[release] step: open changelog for this release in \$EDITOR"
-        CHANGELOG_TMP=$(mktemp -t clisyc-release-XXXXXX)
-        cat > "$CHANGELOG_TMP" <<'CL_HINT'
+        if [ -n "$CHANGELOG_FILE" ]; then
+            if [ ! -f "$CHANGELOG_FILE" ]; then
+                echo "❌ ERROR: [release] --changelog-file '$CHANGELOG_FILE' not found"
+                exit 1
+            fi
+            echo "[release] step: read changelog from $CHANGELOG_FILE"
+            CHANGELOG_BODY=$(grep -v '^#' "$CHANGELOG_FILE" | sed '/^[[:space:]]*$/d')
+        else
+            echo "[release] step: open changelog in \$EDITOR"
+            CHANGELOG_TMP=$(mktemp -t clisyc-release-XXXXXX)
+            cat > "$CHANGELOG_TMP" <<'CL_HINT'
 # One changelog bullet per line. Lines starting with "#" are ignored.
 # This text will be added to both readme.txt files and update-info.php's
 # changelog. Use Markdown-style emphasis (*word* or **word**) — the
@@ -708,9 +742,11 @@ case "$COMMAND" in
 #   **Fix:** The booking form no longer crashes on Tuesdays.
 #   **Enhancement:** Dimension grid respects the Appearance text-size setting.
 CL_HINT
-        ${EDITOR:-vi} "$CHANGELOG_TMP"
-        CHANGELOG_BODY=$(grep -v '^#' "$CHANGELOG_TMP" | sed '/^[[:space:]]*$/d')
-        rm -f "$CHANGELOG_TMP"
+            ${EDITOR:-vi} "$CHANGELOG_TMP"
+            CHANGELOG_BODY=$(grep -v '^#' "$CHANGELOG_TMP" | sed '/^[[:space:]]*$/d')
+            rm -f "$CHANGELOG_TMP"
+        fi
+
         if [ -z "$CHANGELOG_BODY" ]; then
             echo "❌ ERROR: [release] changelog is empty — aborting"
             exit 1
