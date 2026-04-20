@@ -6,7 +6,11 @@
 import { createRoot } from '@wordpress/element';
 import HybridApp from './HybridApp';
 import ErrorBoundary from '../shared/ErrorBoundary';
+import { bootstrapApiFetch } from '../shared/bootstrap-api-fetch';
 import './style.css';
+
+// Register the wp_rest nonce on apiFetch — see bootstrap-api-fetch.js.
+bootstrapApiFetch();
 
 /**
  * Initialize all hybrid booking instances on the page.

@@ -75,12 +75,14 @@ class Venue_REST_Controller extends \WP_REST_Controller {
 			],
 		] );
 
-		// POST /seats/hold — hold a seat.
+		// POST /seats/hold — hold a seat. Requires a valid wp_rest nonce so
+		// an anonymous bot can't script fanout holds across randomized
+		// session_token values (ticketing DoS).
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/hold', [
 			[
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'hold_seat' ],
-				'permission_callback' => '__return_true',
+				'permission_callback' => [ $this, 'check_rest_nonce' ],
 				'args'                => [
 					'venue_id'      => [ 'required' => true, 'sanitize_callback' => 'absint' ],
 					'slot_id'       => [ 'required' => true, 'sanitize_callback' => 'absint' ],
@@ -90,12 +92,12 @@ class Venue_REST_Controller extends \WP_REST_Controller {
 			],
 		] );
 
-		// DELETE /seats/hold — release a seat.
+		// DELETE /seats/hold — release a seat. Nonce-gated for consistency.
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/hold', [
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'release_seat' ],
-				'permission_callback' => '__return_true',
+				'permission_callback' => [ $this, 'check_rest_nonce' ],
 				'args'                => [
 					'venue_id'      => [ 'required' => true, 'sanitize_callback' => 'absint' ],
 					'slot_id'       => [ 'required' => true, 'sanitize_callback' => 'absint' ],
@@ -121,11 +123,13 @@ class Venue_REST_Controller extends \WP_REST_Controller {
 		] );
 
 		// POST /seats/refresh — extend hold TTL for all session seats.
+		// Nonce-gated: refreshing is cheap and the route is the easiest way
+		// for an attacker to keep forged holds alive past the TTL.
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/refresh', [
 			[
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'refresh_holds' ],
-				'permission_callback' => '__return_true',
+				'permission_callback' => [ $this, 'check_rest_nonce' ],
 				'args'                => [
 					'venue_id'      => [ 'required' => true, 'sanitize_callback' => 'absint' ],
 					'slot_id'       => [ 'required' => true, 'sanitize_callback' => 'absint' ],
@@ -133,6 +137,38 @@ class Venue_REST_Controller extends \WP_REST_Controller {
 				],
 			],
 		] );
+	}
+
+	/**
+	 * Permission callback for the seat-write endpoints.
+	 *
+	 * Accepts requests from anonymous users (seat selection must work
+	 * without login) but requires a valid `wp_rest` nonce, which binds the
+	 * request to a browser session that actually loaded a booking page on
+	 * this site. Without this, a scripted attacker could occupy every seat
+	 * of a venue using randomized session_token values and block legitimate
+	 * customers from reserving — a pure ticketing DoS.
+	 *
+	 * Note: `wp_verify_nonce` works for anonymous users too — it binds to
+	 * the session cookie WordPress sets on every visitor.
+	 */
+	public function check_rest_nonce( \WP_REST_Request $request ) {
+		$nonce = $request->get_header( 'x_wp_nonce' );
+		if ( ! $nonce && isset( $_SERVER['HTTP_X_WP_NONCE'] ) ) {
+			$nonce = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_WP_NONCE'] ) );
+		}
+		// Also accept `_wpnonce` as a query arg or body param for flexibility.
+		if ( ! $nonce ) {
+			$nonce = (string) $request->get_param( '_wpnonce' );
+		}
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new \WP_Error(
+				'rest_cookie_invalid_nonce',
+				__( 'Your session token is invalid or expired. Please refresh the page and try again.', 'client-sync-pro' ),
+				[ 'status' => 403 ]
+			);
+		}
+		return true;
 	}
 
 	/**

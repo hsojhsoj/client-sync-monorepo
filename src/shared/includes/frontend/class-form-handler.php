@@ -403,7 +403,19 @@ class Form_Handler {
 				$this->validation_errors[] = __( 'Please provide a valid email address.', 'client-sync' );
 			}
 			if ( email_exists( $email ) ) {
-				$this->validation_errors[] = __( 'This email address is already registered. Please log in to book.', 'client-sync' );
+				// On HIPAA-enabled sites we must not distinguish between
+				// "email already registered" and "some other validation
+				// failed", because the former discloses client enrollment
+				// status ("is X a patient here?") to anyone who guesses.
+				// Outside HIPAA mode the UX benefit of a specific message
+				// outweighs the low-severity enumeration risk — that's a
+				// near-universal convention for consumer booking sites.
+				if ( function_exists( '\DependentMedia\ClientSync\Services\clisyc_is_hipaa_mode' )
+					&& \DependentMedia\ClientSync\Services\clisyc_is_hipaa_mode() ) {
+					$this->validation_errors[] = __( 'We could not complete your registration. If you already have an account, please log in.', 'client-sync' );
+				} else {
+					$this->validation_errors[] = __( 'This email address is already registered. Please log in to book.', 'client-sync' );
+				}
 			}
 			if ( strlen( $password ) < 8 ) {
 				$this->validation_errors[] = __( 'Password must be at least 8 characters long.', 'client-sync' );

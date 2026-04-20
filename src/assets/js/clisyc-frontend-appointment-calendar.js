@@ -1322,10 +1322,15 @@ const ServiceDetailsManager = {
             return;
         }
 
-        let html = `<h3>${l10n.serviceDetails || 'Service Details'}</h3>`;
+        // Every dynamic interpolation below is escapeHtml-wrapped. The l10n
+        // strings are static WordPress translations but pass through the
+        // `gettext` filter, so a rogue translation file could otherwise
+        // inject HTML; formatDate() output is safe intrinsically but we
+        // wrap it anyway for consistency.
+        let html = `<h3>${escapeHtml(l10n.serviceDetails || 'Service Details')}</h3>`;
         if (event?.start && CalendarManager.instance) {
-            html += `<p class="clisyc-service-date"><strong>${l10n.date || 'Date'}:</strong> ${CalendarManager.instance.formatDate(event.start, { month: 'long', day: 'numeric', year: 'numeric' })}</p>`;
-            html += `<p class="clisyc-service-time"><strong>${l10n.time || 'Time'}:</strong> ${CalendarManager.instance.formatDate(event.start, { hour: 'numeric', minute: '2-digit', hour12: true })}</p>`;
+            html += `<p class="clisyc-service-date"><strong>${escapeHtml(l10n.date || 'Date')}:</strong> ${escapeHtml(CalendarManager.instance.formatDate(event.start, { month: 'long', day: 'numeric', year: 'numeric' }))}</p>`;
+            html += `<p class="clisyc-service-time"><strong>${escapeHtml(l10n.time || 'Time')}:</strong> ${escapeHtml(CalendarManager.instance.formatDate(event.start, { hour: 'numeric', minute: '2-digit', hour12: true }))}</p>`;
         }
         
         FilterManager.filterOrder.forEach(slug => {
@@ -1394,27 +1399,32 @@ const ServiceDetailsManager = {
         const { availabilityDimensions, l10n } = clisycAppointmentData;
         let html = '';
         
+        // dimInfo.label and option.label originate from admin-controlled
+        // dimension config / CPT post titles (e.g. "Initial Consultation",
+        // "Dr. Carter"). An attacker with post-authoring rights could set
+        // a title like `<img src=x onerror=...>` and land it here unescaped.
+        // Escape every dynamic interpolation.
         FilterManager.filterOrder.forEach(slug => {
             const value = currentFilterSelections[slug];
             if (value && availabilityDimensions[slug]) {
                 const dimInfo = availabilityDimensions[slug];
                 const option = dimInfo.options?.find(opt => opt.value == value);
                 const valueLabel = option ? option.label.replace(/\s*\(\d+\)$/, '').trim() : value;
-                html += `<p><label>${dimInfo.label}:</label> <span class="clisyc-readonly-filter-value">${valueLabel}</span></p>`;
+                html += `<p><label>${escapeHtml(dimInfo.label)}:</label> <span class="clisyc-readonly-filter-value">${escapeHtml(valueLabel)}</span></p>`;
             }
         });
-        
+
         if (event?.start && CalendarManager.instance) {
             const details = event.extendedProps.serviceDetails || {};
             const instance = CalendarManager.instance;
-            html += `<p><label>${l10n.date || 'Date'}:</label> <span class="clisyc-readonly-filter-value">${instance.formatDate(event.start, { month: 'long', day: 'numeric', year: 'numeric' })}</span></p>`;
-            html += `<p><label>${l10n.dayOfWeek || 'Day of the week'}:</label> <span class="clisyc-readonly-filter-value">${instance.formatDate(event.start, { weekday: 'long' })}</span></p>`;
-            html += `<p><label>${l10n.time || 'Time'}:</label> <span class="clisyc-readonly-filter-value">${instance.formatDate(event.start, { hour: 'numeric', minute: '2-digit', hour12: true })}</span></p>`;
-            if (details.price > 0) html += `<p><label>${l10n.price || 'Price'}:</label> <span class="clisyc-readonly-filter-value">${this.formatPrice(details.price)}</span></p>`;
-            if (details.duration > 0) html += `<p><label>${l10n.duration || 'Duration'}:</label> <span class="clisyc-readonly-filter-value">${details.duration} ${l10n.minutes || 'minutes'}</span></p>`;
+            html += `<p><label>${escapeHtml(l10n.date || 'Date')}:</label> <span class="clisyc-readonly-filter-value">${escapeHtml(instance.formatDate(event.start, { month: 'long', day: 'numeric', year: 'numeric' }))}</span></p>`;
+            html += `<p><label>${escapeHtml(l10n.dayOfWeek || 'Day of the week')}:</label> <span class="clisyc-readonly-filter-value">${escapeHtml(instance.formatDate(event.start, { weekday: 'long' }))}</span></p>`;
+            html += `<p><label>${escapeHtml(l10n.time || 'Time')}:</label> <span class="clisyc-readonly-filter-value">${escapeHtml(instance.formatDate(event.start, { hour: 'numeric', minute: '2-digit', hour12: true }))}</span></p>`;
+            if (details.price > 0) html += `<p><label>${escapeHtml(l10n.price || 'Price')}:</label> <span class="clisyc-readonly-filter-value">${escapeHtml(this.formatPrice(details.price))}</span></p>`;
+            if (details.duration > 0) html += `<p><label>${escapeHtml(l10n.duration || 'Duration')}:</label> <span class="clisyc-readonly-filter-value">${escapeHtml(details.duration)} ${escapeHtml(l10n.minutes || 'minutes')}</span></p>`;
         }
-        
-        displayContainers.forEach(c => { c.innerHTML = html || `<p><em>${l10n.selectAvailability || 'Please make selections to view calendar.'}</em></p>`; });
+
+        displayContainers.forEach(c => { c.innerHTML = html || `<p><em>${escapeHtml(l10n.selectAvailability || 'Please make selections to view calendar.')}</em></p>`; });
     },
 
     formatPrice(price) {

@@ -19,9 +19,13 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 import apiFetch from '@wordpress/api-fetch';
 import ErrorBoundary from '../shared/ErrorBoundary';
+import { bootstrapApiFetch } from '../shared/bootstrap-api-fetch';
 
 // Import styles - webpack will extract this to style-index.css
 import './style.css';
+
+// Register the wp_rest nonce on apiFetch — see bootstrap-api-fetch.js.
+bootstrapApiFetch();
 
 // Seat selection (shared with booking-form)
 import SeatMapPicker from '../booking-form/SeatMapPicker';
