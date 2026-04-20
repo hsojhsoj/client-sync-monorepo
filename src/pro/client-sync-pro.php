@@ -6,7 +6,7 @@
  * @wordpress-plugin
  * Plugin Name:       Client Sync Pro
  * Description:       Unlocks advanced features for the Client Sync plugin.
- * Version:           1.6.0
+ * Version:           1.6.3
  * Author:            Joshua Jordan
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -30,6 +30,10 @@ function clisyc_pro_load() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-license-manager.php';
 	$license_manager = new \ClientSyncPro\License_Manager();
 	$license_manager->register_hooks();
+
+	// Self-hosted auto-update checker (pass.dependentmedia.com).
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-update-manager.php';
+	( new \ClientSyncPro\Update_Manager() )->register_hooks();
     
     require_once plugin_dir_path( __FILE__ ) . 'includes/Module_Interface.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/class-module-manager.php';

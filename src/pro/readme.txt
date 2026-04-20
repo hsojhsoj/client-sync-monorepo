@@ -3,7 +3,7 @@ Contributors: hsojhsoj
 Tags: add-on, client sync, pro features, resource scheduling, license
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 1.6.0
+Stable tag: 1.6.3
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -42,6 +42,24 @@ After activating your license, navigate to areas like **Client Sync > Dimensions
 Yes. Client Sync Pro is an add-on and is not a standalone plugin. It relies on the core functionality provided by the free version. Both plugins must be active for the Pro features to work.
 
 == Changelog ==
+
+= 1.6.3 =
+*   **Security: Ed25519-signed auto-updates.** Every Pro release is now cryptographically signed with an offline key, and installs verify the signature before applying an update. Closes the supply-chain risk where a compromised update server could push arbitrary code. Existing 1.6.2 installs receive this release via the unsigned channel as before; from 1.6.4 onward, unsigned update responses are rejected.
+*   **Security: Appointment REST access tightened.** Cross-client reads now require the manager-view capability (`edit_others_posts`) instead of `edit_posts` — closes a PII/PHI disclosure path on multi-author and HIPAA-enabled sites.
+*   **Security: CSV export formula-injection guard.** Appointments, client lists, reporting, and HIPAA audit-log exports now neutralize leading `=`/`+`/`-`/`@` characters so attacker-influenced fields can't execute as formulas in Excel or Google Sheets.
+*   **Security: Seat-hold write endpoints require a REST nonce.** Prevents anonymous bots from scripting fan-out holds across forged session tokens.
+*   **Security: XSS hardening in the frontend calendar.** Dimension labels and other admin-controlled strings are now escaped on the booking page.
+*   Compatibility update for Client Sync 3.7.3.
+
+= 1.6.2 =
+*   **New Feature: Message Queue (Shared Admin Inbox).** New "Message Queue" admin page under Client Sync providing a shared inbox where multiple administrators can view and respond to client messages. Includes status tracking (Awaiting Reply / Open / Resolved), auto-status updates when clients or admins send messages, filter and sort controls, real-time polling, and a red badge count in the sidebar menu.
+*   **Enhancement: Thread Status Tracking.** Added `status` and `assigned_to` columns to the message threads table (DB v1.1.0) with automatic migration for existing threads. Three statuses: open, awaiting_reply, resolved.
+*   **Enhancement: Dashboard Queue Summary.** The Client Messages dashboard widget now shows the number of threads awaiting reply with a direct link to the Message Queue.
+*   Compatibility update for Client Sync 3.7.3.
+
+= 1.6.1 =
+*   **Fix: Membership Plans Shortcode Load Order.** Resolved a timing issue where the `[clisyc_membership_plans]` shortcode was not registered because the Pro plugin's CPT registration ran after the free plugin's shortcode initialization check.
+*   Compatibility update for Client Sync 3.7.1.
 
 = 1.6.0 =
 *   **New Feature: Check-In Dashboard Stats.** Live stats bar on the Check-In page showing Checked In, Expected, Remaining, and Per Hour counters with a progress bar. Auto-refreshes every 15 seconds.

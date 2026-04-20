@@ -10,7 +10,7 @@ SECONDS=0
 LOCAL_WP_PLUGINS_DIR="/var/www/vhosts/testblankwp.dependentmedia.com/httpdocs/wp-content/plugins"
 LOCAL_WP_OWNER_GROUP="testblan:psacln"
 PLUGIN_VERSION="3.7.3"
-PRO_VERSION="1.6.2"
+PRO_VERSION="1.6.3"
 SRC_DIR="src"
 BUILD_DIR="build"
 

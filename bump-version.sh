@@ -162,8 +162,11 @@ if [[ $do_bump_pro -eq 1 ]]; then
     apply "build.sh PRO_VERSION"              build.sh                            "s/^PRO_VERSION=\"$PRO_OLD\"/PRO_VERSION=\"$PRO_NEW\"/"
     apply "client-sync-pro.php header"        src/pro/client-sync-pro.php         "s|^( \* Version: +)$PRO_OLD|\1$PRO_NEW|"
     apply "pro readme.txt Stable tag"         src/pro/readme.txt                  "s/^Stable tag: $PRO_OLD/Stable tag: $PRO_NEW/"
-    apply "update-info.php version"           src/pro/update-server/update-info.php "s/'version'      => '$PRO_OLD'/'version'      => '$PRO_NEW'/"
-    apply "update-info.php last_updated"      src/pro/update-server/update-info.php "s/'last_updated' => '[0-9-]+'/'last_updated' => '$TODAY'/"
+    # Whitespace-tolerant: the PHP array in update-info.php uses however many
+    # spaces PHP-CS / editor alignment prefers (we've seen both 6 and 8).
+    # Preserve whatever's there rather than forcing a specific count.
+    apply "update-info.php version"           src/pro/update-server/update-info.php "s/('version'[[:space:]]*=>[[:space:]]*')$PRO_OLD(')/\1$PRO_NEW\2/"
+    apply "update-info.php last_updated"      src/pro/update-server/update-info.php "s/('last_updated'[[:space:]]*=>[[:space:]]*')[0-9-]+(')/\1$TODAY\2/"
 fi
 echo
 
