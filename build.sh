@@ -327,7 +327,7 @@ EOF
 # --- Main Execution Logic ---
 COMMAND=${1:-all}
 
-if [ "$COMMAND" != "test-setup" ] && [ "$COMMAND" != "test" ] && [ "$COMMAND" != "test-coverage" ] && [ "$COMMAND" != "test-all" ] && [ "$COMMAND" != "sync" ] && [ "$COMMAND" != "deploy" ]; then
+if [ "$COMMAND" != "test-setup" ] && [ "$COMMAND" != "test" ] && [ "$COMMAND" != "test-coverage" ] && [ "$COMMAND" != "test-all" ] && [ "$COMMAND" != "sync" ] && [ "$COMMAND" != "deploy" ] && [ "$COMMAND" != "sign" ]; then
     echo "Cleaning up old build files..."
     rm -rf "$BUILD_DIR"
 fi
@@ -360,6 +360,88 @@ case "$COMMAND" in
         npm run test:js
         echo ""
         echo "✅ All tests complete."
+        ;;
+    sign)
+        # Interactive helper that signs a built Pro ZIP using an Ed25519 secret
+        # key pasted at runtime. Produces the $signed_payload and $signature
+        # values to drop into src/pro/update-server/update-info.php.
+        #
+        # The secret key is entered with echo disabled and lives only in the
+        # child PHP process — it never hits disk, shell history, or env.
+        # See AI_HANDOFF.md → "Pro update signing" for the full procedure.
+        ZIP_ARG="${2:-}"
+        if [ -z "$ZIP_ARG" ]; then
+            # Default: most recent Pro ZIP in build/
+            ZIP_ARG=$(ls -t "$BUILD_DIR"/client-sync-pro-v*.zip 2>/dev/null | head -n 1 || true)
+        fi
+        if [ -z "$ZIP_ARG" ] || [ ! -f "$ZIP_ARG" ]; then
+            echo "❌ ERROR: No Pro ZIP found. Usage: ./build.sh sign [path/to/client-sync-pro-vX.Y.Z.zip]"
+            echo "   Or run ./build.sh zip first to produce one."
+            exit 1
+        fi
+
+        # Derive the version from the filename: client-sync-pro-vX.Y.Z.zip -> X.Y.Z
+        ZIP_BASENAME=$(basename "$ZIP_ARG")
+        SIGN_VERSION=$(echo "$ZIP_BASENAME" | sed -E 's/^client-sync-pro-v(.+)\.zip$/\1/')
+        if [ "$SIGN_VERSION" = "$ZIP_BASENAME" ]; then
+            echo "❌ ERROR: Could not derive version from filename '$ZIP_BASENAME'."
+            echo "   Expected format: client-sync-pro-vX.Y.Z.zip"
+            exit 1
+        fi
+
+        if command -v shasum >/dev/null 2>&1; then
+            ZIP_HASH=$(shasum -a 256 "$ZIP_ARG" | awk '{print $1}')
+        elif command -v sha256sum >/dev/null 2>&1; then
+            ZIP_HASH=$(sha256sum "$ZIP_ARG" | awk '{print $1}')
+        else
+            echo "❌ ERROR: Neither shasum nor sha256sum is available."
+            exit 1
+        fi
+
+        RELEASED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        SIGNED_PAYLOAD=$(printf '{"version":"%s","zip_sha256":"%s","released_at":"%s"}' \
+            "$SIGN_VERSION" "$ZIP_HASH" "$RELEASED_AT")
+
+        echo "-------------------------------------"
+        echo "Signing Pro release:"
+        echo "   ZIP        : $ZIP_ARG"
+        echo "   Version    : $SIGN_VERSION"
+        echo "   SHA256     : $ZIP_HASH"
+        echo "   Released at: $RELEASED_AT"
+        echo "-------------------------------------"
+
+        # Sign in a child PHP process. Secret key is read from stdin with echo
+        # suppressed and zeroed with sodium_memzero after signing.
+        SIGNATURE_B64=$(php -r '
+            $payload = $argv[1];
+            fwrite( STDERR, "Paste base64 Ed25519 secret key (input hidden, then Enter): " );
+            system( "stty -echo" );
+            $sk_b64 = trim( fgets( STDIN ) );
+            system( "stty echo" );
+            fwrite( STDERR, "\n" );
+            $sk = base64_decode( $sk_b64, true );
+            if ( false === $sk || strlen( $sk ) !== SODIUM_CRYPTO_SIGN_SECRETKEYBYTES ) {
+                fwrite( STDERR, "❌ ERROR: Invalid secret key (wrong length or bad base64).\n" );
+                exit( 1 );
+            }
+            $sig = sodium_crypto_sign_detached( $payload, $sk );
+            echo base64_encode( $sig );
+            sodium_memzero( $sk );
+        ' "$SIGNED_PAYLOAD")
+
+        if [ -z "$SIGNATURE_B64" ]; then
+            echo "❌ ERROR: Signing failed — no signature produced."
+            exit 1
+        fi
+
+        echo ""
+        echo "✅ Signed. Paste these into src/pro/update-server/update-info.php:"
+        echo ""
+        echo "\$signed_payload = '${SIGNED_PAYLOAD}';"
+        echo "\$signature      = '${SIGNATURE_B64}';"
+        echo ""
+        echo "Also update the outer 'version' field in update-info.php to '${SIGN_VERSION}'."
+        echo "-------------------------------------"
         ;;
     sync)
         REMOTE_USER="testblan"

@@ -550,3 +550,111 @@ Managed by `class-menu-manager.php` with a `$desired_order` array controlling su
 14. **Membership plans shortcode load-order** — The `[clisyc_membership_plans]` shortcode in `class-shortcodes.php` must NOT be gated behind `post_type_exists()` — the Pro plugin registers the CPT after the free plugin's shortcode init. Fixed in v3.7.1
 15. **Pro update server is separate from WHMCS** — The auto-update endpoint at `pass.dependentmedia.com` is a simple JSON file, not connected to WHMCS. When releasing a new Pro version, you must manually update `update-info.php` AND upload the zip. The client-side `Update_Manager` handles license gating independently via `License_Manager::is_license_active()`
 16. **pass.dependentmedia.com SSH key** — At `~/.ssh/pass_dm`. Different vhost user than testblan or the demo site. Use the cross-vhost `/tmp` trick to move built zips from testblan's build output to the update server directory
+
+---
+
+## Pro update signing
+
+**Status: soft-launch. The public key constant in `src/pro/includes/class-update-manager.php` is empty, so signature verification is currently SKIPPED and a `Debug_Logger` warning is emitted on each update check. Until the keypair is generated and the public key pasted in, `pass.dependentmedia.com` is an unauthenticated RCE channel into every Pro install. This section is the runbook for closing that gap.**
+
+### Threat model
+
+`Update_Manager::get_remote_info()` fetches JSON from `https://pass.dependentmedia.com/plugin-updates/client-sync-pro/update-info.php`, follows the `download_url` it finds there, and hands the resulting ZIP to `WP_Upgrader` for install. Before signing, the only integrity gate was TLS. So a compromise of the update server, DNS, or any CA in the chain would let an attacker push arbitrary PHP to every licensed site on the next cron-driven update check — RCE blast radius = every Pro customer.
+
+Ed25519 signing moves the root of trust from "whoever controls TLS termination at pass.dependentmedia.com" to "whoever holds the offline secret key". A compromised update server can still DoS updates, but it cannot silently ship code.
+
+### One-time setup: generate the keypair
+
+**Do this ONCE, on a machine you trust, in a clean shell session with no transcript logging.** Generate the keypair with a local PHP CLI:
+
+```bash
+php -r '
+$kp  = sodium_crypto_sign_keypair();
+$pk  = sodium_crypto_sign_publickey( $kp );
+$sk  = sodium_crypto_sign_secretkey( $kp );
+echo "PUBLIC  (paste into UPDATE_SIGNING_PUBKEY_BASE64): " . base64_encode( $pk ) . "\n";
+echo "SECRET  (store offline, NEVER commit):             " . base64_encode( $sk ) . "\n";
+'
+```
+
+Then:
+
+1. Copy the PUBLIC line and paste into `src/pro/includes/class-update-manager.php`:
+   ```php
+   const UPDATE_SIGNING_PUBKEY_BASE64 = '<paste base64 public key here>';
+   ```
+   Commit this change with message `pro: enable update signature enforcement`.
+2. Copy the SECRET line into your offline secret store (1Password → Vault → "Client Sync Pro release signing key"). **The secret key must never touch this repository, the test/demo servers, the update server, or any shell history file.** If it ends up in any of those places, rotate: generate a new keypair, replace the public key, and re-sign the current release.
+3. Wipe your terminal scrollback (`clear && history -c` in zsh, or restart the terminal).
+
+### Per-release signing procedure
+
+Run this after `bash build.sh zip` produces `build/client-sync-pro-v<VERSION>.zip`:
+
+```bash
+# 1. Find the ZIP and compute its sha256
+ZIP="build/client-sync-pro-v1.6.3.zip"
+ZIP_HASH=$(shasum -a 256 "$ZIP" | awk '{print $1}')
+VERSION="1.6.3"
+RELEASED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# 2. Build the exact JSON bytes to sign. Key order matters — the client
+#    re-parses these bytes, but tampered reorderings would still fail sig check.
+SIGNED_PAYLOAD=$(printf '{"version":"%s","zip_sha256":"%s","released_at":"%s"}' \
+  "$VERSION" "$ZIP_HASH" "$RELEASED_AT")
+
+# 3. Sign the payload with the offline secret key. Paste the base64 secret key
+#    at the prompt — do NOT pass it as a CLI argument or env var (it would end
+#    up in shell history / /proc).
+php -r '
+$payload = $argv[1];
+fwrite( STDERR, "Paste base64 secret key (input hidden): " );
+system( "stty -echo" );
+$sk_b64 = trim( fgets( STDIN ) );
+system( "stty echo" );
+fwrite( STDERR, "\n" );
+$sk  = base64_decode( $sk_b64, true );
+if ( false === $sk || strlen( $sk ) !== SODIUM_CRYPTO_SIGN_SECRETKEYBYTES ) {
+    fwrite( STDERR, "Invalid secret key.\n" ); exit( 1 );
+}
+$sig = sodium_crypto_sign_detached( $payload, $sk );
+echo base64_encode( $sig ) . "\n";
+sodium_memzero( $sk );
+' "$SIGNED_PAYLOAD"
+```
+
+4. Paste both values into `src/pro/update-server/update-info.php`:
+   ```php
+   $signed_payload = '<the exact JSON from step 2>';
+   $signature      = '<the base64 output from step 3>';
+   ```
+   The `$signed_payload` must be byte-for-byte identical to what was signed. Do NOT let an IDE reformat it or add trailing newlines.
+5. Also bump the outer `'version' => '1.6.3'` in the same file so it matches the signed payload. The client verifies that outer and signed versions match and rejects mismatches.
+6. Upload the updated `update-info.php` AND the new `client-sync-pro.zip` to `pass.dependentmedia.com` per the standard flow (see "Pro update server" in the gotchas list above).
+
+### Optional helper: `bash build.sh sign`
+
+A `sign` subcommand is wired into `build.sh` that walks through steps 1–3 interactively and prints the two values to paste. It never writes the secret key to disk. See `build.sh` for source.
+
+### Transition / soft-launch behaviour
+
+The first signed release must remain installable by the existing (unsigned) client generation — otherwise every site already running ≤ 1.6.2 bricks the moment 1.6.3 ships. The design handles this by construction:
+
+- **Existing clients (≤ 1.6.2)**: ignore the new `signature` / `signed_payload` fields (they just iterate keys they know about). They install 1.6.3 the old way.
+- **New client (1.6.3+) with empty `UPDATE_SIGNING_PUBKEY_BASE64`**: soft-launch mode — accepts the update and logs a warning via `Debug_Logger`. This is the state the very first 1.6.3 build ships in.
+- **New client (1.6.3+) with a populated public key**: enforces the signature. Any response missing or failing verification is rejected, and the last known-good response (stored in the `clisyc_pro_update_last_good` option) is returned instead.
+
+Recommended rollout:
+1. Ship 1.6.3 with the public key constant EMPTY and the server `update-info.php` still unsigned. Nothing changes behaviourally; the codepath is inert.
+2. Once ≥ 95% of customer sites have auto-updated to 1.6.3, cut 1.6.4 with the populated public key constant. Sign the 1.6.4 release. Enforcement is now real.
+3. From 1.6.4 onward every release must be signed, or sites running ≥ 1.6.4 will stop updating and fall back to the last-good cached response.
+
+### Files involved
+
+| File | Role |
+|------|------|
+| `src/pro/includes/class-update-manager.php` | Client-side verifier. Holds the public-key constant and the `verify_and_process()` + `verify_package_before_install()` methods. |
+| `src/pro/update-server/update-info.php` | Server-side template. Has `signature` + `signed_payload` fields. |
+| `tests/unit/UpdateManagerSignatureTest.php` | Unit tests for accept / tamper-payload / tamper-signature / soft-launch. |
+| `build.sh` (`sign` subcommand) | Interactive signing helper. |
+| Offline secret store | The secret key. Nothing else. |
