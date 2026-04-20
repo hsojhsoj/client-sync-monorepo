@@ -100,11 +100,16 @@ class Users_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Check permissions for searching users
-	 * Only users who can edit appointments should be able to search clients
+	 * Check permissions for searching users.
+	 *
+	 * Gated on the manager-view capability (default `edit_others_posts`),
+	 * not `edit_posts`. The response includes user email addresses, so a
+	 * Contributor-level account must not be able to use this endpoint as a
+	 * user-enumeration primitive.
 	 */
 	public function search_users_permissions_check( $request ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		$cap = apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' );
+		if ( ! current_user_can( $cap ) ) {
 			return new WP_Error(
 				'rest_forbidden',
 				esc_html__( 'You do not have permission to search users.', 'client-sync' ),

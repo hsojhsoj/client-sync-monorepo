@@ -9,7 +9,16 @@
  *   PUT    /clisyc/v1/appointments/{id}       - Update (status, notes, reschedule)
  *   DELETE /clisyc/v1/appointments/{id}       - Cancel appointment
  *
- * All endpoints require edit_posts capability.
+ * Authorization model:
+ *   - Collection reads (GET /appointments) require the manager-view capability
+ *     (default `edit_others_posts`, filterable via `clisyc_manager_view_capability`).
+ *     The response embeds client email, display_name, and notes — treating this
+ *     as PHI on HIPAA-enabled sites — so a cross-client read must be gated to
+ *     practice managers, not to any user with `edit_posts` (Contributors included).
+ *   - Single-item reads (GET /appointments/{id}) allow either the manager
+ *     capability OR the appointment's own `post_author` — mirroring the check
+ *     already used by `[clisyc_appointment_detail]`.
+ *   - Writes (PUT/PATCH/DELETE) continue to require `manage_options`.
  *
  * @package    ClientSync
  * @subpackage ClientSync/RestAPI
@@ -57,7 +66,8 @@ class Appointments_Rest_Controller extends \WP_REST_Controller {
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'get_item' ],
-				'permission_callback' => [ $this, 'check_permissions' ],
+				// Single-item read: author-of-appointment OR manager.
+				'permission_callback' => [ $this, 'check_single_item_permission' ],
 			],
 			[
 				'methods'             => 'PUT, PATCH',
@@ -81,10 +91,46 @@ class Appointments_Rest_Controller extends \WP_REST_Controller {
 	// =====================================================================
 
 	/**
-	 * Read access requires edit_posts (managers + admins).
+	 * Collection-read access: the manager-view capability.
+	 *
+	 * Previously this was `edit_posts`, which WordPress grants to Contributors,
+	 * Authors, and Editors — not just practice managers. Since the collection
+	 * response exposes client email + notes for every appointment, that gate
+	 * allowed a low-privilege logged-in user to walk the entire appointment
+	 * database. Rely on the existing `clisyc_manager_view_capability` filter
+	 * (defaulting to `edit_others_posts`) so this matches the capability used
+	 * throughout the rest of the codebase (ajax handler, manager shortcodes,
+	 * ical generator, appointment detail shortcode).
 	 */
 	public function check_permissions(): bool {
-		return current_user_can( 'edit_posts' );
+		return current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) );
+	}
+
+	/**
+	 * Single-item read access: either a manager, or the appointment's own
+	 * author. Mirrors the check used by `[clisyc_appointment_detail]`.
+	 *
+	 * @param \WP_REST_Request $request
+	 */
+	public function check_single_item_permission( $request ): bool {
+		$id = absint( $request['id'] ?? 0 );
+		if ( ! $id ) {
+			return false;
+		}
+		// Managers can always read.
+		if ( current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
+			return true;
+		}
+		// Otherwise, the appointment's own author may read it. No information
+		// is disclosed about posts the requester can't access (the post load
+		// happens inside this check, not leaked in the 403 response body).
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+		$post = get_post( $id );
+		return $post
+			&& Constants::POST_TYPE_APPOINTMENT === $post->post_type
+			&& (int) $post->post_author === get_current_user_id();
 	}
 
 	/**

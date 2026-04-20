@@ -248,7 +248,12 @@ class Checkin_Page {
 	public function ajax_search(): void {
 		check_ajax_referer( 'clisyc_checkin_search', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		// All check-in AJAX handlers in this file use the manager-view
+		// capability (default `edit_others_posts`) rather than `edit_posts`,
+		// because they list / mutate appointment data across every client in
+		// the practice. `edit_posts` would also let Contributors through,
+		// which would expose client identities site-wide.
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
@@ -380,7 +385,7 @@ class Checkin_Page {
 	public function ajax_confirm(): void {
 		check_ajax_referer( 'clisyc_checkin_confirm', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
@@ -430,7 +435,7 @@ class Checkin_Page {
 	public function ajax_checkin_by_token(): void {
 		check_ajax_referer( 'clisyc_checkin_by_token', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
@@ -512,7 +517,7 @@ class Checkin_Page {
 	public function ajax_stats(): void {
 		check_ajax_referer( 'clisyc_checkin_stats', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
@@ -614,7 +619,7 @@ class Checkin_Page {
 	public function ajax_bulk_checkin(): void {
 		check_ajax_referer( 'clisyc_checkin_bulk', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
@@ -679,7 +684,7 @@ class Checkin_Page {
 	public function ajax_undo_checkin(): void {
 		check_ajax_referer( 'clisyc_checkin_undo', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
@@ -724,7 +729,7 @@ class Checkin_Page {
 	public function ajax_events_for_date(): void {
 		check_ajax_referer( 'clisyc_checkin_events', 'nonce' );
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( apply_filters( 'clisyc_manager_view_capability', 'edit_others_posts' ) ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'client-sync-pro' ) ] );
 		}
 
