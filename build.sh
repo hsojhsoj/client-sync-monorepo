@@ -37,6 +37,25 @@ TEST_TMP_DIR="tmp"
 # Build mode (sequential or parallel)
 BUILD_MODE="${BUILD_MODE:-sequential}"
 
+# Flags appended to every local `composer install` / `composer install --no-dev`
+# invocation. Default: skip the PHP version check (but KEEP extension checks,
+# unlike --ignore-platform-reqs). Rationale:
+#   - The built ZIP is consumed on WordPress sites whose PHP version may
+#     legitimately differ from the developer's local PHP. The runtime
+#     compatibility floor is the plugin header's `Requires PHP: 7.4`, not
+#     whatever the dev has installed.
+#   - Without this, developers on PHP ≥ 8.5 can't run `build.sh zip`
+#     locally because `sabberworm/php-css-parser` (a dompdf transitive
+#     dep) caps at PHP 8.4. That's a cosmetic block, not a real
+#     incompatibility — the packages run fine on any supported PHP.
+#   - `--ignore-platform-req=php` is strictly narrower than
+#     `--ignore-platform-reqs`: it ignores ONLY the PHP version, not
+#     required extensions like ext-mbstring — so a genuinely broken
+#     environment still fails loudly.
+# Override with `COMPOSER_LOCAL_FLAGS= bash build.sh zip` to force strict
+# platform matching locally.
+COMPOSER_LOCAL_FLAGS="${COMPOSER_LOCAL_FLAGS:---ignore-platform-req=php}"
+
 # --- Function Definitions ---
 deploy_local() {
     local plugin_name="$1"
@@ -251,7 +270,7 @@ setup_tests() {
     echo "-------------------------------------"
     echo "Setting up PHPUnit test environment..."
     echo "   - Installing Composer dependencies..."
-    composer install
+    composer install $COMPOSER_LOCAL_FLAGS
 
     echo "   - Setting up WordPress test suite..."
     
@@ -498,6 +517,7 @@ case "$COMMAND" in
             --exclude '.DS_Store' \
             --exclude 'build/' \
             --exclude 'wp-tests-config.php' \
+            --exclude 'wp-svn/' \
             ./ "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/"
 
         echo ""
@@ -513,19 +533,19 @@ case "$COMMAND" in
         echo "✅ Deploy complete. Free + Pro plugins are live on the test site."
         ;;
     free)
-        composer install --no-dev
+        composer install --no-dev $COMPOSER_LOCAL_FLAGS
         build_assets
         build_free
         deploy_local "client-sync"
         ;;
     pro)
-        composer install --no-dev
+        composer install --no-dev $COMPOSER_LOCAL_FLAGS
         build_assets
         build_pro
         deploy_local "client-sync-pro"
         ;;
     free-pro)
-        composer install --no-dev
+        composer install --no-dev $COMPOSER_LOCAL_FLAGS
         build_assets
         build_free
         build_pro
@@ -533,18 +553,18 @@ case "$COMMAND" in
         deploy_local "client-sync-pro"
         ;;
     zip)
-        composer install --no-dev
+        composer install --no-dev $COMPOSER_LOCAL_FLAGS
         build_assets
         build_free
         zip_free
         build_pro
         zip_pro
-        composer install
+        composer install $COMPOSER_LOCAL_FLAGS
         ;;
     fast|parallel)
         # Fast/parallel build mode
         export BUILD_MODE="parallel"
-        composer install --no-dev
+        composer install --no-dev $COMPOSER_LOCAL_FLAGS
         build_assets
         build_free
         zip_free
@@ -552,10 +572,10 @@ case "$COMMAND" in
         build_pro
         zip_pro
         deploy_local "client-sync-pro"
-        composer install
+        composer install $COMPOSER_LOCAL_FLAGS
         ;;
     *) # This is the 'all' case
-        composer install --no-dev
+        composer install --no-dev $COMPOSER_LOCAL_FLAGS
         build_assets
         build_free
         zip_free
@@ -563,7 +583,7 @@ case "$COMMAND" in
         build_pro
         zip_pro
         deploy_local "client-sync-pro"
-        composer install
+        composer install $COMPOSER_LOCAL_FLAGS
         ;;
 esac
 
