@@ -285,18 +285,32 @@ git add -A && git commit -m "Update documentation" && git push
 
 ## Version Bumping
 
-Use the `bump-version.sh` script — it rewrites every version location atomically and fails loudly if any file is out of sync before editing:
+Most humans should use the full `build.sh release` orchestrator (see "Full
+Release Checklist"), which calls `bump-version.sh` internally and also
+handles changelog fan-out + building + signing + publishing. The
+`bump-version.sh` script is still useful on its own when you want to
+bump versions without cutting a release (e.g. for a WIP commit).
 
 ```bash
-bash bump-version.sh --free 3.7.4 --pro 1.6.3   # bump both
+bash bump-version.sh --free 3.7.4 --pro 1.6.4   # bump both
 bash bump-version.sh --free 3.7.4                # free only
-bash bump-version.sh --pro 1.6.3                 # pro only
+bash bump-version.sh --pro 1.6.4                 # pro only
 bash bump-version.sh --free 3.7.4 --dry-run      # preview, no writes
 ```
 
-The script handles all 8 version locations (see `bash bump-version.sh --help`). What it does NOT do: write changelog entries — prose doesn't automate well, so you still need to manually add a `= X.Y.Z =` block to the relevant `readme.txt` and an `<h4>X.Y.Z</h4>` block to `src/pro/update-server/update-info.php`.
+The script rewrites every version location atomically and fails loudly if
+any file is out of sync before editing. Patterns are whitespace-tolerant
+(as of 2026-04-20 — prior versions silently no-op'd on alignment-shifted
+`update-info.php` entries).
 
-Locations the script manages (kept here for reference in case the script is ever unavailable):
+What it does NOT do: write changelog entries — prose doesn't automate
+well when run standalone. `build.sh release` handles the fan-out; for
+manual bumps you still need to add a `= X.Y.Z =` block to the relevant
+`readme.txt` and an `<h4>X.Y.Z</h4>` block to
+`src/pro/update-server/update-info.php`.
+
+Locations the script manages (kept here for reference in case the script
+is ever unavailable):
 
 | File | What it updates |
 |------|---------------|
@@ -335,25 +349,44 @@ Client Sync Pro uses a self-hosted update server at `pass.dependentmedia.com` fo
 
 ### Deploying a Pro Plugin Update
 
+Automated. Run:
+
 ```bash
-# 1. Build the Pro plugin zip (on the test server):
-ssh testblan@44.240.240.195 'cd ~/projects/client-sync-monorepo && ./build.sh zip'
-# Creates: build/client-sync-pro.zip
+bash build.sh publish-pro
+```
 
-# 2. Copy the zip to /tmp (shared filesystem):
-ssh testblan@44.240.240.195 'cp ~/projects/client-sync-monorepo/build/client-sync-pro.zip /tmp/'
+This scps the most recent built zip to `pass.dependentmedia.com`, atomic-
+swaps it in (via `.new` → `mv -f` so cron-fetchers never see a torn
+state), uploads `src/pro/update-server/update-info.php` the same way, and
+`curl`s the endpoint to verify the response carries the expected version
+plus non-empty `signature` / `signed_payload` fields.
 
-# 3. Move to the update server directory:
-ssh -i ~/.ssh/pass_dm updates.dependentmedia.com_43485@44.240.240.195 \
-  'cp /tmp/client-sync-pro.zip httpdocs/plugin-updates/client-sync-pro/'
+Prerequisites:
+- `build/client-sync-pro-v$PRO_VERSION.zip` must exist (`bash build.sh zip`).
+- `update-info.php` must be signed (`bash build.sh sign`).
+- `~/.ssh/pass_dm` key must be present locally.
 
-# 4. Update update-info.php with new version/changelog:
+The entire publish takes ~10 seconds end-to-end and is idempotent —
+re-running against an already-published release just re-uploads
+identical bytes.
+
+For one-step release + publish, use the `release` orchestrator — see
+"Full Release Checklist" below.
+
+<details>
+<summary>Manual commands (legacy; only if build.sh is unavailable)</summary>
+
+```bash
+scp build/client-sync-pro-v$PRO_VERSION.zip \
+  testblan@44.240.240.195:/tmp/client-sync-pro.zip
 scp -i ~/.ssh/pass_dm src/pro/update-server/update-info.php \
   updates.dependentmedia.com_43485@44.240.240.195:httpdocs/plugin-updates/client-sync-pro/
-
-# 5. Verify endpoint:
+ssh -i ~/.ssh/pass_dm updates.dependentmedia.com_43485@44.240.240.195 \
+  'cp /tmp/client-sync-pro.zip httpdocs/plugin-updates/client-sync-pro/'
 curl -s https://pass.dependentmedia.com/plugin-updates/client-sync-pro/update-info.php | python3 -m json.tool
 ```
+
+</details>
 
 ### Key Files
 
@@ -366,49 +399,169 @@ curl -s https://pass.dependentmedia.com/plugin-updates/client-sync-pro/update-in
 
 ## Publishing to WordPress.org (SVN)
 
-There is **no automated script** for this. It's a manual SVN process:
+Mostly automated. Run:
 
 ```bash
-# 1. Build the zip
-./build.sh zip
-# Creates: build/client-sync-vX.Y.Z.zip
-
-# 2. Checkout the SVN repo (first time only)
-svn checkout https://plugins.svn.wordpress.org/client-sync/ svn-client-sync
-
-# 3. Copy built plugin to trunk
-rm -rf svn-client-sync/trunk/*
-cp -R build/client-sync/* svn-client-sync/trunk/
-
-# 4. Tag the release
-svn copy svn-client-sync/trunk svn-client-sync/tags/X.Y.Z
-
-# 5. Commit
-cd svn-client-sync
-svn add --force .
-svn commit -m "Release vX.Y.Z"
+bash build.sh publish-free
 ```
 
-WordPress.org SVN credentials are separate from the test server and GitHub credentials.
+This runs the full SVN dance: `svn update`, rsync `build/client-sync/` →
+`trunk/`, stage adds/removes, `svn copy trunk tags/$PLUGIN_VERSION` (skipped
+if the tag already exists). Stops before the final `svn commit` because
+that needs a password prompt — the script prints the exact command for
+you to run yourself:
 
-**Important:** The `readme.txt` in `src/free/readme.txt` is what WordPress.org uses for the plugin listing page. Changes to the description, FAQ, changelog, or "Tested up to" value are deployed via SVN.
+```bash
+cd /Users/joshuajordan/Projects/Code/SVN/client-sync
+svn commit --username hsojhsoj -m "Release X.Y.Z"
+```
+
+SVN prompts for the WP.org password (input hidden; offers to cache).
+
+Prerequisites:
+- SVN client installed locally (`brew install subversion`)
+- Checkout at `/Users/joshuajordan/Projects/Code/SVN/client-sync` (override
+  via `SVN_CLIENT_SYNC_DIR` env var if needed)
+- `build/client-sync/` must exist (`bash build.sh zip`)
+
+WordPress.org SVN credentials are separate from the test server and GitHub
+credentials — the WP.org account username is `hsojhsoj`.
+
+**Important:** The `readme.txt` at `src/free/readme.txt` is what WordPress.org
+uses for the plugin listing page. Changes to the description, FAQ,
+changelog, or "Tested up to" value are deployed via SVN. `build.sh release`
+fans the changelog into this file automatically; for spot-edits to
+description/FAQ, edit the source readme and run `publish-free` directly.
+
+WP.org's infra rebuilds the plugin listing and the canonical zip within
+~30 seconds of an SVN commit. Verify with:
+
+```bash
+curl -s https://api.wordpress.org/plugins/info/1.0/client-sync.json | \
+  python3 -c "import sys,json; d=json.load(sys.stdin); print(d['version'], d['last_updated'])"
+```
 
 ---
 
 ## Full Release Checklist
 
-When releasing a new version to all three targets:
+The release pipeline is automated — there are three ways to drive it, in
+order of increasing convenience:
 
-1. **Bump versions** in all locations (see Version Bumping above)
-2. **Update changelogs** in `src/free/readme.txt` and `src/pro/readme.txt`
-3. **Update Pro update server** — bump version + changelog in `src/pro/update-server/update-info.php`
-4. **Build & deploy to test site:** `bash build.sh deploy`
-5. **Test on the test site** at https://testblankwp.dependentmedia.com/
-6. **Push to GitHub:** `git add . && git commit -m "Release vX.Y.Z" && git push`
-7. **Update wiki** if features/settings/shortcodes changed (see wiki update steps above)
-8. **Publish Free to WordPress.org** via SVN (see SVN steps above)
-9. **Publish Pro to update server** — upload zip + update-info.php (see Pro Auto-Update Server above)
-10. **Update demo site** if needed (see Demo Site section above)
+### Option A: The GUI (recommended for routine releases)
+
+Open `../_ReleaseRunner/ReleaseRunner.xcodeproj` in Xcode and ⌘R. The app
+surfaces a single form (current versions, target versions, changelog,
+secret key) plus buttons for each individual operation. It shells out to
+`bash build.sh` under the hood; the `_ReleaseRunner/` project is outside
+the monorepo so it's not part of the published plugin.
+
+### Option B: `bash build.sh release` (single-command CLI)
+
+```bash
+# Non-interactive (GUI / CI mode):
+bash build.sh release --free 3.7.4 --pro 1.6.4 --changelog-file release-notes.md
+
+# Interactive (prompts for versions + opens $EDITOR for changelog):
+bash build.sh release
+```
+
+Steps it runs in order:
+1. `bump-version.sh` for any version passed
+2. Writes the changelog into both readme.txt files and the
+   update-info.php HTML changelog
+3. `build.sh zip` (builds both plugins)
+4. `build.sh sign` for the Pro zip (prompts for the Ed25519 secret key
+   over stdin; patches `update-info.php` in place; verifies signature
+   against the installed public key)
+5. `git add -A && git commit && git push` with the changelog as the body
+6. `build.sh publish-pro` — uploads zip + update-info.php to
+   pass.dependentmedia.com, atomic-swaps into place, verifies endpoint
+7. `build.sh publish-free` — stages the WordPress.org SVN commit (trunk
+   mirror + tag copy); stops before the interactive `svn commit`
+
+It stops at two interactive points (by design):
+- **Secret key paste** during `sign` — `stty -echo` prompt; never hits
+  disk or shell history.
+- **WP.org password** during the final `svn commit` — which it prints for
+  you to run in your own terminal (prints the exact command).
+
+### Option C: The individual subcommands
+
+Use when a step fails mid-release or you need to re-run just one piece.
+Each subcommand is idempotent and can be run standalone. Every step emits
+`[<op>] step: <description>` progress lines and terminates with `✅`/`❌`
+lines + a clear exit code — machine-parseable.
+
+| Subcommand | What it does |
+|-----------|--------------|
+| `bash bump-version.sh --free X.Y.Z --pro X.Y.Z` | Rewrites every version location. See "Version Bumping" above. |
+| `bash build.sh zip` | Builds both plugins; produces `build/client-sync-v*.zip` and `build/client-sync-pro-v*.zip`. |
+| `bash build.sh sign [zip]` | Signs most-recent Pro zip (or the one passed). **Writes** signed_payload + signature directly into `update-info.php` and verifies. Pass `--print` to get the old print-only behaviour. |
+| `bash build.sh publish-pro` | Uploads signed zip + update-info.php to pass.dependentmedia.com; verifies the endpoint. Idempotent. |
+| `bash build.sh publish-free` | WP.org SVN dance: update, mirror trunk, stage adds/removes, tag-copy. Stops before the interactive commit. |
+| `bash build.sh deploy` | Push current source to the test server, build + install to `wp-content/plugins/`. Used for mid-cycle QA, not releases. |
+
+### Manual extras (not automated)
+
+- **Update demo site** if needed (see Demo Site section above)
+- **Update wiki** if features/settings/shortcodes changed (see wiki update
+  steps above)
+- **Smoke-test** on the test site after publish-pro via
+  `wp plugin update client-sync-pro`
+
+---
+
+## Companion GUI apps
+
+Two SwiftUI macOS apps live alongside the monorepo (at the sibling
+`clientSync/_TestRunner/` and `clientSync/_ReleaseRunner/` paths — outside
+the plugin source tree so they never ship with the plugin).
+
+### `_TestRunner/` — Playwright test runner
+
+Wraps `npx playwright test`. Shows a sidebar with all spec files and the
+individual tests inside each, a console that streams live output, and
+status icons per test. Supports headless/headed/UI modes. Useful for
+running the Playwright suite without a terminal.
+
+```bash
+open /Users/joshuajordan/Projects/Code/dm-software/clientSync/_TestRunner/TestRunner.xcodeproj
+```
+
+Targets `___________cs/client-sync-monorepo/` (auto-detected; override in
+`TestRunnerVM.detectProjectPath()` if needed).
+
+### `_ReleaseRunner/` — Release pipeline GUI
+
+Wraps the `bash build.sh` release subcommands. Single form for current
+versions, target versions, changelog, and the Ed25519 secret key; buttons
+for the full release or any individual step. Streams `[<op>] step: ...`
+lines into a step-list strip and full output into a console pane.
+
+```bash
+open /Users/joshuajordan/Projects/Code/dm-software/clientSync/_ReleaseRunner/ReleaseRunner.xcodeproj
+```
+
+Design notes:
+- Secret key is held in a `SecureField`, cleared from VM memory the moment
+  a run starts, and piped to the child `build.sh sign` process over stdin.
+  Never hits disk, clipboard, or shell history; the child PHP process
+  zeroizes its own copy via `sodium_memzero`.
+- The full WP.org `svn commit` is NOT invoked from the GUI — `build.sh
+  publish-free` stops at staging, the GUI shows the command to paste into
+  a terminal. Deliberate: interactive password prompts don't work well
+  through a SwiftUI `Process` pipe, and keeping the SVN password outside
+  the app is one less credential to babysit.
+- Everything else is fully automated — the GUI will drive a complete
+  release from "New Version" text field to "published on pass.dm" with a
+  single button click, then hand off the one remaining terminal command
+  for WP.org.
+
+Both apps follow the same pattern: `NavigationSplitView` with a
+form/tree sidebar and a streaming-console detail. Adding new operations
+is a matter of adding a `ReleaseOperation` / `TestItem` entry and a
+button; the VM's Process runner doesn't care what command it's running.
 
 ---
 
@@ -589,52 +742,58 @@ Then:
 
 ### Per-release signing procedure
 
-Run this after `bash build.sh zip` produces `build/client-sync-pro-v<VERSION>.zip`:
+**Automated.** Run `bash build.sh sign` after `bash build.sh zip`. It:
+
+1. Auto-detects the most recent `build/client-sync-pro-v*.zip`
+2. Derives version + sha256 + timestamp
+3. Builds the canonical signed_payload JSON (key order is deterministic)
+4. Prompts for the base64 secret key over stdin with echo disabled
+5. Signs via `sodium_crypto_sign_detached`, `sodium_memzero`s the key
+6. **Patches `src/pro/update-server/update-info.php` in place** —
+   replaces the `$signed_payload` and `$signature` assignments, and
+   updates the outer `'version'` key to match
+7. Re-verifies the signature against the installed public key in
+   `class-update-manager.php` (catches pubkey drift or file-write
+   corruption before the release ever leaves your laptop)
 
 ```bash
-# 1. Find the ZIP and compute its sha256
+bash build.sh sign                   # signs most recent pro zip; writes in place
+bash build.sh sign --print            # legacy: prints values for manual paste
+bash build.sh sign build/older.zip    # sign a specific zip
+```
+
+The entire `release` orchestrator invokes this automatically — most
+humans never need to call `sign` directly.
+
+<details>
+<summary>Manual equivalent (only if build.sh is unavailable)</summary>
+
+```bash
 ZIP="build/client-sync-pro-v1.6.3.zip"
 ZIP_HASH=$(shasum -a 256 "$ZIP" | awk '{print $1}')
 VERSION="1.6.3"
 RELEASED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-# 2. Build the exact JSON bytes to sign. Key order matters — the client
-#    re-parses these bytes, but tampered reorderings would still fail sig check.
 SIGNED_PAYLOAD=$(printf '{"version":"%s","zip_sha256":"%s","released_at":"%s"}' \
   "$VERSION" "$ZIP_HASH" "$RELEASED_AT")
 
-# 3. Sign the payload with the offline secret key. Paste the base64 secret key
-#    at the prompt — do NOT pass it as a CLI argument or env var (it would end
-#    up in shell history / /proc).
 php -r '
 $payload = $argv[1];
 fwrite( STDERR, "Paste base64 secret key (input hidden): " );
 system( "stty -echo" );
 $sk_b64 = trim( fgets( STDIN ) );
 system( "stty echo" );
-fwrite( STDERR, "\n" );
-$sk  = base64_decode( $sk_b64, true );
-if ( false === $sk || strlen( $sk ) !== SODIUM_CRYPTO_SIGN_SECRETKEYBYTES ) {
-    fwrite( STDERR, "Invalid secret key.\n" ); exit( 1 );
-}
+$sk = base64_decode( $sk_b64, true );
 $sig = sodium_crypto_sign_detached( $payload, $sk );
 echo base64_encode( $sig ) . "\n";
 sodium_memzero( $sk );
 ' "$SIGNED_PAYLOAD"
 ```
 
-4. Paste both values into `src/pro/update-server/update-info.php`:
-   ```php
-   $signed_payload = '<the exact JSON from step 2>';
-   $signature      = '<the base64 output from step 3>';
-   ```
-   The `$signed_payload` must be byte-for-byte identical to what was signed. Do NOT let an IDE reformat it or add trailing newlines.
-5. Also bump the outer `'version' => '1.6.3'` in the same file so it matches the signed payload. The client verifies that outer and signed versions match and rejects mismatches.
-6. Upload the updated `update-info.php` AND the new `client-sync-pro.zip` to `pass.dependentmedia.com` per the standard flow (see "Pro update server" in the gotchas list above).
+Paste both values into `src/pro/update-server/update-info.php` and bump
+the outer `'version'` to match. `$signed_payload` must be byte-for-byte
+identical to what was signed — do NOT let an IDE reformat it.
 
-### Optional helper: `bash build.sh sign`
-
-A `sign` subcommand is wired into `build.sh` that walks through steps 1–3 interactively and prints the two values to paste. It never writes the secret key to disk. See `build.sh` for source.
+</details>
 
 ### Transition behaviour (what actually shipped)
 
