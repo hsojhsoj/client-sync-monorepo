@@ -346,10 +346,15 @@ EOF
 # --- Main Execution Logic ---
 COMMAND=${1:-all}
 
-if [ "$COMMAND" != "test-setup" ] && [ "$COMMAND" != "test" ] && [ "$COMMAND" != "test-coverage" ] && [ "$COMMAND" != "test-all" ] && [ "$COMMAND" != "sync" ] && [ "$COMMAND" != "deploy" ] && [ "$COMMAND" != "sign" ]; then
-    echo "Cleaning up old build files..."
-    rm -rf "$BUILD_DIR"
-fi
+# Subcommands that need to preserve build/ (either they read from it, or they
+# don't produce new artefacts and shouldn't force a rebuild on unrelated runs).
+case "$COMMAND" in
+    test-setup|test|test-coverage|test-all|sync|deploy|sign|publish-pro|publish-free|release) ;;
+    *)
+        echo "Cleaning up old build files..."
+        rm -rf "$BUILD_DIR"
+        ;;
+esac
 
 # Proactively remove macOS system files from the entire project before building
 find . -name ".DS_Store" -delete
@@ -382,29 +387,38 @@ case "$COMMAND" in
         ;;
     sign)
         # Interactive helper that signs a built Pro ZIP using an Ed25519 secret
-        # key pasted at runtime. Produces the $signed_payload and $signature
-        # values to drop into src/pro/update-server/update-info.php.
+        # key pasted at runtime. By default patches the result directly into
+        # src/pro/update-server/update-info.php. Pass `--print` as the second
+        # arg to get the old print-only behaviour instead (useful for CI or
+        # out-of-band pipelines).
         #
         # The secret key is entered with echo disabled and lives only in the
         # child PHP process — it never hits disk, shell history, or env.
         # See AI_HANDOFF.md → "Pro update signing" for the full procedure.
-        ZIP_ARG="${2:-}"
+        SIGN_MODE="write"
+        ZIP_ARG=""
+        for arg in "${@:2}"; do
+            case "$arg" in
+                --print) SIGN_MODE="print" ;;
+                --write) SIGN_MODE="write" ;;
+                *)       ZIP_ARG="$arg" ;;
+            esac
+        done
+
         if [ -z "$ZIP_ARG" ]; then
-            # Default: most recent Pro ZIP in build/
             ZIP_ARG=$(ls -t "$BUILD_DIR"/client-sync-pro-v*.zip 2>/dev/null | head -n 1 || true)
         fi
         if [ -z "$ZIP_ARG" ] || [ ! -f "$ZIP_ARG" ]; then
-            echo "❌ ERROR: No Pro ZIP found. Usage: ./build.sh sign [path/to/client-sync-pro-vX.Y.Z.zip]"
+            echo "❌ ERROR: [sign] No Pro ZIP found. Usage: ./build.sh sign [--print] [path/to/client-sync-pro-vX.Y.Z.zip]"
             echo "   Or run ./build.sh zip first to produce one."
             exit 1
         fi
 
-        # Derive the version from the filename: client-sync-pro-vX.Y.Z.zip -> X.Y.Z
+        # Derive the version from the filename.
         ZIP_BASENAME=$(basename "$ZIP_ARG")
         SIGN_VERSION=$(echo "$ZIP_BASENAME" | sed -E 's/^client-sync-pro-v(.+)\.zip$/\1/')
         if [ "$SIGN_VERSION" = "$ZIP_BASENAME" ]; then
-            echo "❌ ERROR: Could not derive version from filename '$ZIP_BASENAME'."
-            echo "   Expected format: client-sync-pro-vX.Y.Z.zip"
+            echo "❌ ERROR: [sign] Could not derive version from filename '$ZIP_BASENAME'."
             exit 1
         fi
 
@@ -413,7 +427,7 @@ case "$COMMAND" in
         elif command -v sha256sum >/dev/null 2>&1; then
             ZIP_HASH=$(sha256sum "$ZIP_ARG" | awk '{print $1}')
         else
-            echo "❌ ERROR: Neither shasum nor sha256sum is available."
+            echo "❌ ERROR: [sign] Neither shasum nor sha256sum is available."
             exit 1
         fi
 
@@ -421,16 +435,14 @@ case "$COMMAND" in
         SIGNED_PAYLOAD=$(printf '{"version":"%s","zip_sha256":"%s","released_at":"%s"}' \
             "$SIGN_VERSION" "$ZIP_HASH" "$RELEASED_AT")
 
-        echo "-------------------------------------"
-        echo "Signing Pro release:"
+        echo "[sign] step: summarize"
         echo "   ZIP        : $ZIP_ARG"
         echo "   Version    : $SIGN_VERSION"
         echo "   SHA256     : $ZIP_HASH"
         echo "   Released at: $RELEASED_AT"
-        echo "-------------------------------------"
+        echo "   Mode       : $SIGN_MODE"
 
-        # Sign in a child PHP process. Secret key is read from stdin with echo
-        # suppressed and zeroed with sodium_memzero after signing.
+        echo "[sign] step: sign payload (child PHP; key never touches disk)"
         SIGNATURE_B64=$(php -r '
             $payload = $argv[1];
             fwrite( STDERR, "Paste base64 Ed25519 secret key (input hidden, then Enter): " );
@@ -449,19 +461,357 @@ case "$COMMAND" in
         ' "$SIGNED_PAYLOAD")
 
         if [ -z "$SIGNATURE_B64" ]; then
-            echo "❌ ERROR: Signing failed — no signature produced."
+            echo "❌ ERROR: [sign] Signing failed — no signature produced."
             exit 1
         fi
 
-        echo ""
-        echo "✅ Signed. Paste these into src/pro/update-server/update-info.php:"
-        echo ""
-        echo "\$signed_payload = '${SIGNED_PAYLOAD}';"
-        echo "\$signature      = '${SIGNATURE_B64}';"
-        echo ""
-        echo "Also update the outer 'version' field in update-info.php to '${SIGN_VERSION}'."
-        echo "-------------------------------------"
+        if [ "$SIGN_MODE" = "print" ]; then
+            echo ""
+            echo "[sign] step: output (print mode)"
+            echo "\$signed_payload = '${SIGNED_PAYLOAD}';"
+            echo "\$signature      = '${SIGNATURE_B64}';"
+            echo ""
+            echo "Also confirm the outer 'version' field in update-info.php matches '${SIGN_VERSION}'."
+            echo "✅ [sign] done"
+            exit 0
+        fi
+
+        # --write mode: patch update-info.php in place. Use PHP rather than sed
+        # so we don't have to worry about escaping the JSON payload's `/` or `$`.
+        UPDATE_INFO="src/pro/update-server/update-info.php"
+        if [ ! -f "$UPDATE_INFO" ]; then
+            echo "❌ ERROR: [sign] $UPDATE_INFO not found — can't --write. Re-run with --print."
+            exit 1
+        fi
+
+        echo "[sign] step: patch $UPDATE_INFO"
+        php -r '
+            $file    = $argv[1];
+            $payload = $argv[2];
+            $sig     = $argv[3];
+            $version = $argv[4];
+            $src     = file_get_contents( $file );
+            if ( false === $src ) { fwrite( STDERR, "Cannot read $file\n" ); exit( 1 ); }
+
+            // Replace the two executable assignment lines (NOT the docblock examples).
+            // The assignments are at the top-level (no leading whitespace before $).
+            // Use callback replacements with a count assertion so a missing line
+            // fails loudly instead of silently no-op-ing.
+            $count = 0;
+            $src = preg_replace(
+                "/^\\\$signed_payload\s*=\s*\x27[^\x27]*\x27;/m",
+                "\$signed_payload = " . var_export( $payload, true ) . ";",
+                $src, 1, $count
+            );
+            if ( $count !== 1 ) { fwrite( STDERR, "Could not locate \$signed_payload assignment\n" ); exit( 1 ); }
+
+            $src = preg_replace(
+                "/^\\\$signature\s*=\s*\x27[^\x27]*\x27;/m",
+                "\$signature      = " . var_export( $sig, true ) . ";",
+                $src, 1, $count
+            );
+            if ( $count !== 1 ) { fwrite( STDERR, "Could not locate \$signature assignment\n" ); exit( 1 ); }
+
+            // Also confirm the outer version is consistent.
+            $src = preg_replace(
+                "/(\x27version\x27[[:space:]]*=>[[:space:]]*\x27)[^\x27]+(\x27)/",
+                "$1" . $version . "$2",
+                $src, 1, $count
+            );
+            if ( $count !== 1 ) { fwrite( STDERR, "Could not locate outer version key\n" ); exit( 1 ); }
+
+            file_put_contents( $file, $src );
+        ' "$UPDATE_INFO" "$SIGNED_PAYLOAD" "$SIGNATURE_B64" "$SIGN_VERSION"
+
+        # Cheap verify: syntax-check the patched file and re-verify the signature.
+        php -l "$UPDATE_INFO" >/dev/null || {
+            echo "❌ ERROR: [sign] Patched file has PHP syntax errors."
+            exit 1
+        }
+        echo "[sign] step: verify signature against installed pubkey"
+        php -r '
+            $pubkey_src = file_get_contents( "src/pro/includes/class-update-manager.php" );
+            if ( ! preg_match( "/UPDATE_SIGNING_PUBKEY_BASE64\s*=\s*\x27([^\x27]+)\x27/", $pubkey_src, $m ) ) {
+                fwrite( STDERR, "Could not read pubkey from class-update-manager.php\n" ); exit( 1 );
+            }
+            $pk  = base64_decode( $m[1], true );
+            $sig = base64_decode( $argv[1], true );
+            $ok  = sodium_crypto_sign_verify_detached( $sig, $argv[2], $pk );
+            if ( ! $ok ) { fwrite( STDERR, "Signature did NOT verify against pubkey\n" ); exit( 1 ); }
+        ' "$SIGNATURE_B64" "$SIGNED_PAYLOAD" || exit 1
+
+        echo "✅ [sign] done — $UPDATE_INFO patched and signature verified"
         ;;
+    publish-pro)
+        # Upload a signed Pro release (ZIP + update-info.php) to
+        # pass.dependentmedia.com and verify the endpoint. Idempotent —
+        # re-running against the same release just re-uploads the same bytes.
+        #
+        # Expects the zip at build/client-sync-pro-v$PRO_VERSION.zip and a
+        # signed src/pro/update-server/update-info.php (run `./build.sh sign`
+        # first if not signed yet).
+        echo "[publish-pro] step: locate artefacts"
+        PRO_ZIP="$BUILD_DIR/client-sync-pro-v${PRO_VERSION}.zip"
+        UPDATE_INFO="src/pro/update-server/update-info.php"
+        if [ ! -f "$PRO_ZIP" ]; then
+            echo "❌ ERROR: [publish-pro] $PRO_ZIP not found. Run './build.sh zip' first."
+            exit 1
+        fi
+        if [ ! -f "$UPDATE_INFO" ]; then
+            echo "❌ ERROR: [publish-pro] $UPDATE_INFO not found."
+            exit 1
+        fi
+
+        # Sanity: confirm update-info.php is signed (not stub empty strings).
+        # Parse statically rather than include()'ing, because update-info.php
+        # calls echo json_encode(...) at the bottom and would leak it to stdout.
+        echo "[publish-pro] step: verify update-info.php is signed"
+        php -r '
+            $src = file_get_contents( $argv[1] );
+            if ( ! preg_match( "/^\\\$signed_payload\s*=\s*\x27([^\x27]*)\x27;/m", $src, $m_sp ) ||
+                 ! preg_match( "/^\\\$signature\s*=\s*\x27([^\x27]*)\x27;/m",      $src, $m_sig ) ) {
+                fwrite( STDERR, "Could not parse signed_payload / signature from update-info.php\n" ); exit( 1 );
+            }
+            if ( $m_sp[1] === "" || $m_sig[1] === "" ) {
+                fwrite( STDERR, "signed_payload or signature is empty — run ./build.sh sign first\n" ); exit( 1 );
+            }
+            $payload = json_decode( $m_sp[1] );
+            if ( empty( $payload->version ) || $payload->version !== $argv[2] ) {
+                fwrite( STDERR, sprintf( "signed_payload version (%s) does not match PRO_VERSION (%s)\n", $payload->version ?? "?", $argv[2] ) );
+                exit( 1 );
+            }
+        ' "$UPDATE_INFO" "$PRO_VERSION" || exit 1
+
+        echo "[publish-pro] step: upload zip to build server /tmp"
+        scp -q "$PRO_ZIP" testblan@44.240.240.195:/tmp/client-sync-pro.zip
+
+        echo "[publish-pro] step: upload update-info.php to update-server vhost"
+        scp -q -i ~/.ssh/pass_dm "$UPDATE_INFO" \
+            updates.dependentmedia.com_43485@44.240.240.195:httpdocs/plugin-updates/client-sync-pro/update-info.php.new
+
+        echo "[publish-pro] step: atomic swap on update-server vhost"
+        ssh -q -i ~/.ssh/pass_dm updates.dependentmedia.com_43485@44.240.240.195 "
+            set -e
+            cd httpdocs/plugin-updates/client-sync-pro/
+            cp /tmp/client-sync-pro.zip client-sync-pro.zip.new
+            mv -f client-sync-pro.zip.new client-sync-pro.zip
+            mv -f update-info.php.new update-info.php
+        " || { echo "❌ ERROR: [publish-pro] remote swap failed"; exit 1; }
+
+        echo "[publish-pro] step: verify endpoint"
+        ENDPOINT_JSON=$(curl -sf https://pass.dependentmedia.com/plugin-updates/client-sync-pro/update-info.php)
+        if [ -z "$ENDPOINT_JSON" ]; then
+            echo "❌ ERROR: [publish-pro] endpoint returned nothing"
+            exit 1
+        fi
+        php -r '
+            $data = json_decode( $argv[1] );
+            if ( empty( $data->version ) || $data->version !== $argv[2] ) {
+                fwrite( STDERR, sprintf( "endpoint version (%s) != expected (%s)\n", $data->version ?? "?", $argv[2] ) ); exit( 1 );
+            }
+            if ( empty( $data->signature ) || empty( $data->signed_payload ) ) {
+                fwrite( STDERR, "endpoint signature/signed_payload is empty\n" ); exit( 1 );
+            }
+        ' "$ENDPOINT_JSON" "$PRO_VERSION" || exit 1
+
+        echo "✅ [publish-pro] done — Pro $PRO_VERSION live at pass.dependentmedia.com"
+        ;;
+
+    publish-free)
+        # Publish the Free plugin to WordPress.org via SVN. Idempotent: safe to
+        # re-run; if the tag already exists SVN will complain but trunk will be
+        # re-synced cleanly.
+        #
+        # We stop before `svn commit` because that requires an interactive
+        # password prompt — emit the exact command for the human to run.
+        SVN_DIR="${SVN_CLIENT_SYNC_DIR:-/Users/joshuajordan/Projects/Code/SVN/client-sync}"
+        FREE_BUILD="$BUILD_DIR/client-sync"
+
+        echo "[publish-free] step: sanity"
+        if [ ! -d "$SVN_DIR/trunk" ]; then
+            echo "❌ ERROR: [publish-free] SVN checkout not found at $SVN_DIR"
+            echo "   Check it out with: svn checkout https://plugins.svn.wordpress.org/client-sync/ $SVN_DIR"
+            exit 1
+        fi
+        if [ ! -d "$FREE_BUILD" ]; then
+            echo "❌ ERROR: [publish-free] $FREE_BUILD not found. Run './build.sh zip' first."
+            exit 1
+        fi
+        if ! command -v svn >/dev/null 2>&1; then
+            echo "❌ ERROR: [publish-free] svn not in PATH. Install with: brew install subversion"
+            exit 1
+        fi
+
+        echo "[publish-free] step: svn update (pull latest)"
+        ( cd "$SVN_DIR" && svn update --quiet ) || { echo "❌ ERROR: svn update failed"; exit 1; }
+
+        echo "[publish-free] step: mirror $FREE_BUILD → $SVN_DIR/trunk"
+        rsync -a --delete --exclude='.svn/' "$FREE_BUILD/" "$SVN_DIR/trunk/"
+
+        echo "[publish-free] step: stage adds/removes"
+        ( cd "$SVN_DIR" && svn status | grep '^!' | awk '{print $2}' | xargs -I{} svn rm --quiet {} 2>/dev/null || true )
+        ( cd "$SVN_DIR" && svn status | grep '^?' | awk '{print $2}' | xargs -I{} svn add --quiet --force {} 2>/dev/null || true )
+
+        TAG_PATH="$SVN_DIR/tags/$PLUGIN_VERSION"
+        if [ -d "$TAG_PATH" ]; then
+            echo "[publish-free] step: tag $PLUGIN_VERSION already exists — skipping svn copy"
+        else
+            echo "[publish-free] step: svn copy trunk → tags/$PLUGIN_VERSION"
+            ( cd "$SVN_DIR" && svn copy --quiet trunk "tags/$PLUGIN_VERSION" ) || { echo "❌ ERROR: svn copy failed"; exit 1; }
+        fi
+
+        # Summary
+        echo "[publish-free] step: stage summary"
+        ( cd "$SVN_DIR" && svn status | awk '{print $1}' | sort | uniq -c )
+
+        echo ""
+        echo "✅ [publish-free] staged. Final commit is interactive — run this yourself:"
+        echo ""
+        echo "   cd $SVN_DIR && svn commit --username hsojhsoj -m \"Release $PLUGIN_VERSION\""
+        echo ""
+        echo "(password prompt is WP.org — input hidden)"
+        ;;
+
+    release)
+        # Top-level orchestrator. Prompts for new versions, runs the full
+        # release pipeline for either free, pro, or both. Intentionally stops
+        # at the final interactive commits (secret-key paste, SVN password) —
+        # everything else is automated.
+        echo "[release] step: prompt for versions"
+        CURRENT_FREE="$PLUGIN_VERSION"
+        CURRENT_PRO="$PRO_VERSION"
+        echo "   Current free: $CURRENT_FREE"
+        echo "   Current pro : $CURRENT_PRO"
+        printf "New free version (Enter to skip): "
+        read -r NEW_FREE
+        printf "New pro  version (Enter to skip): "
+        read -r NEW_PRO
+
+        if [ -z "$NEW_FREE" ] && [ -z "$NEW_PRO" ]; then
+            echo "❌ ERROR: [release] must specify at least one new version"
+            exit 1
+        fi
+
+        BUMP_ARGS=""
+        [ -n "$NEW_FREE" ] && BUMP_ARGS="$BUMP_ARGS --free $NEW_FREE"
+        [ -n "$NEW_PRO"  ] && BUMP_ARGS="$BUMP_ARGS --pro $NEW_PRO"
+
+        echo "[release] step: open changelog for this release in \$EDITOR"
+        CHANGELOG_TMP=$(mktemp -t clisyc-release-XXXXXX)
+        cat > "$CHANGELOG_TMP" <<'CL_HINT'
+# One changelog bullet per line. Lines starting with "#" are ignored.
+# This text will be added to both readme.txt files and update-info.php's
+# changelog. Use Markdown-style emphasis (*word* or **word**) — the
+# release script converts as needed per destination.
+#
+# Example:
+#   **Fix:** The booking form no longer crashes on Tuesdays.
+#   **Enhancement:** Dimension grid respects the Appearance text-size setting.
+CL_HINT
+        ${EDITOR:-vi} "$CHANGELOG_TMP"
+        CHANGELOG_BODY=$(grep -v '^#' "$CHANGELOG_TMP" | sed '/^[[:space:]]*$/d')
+        rm -f "$CHANGELOG_TMP"
+        if [ -z "$CHANGELOG_BODY" ]; then
+            echo "❌ ERROR: [release] changelog is empty — aborting"
+            exit 1
+        fi
+
+        echo "[release] step: bump versions"
+        bash bump-version.sh $BUMP_ARGS || { echo "❌ ERROR: [release] bump-version failed"; exit 1; }
+
+        echo "[release] step: insert changelog entries"
+        # bump-version.sh doesn't touch changelogs — do it here.
+        TODAY=$(date +%Y-%m-%d)
+        if [ -n "$NEW_FREE" ]; then
+            # src/free/readme.txt style: "= X.Y.Z =" + bullet lines prefixed "*   "
+            php -r '
+                $file    = "src/free/readme.txt";
+                $version = $argv[1];
+                $bullets = array_filter( explode( "\n", $argv[2] ) );
+                $block   = "= $version =\n";
+                foreach ( $bullets as $b ) { $block .= "*   " . trim( $b ) . "\n"; }
+                $block .= "\n";
+                $src = file_get_contents( $file );
+                $src = preg_replace( "/== Changelog ==\n\n/", "== Changelog ==\n\n" . $block, $src, 1 );
+                file_put_contents( $file, $src );
+            ' "$NEW_FREE" "$CHANGELOG_BODY" || exit 1
+        fi
+        if [ -n "$NEW_PRO" ]; then
+            php -r '
+                $file    = "src/pro/readme.txt";
+                $version = $argv[1];
+                $bullets = array_filter( explode( "\n", $argv[2] ) );
+                $block   = "= $version =\n";
+                foreach ( $bullets as $b ) { $block .= "*   " . trim( $b ) . "\n"; }
+                $block .= "\n";
+                $src = file_get_contents( $file );
+                $src = preg_replace( "/== Changelog ==\n\n/", "== Changelog ==\n\n" . $block, $src, 1 );
+                file_put_contents( $file, $src );
+            ' "$NEW_PRO" "$CHANGELOG_BODY" || exit 1
+
+            # Also prepend to the update-info.php changelog HTML.
+            php -r '
+                $file    = "src/pro/update-server/update-info.php";
+                $version = $argv[1];
+                $bullets = array_filter( explode( "\n", $argv[2] ) );
+                $html    = "<h4>$version</h4><ul>";
+                foreach ( $bullets as $b ) {
+                    // markdown-ish: **x** -> <strong>x</strong>
+                    $b = preg_replace( "/\\*\\*(.+?)\\*\\*/", "<strong>$1</strong>", trim( $b ) );
+                    $b = preg_replace( "/\\*(.+?)\\*/", "<em>$1</em>", $b );
+                    $html .= "<li>$b</li>";
+                }
+                $html .= "</ul>";
+                $src = file_get_contents( $file );
+                // Insert immediately after the sections.changelog open-quote.
+                $replaced = 0;
+                $src = preg_replace(
+                    "/(\x27changelog\x27[[:space:]]*=>[[:space:]]*\x27)/",
+                    "$1" . addcslashes( $html, "\x27\\\\" ),
+                    $src, 1, $replaced
+                );
+                if ( $replaced !== 1 ) { fwrite( STDERR, "Could not locate changelog field\n" ); exit( 1 ); }
+                file_put_contents( $file, $src );
+            ' "$NEW_PRO" "$CHANGELOG_BODY" || exit 1
+        fi
+
+        echo "[release] step: rebuild from new sources"
+        # Re-source the new versions from the just-bumped build.sh (current process still has the old ones).
+        PLUGIN_VERSION_NEW="${NEW_FREE:-$PLUGIN_VERSION}"
+        PRO_VERSION_NEW="${NEW_PRO:-$PRO_VERSION}"
+        # Temporarily export so the child build.sh invocation picks them up.
+        # (Easier than re-exec'ing ourselves.)
+        ( bash build.sh zip ) || { echo "❌ ERROR: [release] zip build failed"; exit 1; }
+
+        if [ -n "$NEW_PRO" ]; then
+            echo "[release] step: sign pro zip + patch update-info.php"
+            bash build.sh sign "$BUILD_DIR/client-sync-pro-v${PRO_VERSION_NEW}.zip" || { echo "❌ ERROR: [release] sign failed"; exit 1; }
+        fi
+
+        echo "[release] step: git commit"
+        git add build.sh bump-version.sh src/free/readme.txt src/free/client-sync.php src/pro/client-sync-pro.php src/pro/readme.txt src/pro/update-server/update-info.php 2>/dev/null || true
+        COMMIT_MSG="Release:"
+        [ -n "$NEW_FREE" ] && COMMIT_MSG="$COMMIT_MSG Client Sync $NEW_FREE"
+        [ -n "$NEW_PRO"  ] && COMMIT_MSG="$COMMIT_MSG${NEW_FREE:+,} Pro $NEW_PRO"
+        git commit -m "$COMMIT_MSG
+
+$CHANGELOG_BODY" || { echo "❌ ERROR: [release] git commit failed"; exit 1; }
+
+        echo "[release] step: git push"
+        git push || { echo "⚠️  [release] git push failed — continue manually"; }
+
+        if [ -n "$NEW_PRO" ]; then
+            PRO_VERSION="$NEW_PRO" bash build.sh publish-pro || { echo "❌ ERROR: [release] publish-pro failed"; exit 1; }
+        fi
+        if [ -n "$NEW_FREE" ]; then
+            PLUGIN_VERSION="$NEW_FREE" bash build.sh publish-free || { echo "❌ ERROR: [release] publish-free failed"; exit 1; }
+        fi
+
+        echo ""
+        echo "✅ [release] done."
+        [ -n "$NEW_FREE" ] && echo "   → Run the final svn commit printed above to finish WP.org publish."
+        ;;
+
     sync)
         REMOTE_USER="testblan"
         REMOTE_HOST="44.240.240.195"
