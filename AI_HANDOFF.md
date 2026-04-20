@@ -555,7 +555,7 @@ Managed by `class-menu-manager.php` with a `$desired_order` array controlling su
 
 ## Pro update signing
 
-**Status: soft-launch. The public key constant in `src/pro/includes/class-update-manager.php` is empty, so signature verification is currently SKIPPED and a `Debug_Logger` warning is emitted on each update check. Until the keypair is generated and the public key pasted in, `pass.dependentmedia.com` is an unauthenticated RCE channel into every Pro install. This section is the runbook for closing that gap.**
+**Status (as of 2026-04-20): enforcement LIVE.** The public key is populated in `src/pro/includes/class-update-manager.php`, Pro 1.6.3 is the first signed release, and the update endpoint at `pass.dependentmedia.com` is serving a valid signature. Sites running 1.6.3+ verify every update response; sites still on ≤ 1.6.2 ignore the new fields and will pick up 1.6.3 via the unsigned channel on their next cron check. The soft-launch window originally planned for this section was collapsed because the public key was populated before the first signed release shipped — sites on 1.6.3 are immediately enforcing, not soft-launching.
 
 ### Threat model
 
@@ -636,18 +636,15 @@ sodium_memzero( $sk );
 
 A `sign` subcommand is wired into `build.sh` that walks through steps 1–3 interactively and prints the two values to paste. It never writes the secret key to disk. See `build.sh` for source.
 
-### Transition / soft-launch behaviour
+### Transition behaviour (what actually shipped)
 
-The first signed release must remain installable by the existing (unsigned) client generation — otherwise every site already running ≤ 1.6.2 bricks the moment 1.6.3 ships. The design handles this by construction:
+The design allows for a soft-launch window between "first build with signing code" and "first build that enforces signatures", via an empty `UPDATE_SIGNING_PUBKEY_BASE64` constant. 1.6.3 skipped that window — the pubkey was populated before the release was cut, so 1.6.3 installs enforce immediately. The result:
 
-- **Existing clients (≤ 1.6.2)**: ignore the new `signature` / `signed_payload` fields (they just iterate keys they know about). They install 1.6.3 the old way.
-- **New client (1.6.3+) with empty `UPDATE_SIGNING_PUBKEY_BASE64`**: soft-launch mode — accepts the update and logs a warning via `Debug_Logger`. This is the state the very first 1.6.3 build ships in.
-- **New client (1.6.3+) with a populated public key**: enforces the signature. Any response missing or failing verification is rejected, and the last known-good response (stored in the `clisyc_pro_update_last_good` option) is returned instead.
+- **Existing clients (≤ 1.6.2)**: ignore the new `signature` / `signed_payload` fields; install 1.6.3 via the old TLS-only path. From their next WP update-check cron (up to 12 hours after this release landed on `pass.dependentmedia.com`), they pick up 1.6.3.
+- **Clients running 1.6.3+**: every update response must carry a valid signature over a signed payload whose `zip_sha256` matches the downloaded package. Invalid responses are rejected and the last known-good response (stored in the `clisyc_pro_update_last_good` option) is returned instead. Sites never stop on a failed verify — they stay on their current version.
+- **Soft-launch remains available for future keypair rotation**: if the keypair is ever rotated, new code can ship with an empty pubkey constant as a temporary grace window while the new signature rolls out. Not needed for the initial launch.
 
-Recommended rollout:
-1. Ship 1.6.3 with the public key constant EMPTY and the server `update-info.php` still unsigned. Nothing changes behaviourally; the codepath is inert.
-2. Once ≥ 95% of customer sites have auto-updated to 1.6.3, cut 1.6.4 with the populated public key constant. Sign the 1.6.4 release. Enforcement is now real.
-3. From 1.6.4 onward every release must be signed, or sites running ≥ 1.6.4 will stop updating and fall back to the last-good cached response.
+Every release from 1.6.3 onward must be signed. Unsigned `update-info.php` responses result in sites stalling on whatever version they're currently running.
 
 ### Files involved
 
