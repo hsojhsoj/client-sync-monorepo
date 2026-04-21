@@ -151,6 +151,14 @@ describe('SeatMapPicker', () => {
 
 		render(<SeatMapPicker {...defaultProps} />);
 
+		// With multi-section layouts the legend is gated behind picking a
+		// section first (section overview → seat view). Click into VIP so
+		// the SVG + legend render.
+		await waitFor(() => {
+			expect(screen.getByText('VIP')).toBeInTheDocument();
+		});
+		fireEvent.click(screen.getByText('VIP'));
+
 		await waitFor(() => {
 			expect(screen.getByText('Available')).toBeInTheDocument();
 		});
