@@ -42,6 +42,14 @@ module.exports = {
 			'error',
 			{ properties: 'never', ignoreDestructuring: true },
 		],
+		// Accept `<label><input/></label>` (implicit association via nesting)
+		// alongside `<label htmlFor=...>` (explicit). `depth: 3` lets the
+		// input sit a couple of wrapping divs/spans below the label, which
+		// is how the custom checkbox UI is structured here.
+		'jsx-a11y/label-has-associated-control': [
+			'error',
+			{ assert: 'either', depth: 3 },
+		],
 	},
 	overrides: [
 		...( defaultConfig.overrides || [] ),

@@ -1094,9 +1094,9 @@ const App = () => {
 
 										{ /* Live Clock - Center/Right */ }
 										<div className="clisyc-live-clock-wrapper">
-											<label className="clisyc-clock-label">
+											<div className="clisyc-clock-label">
 												<span>Current Time</span>
-											</label>
+											</div>
 											<div className="clisyc-clock-display">
 												<AnalogClock
 													timezone={ timezone }
