@@ -168,11 +168,14 @@ const FacetedFilterPanel = React.memo(
 														backgroundColor:
 															opt.color ||
 															'#9ca3af',
-														opacity: isChecked
-															? 1
-															: hasSlots
-															? 0.4
-															: 0.2,
+														opacity: ( () => {
+															if ( isChecked ) {
+																return 1;
+															}
+															return hasSlots
+																? 0.4
+																: 0.2;
+														} )(),
 													} }
 												></span>
 												<span className="clisyc-filter-option-text">

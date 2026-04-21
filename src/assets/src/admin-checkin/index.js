@@ -564,11 +564,17 @@ import { Html5Qrcode } from 'html5-qrcode';
 			const checkedInClass = appt.is_checked_in
 				? ' clisyc-checkin-card--checked-in'
 				: '';
-			const statusClass = appt.is_checked_in
-				? 'checked-in'
-				: appt.status === 'publish' || appt.status === 'confirmed'
-				? 'confirmed'
-				: 'pending';
+			let statusClass;
+			if ( appt.is_checked_in ) {
+				statusClass = 'checked-in';
+			} else if (
+				appt.status === 'publish' ||
+				appt.status === 'confirmed'
+			) {
+				statusClass = 'confirmed';
+			} else {
+				statusClass = 'pending';
+			}
 
 			let seatsHtml = '';
 			if ( appt.seat_details && appt.seat_details.length ) {
@@ -797,11 +803,18 @@ import { Html5Qrcode } from 'html5-qrcode';
 				escHtml( seatText ) +
 				'</td>' +
 				'<td><span class="clisyc-checkin-card__status clisyc-checkin-card__status--' +
-				( appt.is_checked_in
-					? 'checked-in'
-					: appt.status === 'publish' || appt.status === 'confirmed'
-					? 'confirmed'
-					: 'pending' ) +
+				( function () {
+					if ( appt.is_checked_in ) {
+						return 'checked-in';
+					}
+					if (
+						appt.status === 'publish' ||
+						appt.status === 'confirmed'
+					) {
+						return 'confirmed';
+					}
+					return 'pending';
+				} )() +
 				'">' +
 				escHtml( appt.status_label ) +
 				'</span></td>' +

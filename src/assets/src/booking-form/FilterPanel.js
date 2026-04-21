@@ -316,14 +316,19 @@ const FilterPanel = React.memo(
 													// Format price hint
 													let priceHint = '';
 													if ( hasPrice ) {
-														const typeLabel =
+														let typeLabel = '';
+														if (
 															meta.calc_type ===
 															'per_night'
-																? '/night'
-																: meta.calc_type ===
-																  'per_hour'
-																? '/hr'
-																: '';
+														) {
+															typeLabel =
+																'/night';
+														} else if (
+															meta.calc_type ===
+															'per_hour'
+														) {
+															typeLabel = '/hr';
+														}
 														priceHint = ` +${ symbol }${ meta.price }${ typeLabel }`;
 													}
 

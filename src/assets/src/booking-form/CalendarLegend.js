@@ -82,35 +82,45 @@ const CalendarLegend = React.memo( ( { showBooked = false } ) => {
 			<div className="clisyc-legend-items">
 				{ visibleItems.map( ( item ) => (
 					<div key={ item.key } className="clisyc-legend-item">
-						{ item.type === 'line' ? (
-							// Current time indicator (red horizontal line)
-							<span
-								className="clisyc-legend-indicator clisyc-legend-line"
-								style={ { backgroundColor: item.bgVar } }
-								aria-hidden="true"
-							/>
-						) : item.type === 'highlight' ? (
-							// Today highlight (background tint on day column)
-							<span
-								className="clisyc-legend-indicator clisyc-legend-highlight"
-								style={ {
-									backgroundColor: item.bgVar,
-									borderColor: item.textVar,
-								} }
-								aria-hidden="true"
-							/>
-						) : (
+						{ ( () => {
+							if ( item.type === 'line' ) {
+								// Current time indicator (red horizontal line)
+								return (
+									<span
+										className="clisyc-legend-indicator clisyc-legend-line"
+										style={ {
+											backgroundColor: item.bgVar,
+										} }
+										aria-hidden="true"
+									/>
+								);
+							}
+							if ( item.type === 'highlight' ) {
+								// Today highlight (background tint on day column)
+								return (
+									<span
+										className="clisyc-legend-indicator clisyc-legend-highlight"
+										style={ {
+											backgroundColor: item.bgVar,
+											borderColor: item.textVar,
+										} }
+										aria-hidden="true"
+									/>
+								);
+							}
 							// Regular slot color (matches calendar event appearance)
-							<span
-								className="clisyc-legend-indicator clisyc-legend-slot"
-								style={ {
-									backgroundColor: item.bgVar,
-									borderColor: item.bgVar,
-									color: item.textVar,
-								} }
-								aria-hidden="true"
-							/>
-						) }
+							return (
+								<span
+									className="clisyc-legend-indicator clisyc-legend-slot"
+									style={ {
+										backgroundColor: item.bgVar,
+										borderColor: item.bgVar,
+										color: item.textVar,
+									} }
+									aria-hidden="true"
+								/>
+							);
+						} )() }
 						<span className="clisyc-legend-label">
 							{ item.label }
 						</span>

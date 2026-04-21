@@ -424,34 +424,43 @@ const NodeEditor = () => {
 					</button>
 				</div>
 
-				{ isLoading ? (
-					<div className="clisyc-loading-spinner">
-						<span className="dashicons dashicons-update spin"></span>
-						<p>Loading graph data...</p>
-					</div>
-				) : nodes.length === 0 ? (
-					<div
-						className="clisyc-empty-state"
-						style={ { textAlign: 'center', padding: '50px' } }
-					>
-						<p>
-							<em>
-								Multiple dimensions with child posts are
-								required for the Relationship Graph to display
-								relationships.
-							</em>
-						</p>
-						<p>
-							Go to the{ ' ' }
-							<a href="?page=clisyc-dimensions&tab=setup">
-								System Setup
-							</a>{ ' ' }
-							tab to add dimensions and create child posts within
-							them.
-						</p>
-					</div>
-				) : (
-					( () => {
+				{ ( () => {
+					if ( isLoading ) {
+						return (
+							<div className="clisyc-loading-spinner">
+								<span className="dashicons dashicons-update spin"></span>
+								<p>Loading graph data...</p>
+							</div>
+						);
+					}
+					if ( nodes.length === 0 ) {
+						return (
+							<div
+								className="clisyc-empty-state"
+								style={ {
+									textAlign: 'center',
+									padding: '50px',
+								} }
+							>
+								<p>
+									<em>
+										Multiple dimensions with child posts are
+										required for the Relationship Graph to
+										display relationships.
+									</em>
+								</p>
+								<p>
+									Go to the{ ' ' }
+									<a href="?page=clisyc-dimensions&tab=setup">
+										System Setup
+									</a>{ ' ' }
+									tab to add dimensions and create child posts
+									within them.
+								</p>
+							</div>
+						);
+					}
+					return ( () => {
 						const uniquePostTypes = new Set(
 							nodes.map( ( node ) => node.data.post_type )
 						);
@@ -507,8 +516,8 @@ const NodeEditor = () => {
 								<Controls showFitView={ false } />
 							</ReactFlow>
 						);
-					} )()
-				) }
+					} )();
+				} )() }
 			</div>
 		</div>
 	);

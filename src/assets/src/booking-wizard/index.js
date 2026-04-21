@@ -523,13 +523,17 @@ const DateStep = ( { selectedDate, onSelect, availableDates, isLoading } ) => {
 		<div className="clisyc-wizard-step-content">
 			<h3 className="clisyc-wizard-step-title">Select a Date</h3>
 			<p className="clisyc-wizard-step-subtitle">
-				{ availableDates === null
-					? 'Choose your preferred appointment date'
-					: hasNoAvailability
-					? 'No available dates found for your selections. Please go back and try different options.'
-					: `${ availableDates.length } date${
-							availableDates.length === 1 ? '' : 's'
-					  } with availability` }
+				{ ( () => {
+					if ( availableDates === null ) {
+						return 'Choose your preferred appointment date';
+					}
+					if ( hasNoAvailability ) {
+						return 'No available dates found for your selections. Please go back and try different options.';
+					}
+					return `${ availableDates.length } date${
+						availableDates.length === 1 ? '' : 's'
+					} with availability`;
+				} )() }
 			</p>
 
 			{ hasNoAvailability ? (
@@ -1818,19 +1822,23 @@ const BookingWizard = ( { config } ) => {
 					onClick={ handleNext }
 					disabled={ ! canProceed() || isSubmitting }
 				>
-					{ steps[ currentStep ].type === 'confirm' ? (
-						isSubmitting ? (
-							<>
-								<SpinnerIcon /> Booking...
-							</>
-						) : (
-							'Confirm Booking'
-						)
-					) : (
-						<>
-							Continue <ChevronRight />
-						</>
-					) }
+					{ ( () => {
+						if ( steps[ currentStep ].type !== 'confirm' ) {
+							return (
+								<>
+									Continue <ChevronRight />
+								</>
+							);
+						}
+						if ( isSubmitting ) {
+							return (
+								<>
+									<SpinnerIcon /> Booking...
+								</>
+							);
+						}
+						return 'Confirm Booking';
+					} )() }
 				</button>
 			</div>
 		</div>
