@@ -7,6 +7,13 @@ const defaultConfig = require( '@wordpress/scripts/config/.eslintrc.js' );
 
 module.exports = {
 	...defaultConfig,
+	env: {
+		...( defaultConfig.env || {} ),
+		// Standard browser globals (localStorage, sessionStorage, alert,
+		// navigator, DOMParser, CSS, ResizeObserver, requestAnimationFrame, …).
+		// wp-scripts' recommended config doesn't enable this by default.
+		browser: true,
+	},
 	rules: {
 		...defaultConfig.rules,
 		// Allow console.warn/error for debugging (but not console.log in production).
