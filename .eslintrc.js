@@ -56,5 +56,19 @@ module.exports = {
 				'testing-library/no-node-access': 'off',
 			},
 		},
+		{
+			// Admin-only tools (check-in console, schedule editor, slot
+			// manager) use alert()/confirm() intentionally for quick
+			// operator feedback — these aren't customer-facing flows where
+			// styled modals would matter. no-alert stays on everywhere else.
+			files: [
+				'src/assets/src/admin-checkin/**/*.js',
+				'src/assets/src/manage-slots/**/*.js',
+				'src/assets/src/schedule-editor/**/*.js',
+			],
+			rules: {
+				'no-alert': 'off',
+			},
+		},
 	],
 };

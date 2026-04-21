@@ -126,11 +126,10 @@ describe( 'CalendarView', () => {
 		);
 
 		// The component should call setNavigateCallback with a function
-		if ( setNavigateCallback.mock.calls.length > 0 ) {
-			expect( typeof setNavigateCallback.mock.calls[ 0 ][ 0 ] ).toBe(
-				'function'
-			);
-		}
+		expect( setNavigateCallback.mock.calls.length ).toBeGreaterThan( 0 );
+		expect( typeof setNavigateCallback.mock.calls[ 0 ][ 0 ] ).toBe(
+			'function'
+		);
 	} );
 
 	it( 'shows loading overlay while fetching slots', () => {

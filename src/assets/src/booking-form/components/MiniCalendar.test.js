@@ -139,12 +139,9 @@ describe( 'MiniCalendar', () => {
 		const otherDays = container.querySelectorAll(
 			'.clisyc-mini-cal-day--other'
 		);
-		if ( otherDays.length > 0 ) {
-			await user.click( otherDays[ 0 ] );
-
-			expect( onDateSelect ).toHaveBeenCalled();
-			// The display month title should have changed
-		}
+		expect( otherDays.length ).toBeGreaterThan( 0 );
+		await user.click( otherDays[ 0 ] );
+		expect( onDateSelect ).toHaveBeenCalled();
 	} );
 
 	it( 'updates display when currentDate prop changes month', () => {

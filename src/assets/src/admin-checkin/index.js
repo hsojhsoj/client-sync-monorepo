@@ -1178,7 +1178,6 @@ import { Html5Qrcode } from 'html5-qrcode';
 
 	$( '#clisyc-scanner-toggle' ).on( 'click', function () {
 		const $container = $( '#clisyc-scanner-container' );
-		const $result = $( '#clisyc-scanner-result' );
 
 		if ( scannerRunning ) {
 			stopScanner();
@@ -1190,6 +1189,7 @@ import { Html5Qrcode } from 'html5-qrcode';
 			return;
 		}
 
+		const $result = $( '#clisyc-scanner-result' );
 		$container.slideDown( 200 );
 		$result.hide();
 		$( this ).html(

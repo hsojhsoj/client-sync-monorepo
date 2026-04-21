@@ -87,11 +87,6 @@ const BookingModal = ( {
 			.catch( () => setResolvedVenueId( 0 ) );
 	}, [ selectedSlot, linkedVenueId, isDateRangeMode ] );
 
-	// Determine if payment is required (WooCommerce or Stripe integration enabled)
-	const paymentRequired = Boolean(
-		wcIntegrationEnabled || stripeIntegrationEnabled
-	);
-
 	// Reset state when modal opens + move focus into modal
 	useEffect( () => {
 		if ( isOpen ) {
@@ -581,6 +576,11 @@ const BookingModal = ( {
 	if ( ! isDateRangeMode && ! selectedSlot ) {
 		return null;
 	}
+
+	// Determine if payment is required (WooCommerce or Stripe integration enabled)
+	const paymentRequired = Boolean(
+		wcIntegrationEnabled || stripeIntegrationEnabled
+	);
 
 	const slotDetails =
 		selectedSlot?.event?.extendedProps?.serviceDetails || {};

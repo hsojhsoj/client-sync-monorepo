@@ -257,15 +257,8 @@ describe( 'App — Timezone', () => {
 	} );
 } );
 
-describe( 'App — Sidebar', () => {
-	it( 'has a sidebar toggle button', async () => {
-		await renderApp();
-		const toggle = document.querySelector( '.clisyc-sidebar-toggle' );
-		if ( toggle ) {
-			expect( toggle ).toBeInTheDocument();
-		}
-	} );
-} );
+// Sidebar-toggle rendering is owned by FilterPanel (which is mocked here).
+// Its coverage lives in FilterPanel.test.js.
 
 describe( 'App — Booking Modal', () => {
 	it( 'does not show booking modal by default', async () => {
