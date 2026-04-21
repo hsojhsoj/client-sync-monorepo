@@ -1,4 +1,8 @@
 {
+    "name": "dependentmedia/client-sync-monorepo",
+    "description": "Client Sync — appointment booking, calendar sync, and availability management for WordPress (Free + Pro).",
+    "license": "proprietary",
+    "type": "wordpress-plugin",
     "require": {
         "google/apiclient": "^2.15",
         "twilio/sdk": "^8.8",
