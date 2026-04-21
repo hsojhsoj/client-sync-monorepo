@@ -103,10 +103,12 @@ class Menu_Manager {
 			'clisyc-calendars',
 			'clisyc-available-slots-list',
 			'---SEPARATOR-1---',
-			'clisyc-dimensions', 
+			'clisyc-dimensions',
 			'---CPT-PLACEHOLDER---', // Dynamic dimensions (Staff/Services) go here
 			'---SEPARATOR-2---',
 			// Pro Items will naturally fall here if registered
+			'clisyc-clients',
+			'clisyc-message-queue',
 			'edit.php?post_type=clisyc_form',
 			'edit.php?post_type=clisyc_member_plan',
 			'clisyc-subscribers',

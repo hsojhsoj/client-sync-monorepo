@@ -1,0 +1,328 @@
+/**
+ * Message Queue — Admin Shared Inbox
+ * Extends clisyc-messaging-admin.css (loaded as dependency).
+ */
+
+/* ── Queue Page ───────────────────────────────────────────────── */
+.clisyc-queue-page {
+	max-width: 1400px;
+}
+
+.clisyc-queue-title-badge {
+	display: inline-block;
+	background: #d63638;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 10px;
+	vertical-align: middle;
+	margin-left: 6px;
+}
+
+/* ── Filter Bar ───────────────────────────────────────────────── */
+.clisyc-queue-filters {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 16px 0;
+	flex-wrap: wrap;
+}
+
+.clisyc-queue-status-filters {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.clisyc-queue-filter-btn {
+	padding: 6px 14px;
+	border: 1px solid #c3c4c7;
+	border-radius: 20px;
+	background: #fff;
+	cursor: pointer;
+	font-size: 13px;
+	transition: all 0.15s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	line-height: 1.4;
+}
+
+.clisyc-queue-filter-btn:hover {
+	border-color: #2271b1;
+	color: #2271b1;
+}
+
+.clisyc-queue-filter-btn.active {
+	background: #2271b1;
+	color: #fff;
+	border-color: #2271b1;
+}
+
+.clisyc-filter-count {
+	display: inline-block;
+	background: rgba(0, 0, 0, 0.08);
+	padding: 1px 7px;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+	min-width: 12px;
+	text-align: center;
+}
+
+.clisyc-queue-filter-btn.active .clisyc-filter-count {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.clisyc-queue-sort select {
+	padding: 6px 28px 6px 10px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	font-size: 13px;
+	background: #fff;
+}
+
+/* ── Two-Column Layout ────────────────────────────────────────── */
+.clisyc-queue-layout {
+	display: grid;
+	grid-template-columns: 420px 1fr;
+	gap: 0;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	min-height: 600px;
+}
+
+.clisyc-queue-list-panel {
+	border-right: 1px solid #e0e0e0;
+	display: flex;
+	flex-direction: column;
+}
+
+.clisyc-queue-list {
+	flex: 1;
+	overflow-y: auto;
+	max-height: calc(100vh - 300px);
+}
+
+/* ── Queue Item ───────────────────────────────────────────────── */
+.clisyc-queue-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 14px 16px;
+	cursor: pointer;
+	border-bottom: 1px solid #f0f0f0;
+	border-left: 3px solid transparent;
+	transition: background 0.15s ease;
+}
+
+.clisyc-queue-item:hover {
+	background: #f0f6fc;
+}
+
+.clisyc-queue-item.active {
+	background: #e8f0fe;
+	border-left-color: #2271b1;
+}
+
+.clisyc-queue-item.status-awaiting_reply {
+	border-left-color: #d63638;
+}
+
+.clisyc-queue-item.active.status-awaiting_reply {
+	border-left-color: #2271b1;
+}
+
+.clisyc-queue-item img {
+	border-radius: 50%;
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+}
+
+.clisyc-queue-item-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.clisyc-queue-item-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 2px;
+}
+
+.clisyc-queue-item-header strong {
+	font-size: 13px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* ── Status Badges ────────────────────────────────────────────── */
+.clisyc-queue-status-badge {
+	display: inline-block;
+	font-size: 10px;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-weight: 600;
+	line-height: 1.3;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+.clisyc-status-awaiting_reply {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+.clisyc-status-open {
+	background: #dbeafe;
+	color: #1e40af;
+}
+
+.clisyc-status-resolved {
+	background: #d1fae5;
+	color: #065f46;
+}
+
+.clisyc-queue-item-subject {
+	font-size: 13px;
+	font-weight: 500;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: #1d2327;
+}
+
+.clisyc-queue-item-preview {
+	font-size: 12px;
+	color: #646970;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-top: 2px;
+}
+
+.clisyc-queue-item-meta {
+	font-size: 11px;
+	color: #646970;
+	margin-top: 4px;
+}
+
+/* ── Detail Panel ─────────────────────────────────────────────── */
+.clisyc-queue-detail-panel {
+	display: flex;
+	flex-direction: column;
+}
+
+.clisyc-queue-thread-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 20px;
+	border-bottom: 1px solid #e0e0e0;
+	background: #f9f9f9;
+	flex-wrap: wrap;
+}
+
+.clisyc-queue-thread-header img {
+	border-radius: 50%;
+	width: 36px;
+	height: 36px;
+	flex-shrink: 0;
+}
+
+.clisyc-queue-thread-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.clisyc-queue-thread-info h3 {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.3;
+}
+
+.clisyc-queue-thread-info h3 a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+.clisyc-queue-thread-info h3 a:hover {
+	text-decoration: underline;
+}
+
+.clisyc-queue-thread-subject {
+	font-size: 12px;
+	color: #646970;
+	margin-top: 2px;
+}
+
+.clisyc-queue-thread-actions {
+	display: flex;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+#clisyc-queue-messages {
+	flex: 1;
+	overflow-y: auto;
+	padding: 20px;
+	max-height: calc(100vh - 420px);
+}
+
+/* ── Pagination ───────────────────────────────────────────────── */
+.clisyc-queue-list-panel .clisyc-pagination {
+	padding: 10px 16px;
+	border-top: 1px solid #e0e0e0;
+	text-align: center;
+}
+
+/* ── Queue Summary in Dashboard Widget ────────────────────────── */
+.clisyc-dashboard-queue-summary {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px 12px;
+	background: #fef3f3;
+	border: 1px solid #f5c6c6;
+	border-radius: 4px;
+	margin: 12px 0 8px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.clisyc-dashboard-queue-summary .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.clisyc-dashboard-queue-summary a {
+	margin-left: auto;
+	white-space: nowrap;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+	.clisyc-queue-layout {
+		grid-template-columns: 1fr;
+	}
+
+	.clisyc-queue-list-panel {
+		border-right: none;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	.clisyc-queue-list {
+		max-height: 300px;
+	}
+
+	#clisyc-queue-messages {
+		max-height: 400px;
+	}
+}

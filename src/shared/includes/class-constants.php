@@ -227,6 +227,22 @@ final class Constants {
 	const OPTION_GLOBAL_BLOCKED_PERIODS  = 'clisyc_global_blocked_periods';
 	const OPTION_CLIENT_LIST_CF_COLUMN   = 'clisyc_client_list_custom_field_column';
 
+	// ── Messaging (Pro) ───────────────────────────────────────────────
+	const OPTION_MESSAGING_ENABLED        = 'clisyc_messaging_enabled';
+	const OPTION_MESSAGING_ROLES_INITIATE = 'clisyc_messaging_roles_initiate';
+	const OPTION_MESSAGING_ROLES_REPLY    = 'clisyc_messaging_roles_reply';
+	const OPTION_MESSAGING_MAX_FILE_SIZE  = 'clisyc_messaging_max_file_size';
+	const OPTION_MESSAGING_ALLOWED_TYPES  = 'clisyc_messaging_allowed_file_types';
+	const OPTION_MESSAGING_REALTIME       = 'clisyc_messaging_realtime_enabled';
+	const OPTION_MESSAGING_RETENTION_DAYS = 'clisyc_messaging_retention_days';
+	const OPTION_MESSAGING_POLL_INTERVAL  = 'clisyc_messaging_poll_interval';
+	const OPTION_MESSAGING_DB_VERSION     = 'clisyc_messaging_db_version';
+
+	// ── Thread Status Values ──────────────────────────────────────────
+	const THREAD_STATUS_OPEN            = 'open';
+	const THREAD_STATUS_AWAITING_REPLY  = 'awaiting_reply';
+	const THREAD_STATUS_RESOLVED        = 'resolved';
+
 	// ── Cron / Maintenance ─────────────────────────────────────────────
 	const ACTION_FREQUENT_MAINTENANCE = 'clisyc_frequent_maintenance_tasks';
 	const OPTION_LAST_MAINTENANCE_TS  = 'clisyc_last_frequent_maintenance_run_timestamp';
@@ -264,6 +280,8 @@ final class Constants {
 	const RATE_LIMIT_TIMELINE                = 30;
 	const RATE_LIMIT_USER_SEARCH             = 20;
 	const RATE_LIMIT_SEAT_HOLD               = 30;
+	const RATE_LIMIT_MESSAGE_SEND            = 10;
+	const RATE_LIMIT_MESSAGE_WINDOW_SECS     = 300;
 
 	// ── Transient TTLs (seconds) ──────────────────────────────────────
 	const TRANSIENT_ACTIVATION_REDIRECT_TTL = 30;
