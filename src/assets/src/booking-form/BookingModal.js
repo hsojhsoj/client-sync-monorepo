@@ -590,6 +590,7 @@ const BookingModal = ( {
 		<div
 			className="clisyc-booking-modal-overlay"
 			onClick={ handleBackdropClick }
+			role="presentation"
 		>
 			<div
 				className="clisyc-booking-modal"

@@ -339,6 +339,14 @@ const TimelineApp = ( { containerId } ) => {
 				<div
 					className="clisyc-timeline-resource-label clisyc-timeline-resource-clickable"
 					onClick={ handleClick }
+					onKeyDown={ ( e ) => {
+						if ( e.key === 'Enter' || e.key === ' ' ) {
+							e.preventDefault();
+							handleClick();
+						}
+					} }
+					role="button"
+					tabIndex={ 0 }
 					title={
 						l10n.clickToEdit || 'Click to edit resource settings'
 					}
@@ -394,10 +402,10 @@ const TimelineApp = ( { containerId } ) => {
 				// Map appointments to FullCalendar events
 				// Use consistent colors from colorSettings (matching the Timeline Key)
 				const events = appointments.map( ( appt ) => {
-					let backgroundColor,
-						borderColor,
-						textColor,
-						classNames = [];
+					let backgroundColor;
+					let borderColor;
+					let textColor;
+					const classNames = [];
 
 					if ( appt.is_blocked ) {
 						// BLOCKED = Red (from settings or default)
@@ -816,11 +824,14 @@ const TimelineApp = ( { containerId } ) => {
 				/>
 			</div>
 
-			{ /* Resize Handle */ }
+			{ /* Resize Handle — drag-only separator, no keyboard resize. */ }
+			{ /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */ }
 			<div
 				className="clisyc-timeline-resize-handle"
 				onMouseDown={ handleResizeStart }
 				onTouchStart={ handleResizeStart }
+				role="separator"
+				aria-orientation="horizontal"
 				title={ l10n.resizeHandle || 'Drag to resize timeline height' }
 			>
 				<div className="clisyc-timeline-resize-grip">

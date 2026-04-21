@@ -433,11 +433,17 @@ const HybridApp = ( { displayOptions: propDisplayOptions = {} } ) => {
 			{ isSmartDateModalOpen && (
 				<div
 					className={ `clisyc-modal-overlay ${ textSizeClass }` }
-					onClick={ () => setIsSmartDateModalOpen( false ) }
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							setIsSmartDateModalOpen( false );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						{ /* Calendar Icon */ }
 						<div className="clisyc-modal-icon">
@@ -492,11 +498,17 @@ const HybridApp = ( { displayOptions: propDisplayOptions = {} } ) => {
 			{ isNoAvailabilityModalOpen && (
 				<div
 					className={ `clisyc-modal-overlay ${ textSizeClass }` }
-					onClick={ () => setIsNoAvailabilityModalOpen( false ) }
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							setIsNoAvailabilityModalOpen( false );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						{ /* Calendar Icon */ }
 						<div className="clisyc-modal-icon">
@@ -733,11 +745,17 @@ const HybridApp = ( { displayOptions: propDisplayOptions = {} } ) => {
 			{ isConfirmationModalOpen && selectedSlot && (
 				<div
 					className="clisyc-hybrid-modal-overlay"
-					onClick={ () => setIsConfirmationModalOpen( false ) }
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							setIsConfirmationModalOpen( false );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-hybrid-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						<form
 							method="post"

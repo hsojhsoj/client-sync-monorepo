@@ -284,6 +284,14 @@ const ScheduleEditorApp = () => {
 							key === activeTemplateKey ? 'active' : ''
 						}` }
 						onClick={ () => handleTemplateSwitch( key ) }
+						onKeyDown={ ( e ) => {
+							if ( e.key === 'Enter' || e.key === ' ' ) {
+								e.preventDefault();
+								handleTemplateSwitch( key );
+							}
+						} }
+						role="tab"
+						tabIndex={ 0 }
 					>
 						Week { key }
 						{ templateKeys.length > 1 && (

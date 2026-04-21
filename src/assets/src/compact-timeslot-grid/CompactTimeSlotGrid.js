@@ -642,6 +642,10 @@ const CompactTimeSlotGrid = ( {
 																new Date(
 																	slot.start
 																);
+															const slotEnd =
+																new Date(
+																	slot.end
+																);
 
 															if (
 																slotStart.getHours() <

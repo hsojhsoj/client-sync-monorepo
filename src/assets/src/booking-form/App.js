@@ -684,17 +684,14 @@ const App = () => {
 			const viewportWidth = window.innerWidth;
 			const tooltipWidth = 220; // Approximate tooltip width
 
-			let x, y;
-
 			// Position to the right by default, left if not enough space
-			if ( rect.right + tooltipWidth + 20 < viewportWidth ) {
-				x = rect.right + 8;
-			} else {
-				x = rect.left - tooltipWidth - 8;
-			}
+			const x =
+				rect.right + tooltipWidth + 20 < viewportWidth
+					? rect.right + 8
+					: rect.left - tooltipWidth - 8;
 
 			// Vertically center on the event
-			y = rect.top + rect.height / 2;
+			const y = rect.top + rect.height / 2;
 
 			dispatch( {
 				type: ActionTypes.SET_TOOLTIP,
@@ -745,16 +742,20 @@ const App = () => {
 			{ isSmartDateModalOpen && ! isDateRangeMode && (
 				<div
 					className={ `clisyc-modal-overlay ${ textSizeClass }` }
-					onClick={ () =>
-						dispatch( {
-							type: ActionTypes.SET_IS_SMART_DATE_MODAL_OPEN,
-							payload: false,
-						} )
-					}
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							dispatch( {
+								type: ActionTypes.SET_IS_SMART_DATE_MODAL_OPEN,
+								payload: false,
+							} );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						<div className="clisyc-modal-icon">
 							<svg
@@ -812,16 +813,20 @@ const App = () => {
 			{ isNoAvailabilityModalOpen && ! isDateRangeMode && (
 				<div
 					className={ `clisyc-modal-overlay ${ textSizeClass }` }
-					onClick={ () =>
-						dispatch( {
-							type: ActionTypes.SET_IS_NO_AVAILABILITY_MODAL_OPEN,
-							payload: false,
-						} )
-					}
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							dispatch( {
+								type: ActionTypes.SET_IS_NO_AVAILABILITY_MODAL_OPEN,
+								payload: false,
+							} );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						<div className="clisyc-modal-icon">
 							<svg

@@ -302,11 +302,17 @@ const NodeEditor = () => {
 			{ showAddModal && (
 				<div
 					className="clisyc-modal-overlay"
-					onClick={ () => setShowAddModal( false ) }
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							setShowAddModal( false );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						<h2>Add New Node</h2>
 						<div className="clisyc-modal-body">

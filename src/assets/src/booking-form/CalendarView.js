@@ -68,7 +68,6 @@ const CalendarView = ( {
 
 	const {
 		calendarOptions = {},
-		availabilityDimensions = {},
 		filterOrder = [],
 		nextAvailableDate,
 		generationLookahead = 30, // Default to 30 days if not set

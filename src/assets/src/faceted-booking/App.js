@@ -454,11 +454,17 @@ const App = () => {
 				bookingMode === 'slot' && (
 					<div
 						className="clisyc-compact-modal-overlay"
-						onClick={ () => setIsConfirmationModalOpen( false ) }
+						onClick={ ( e ) => {
+							if ( e.target === e.currentTarget ) {
+								setIsConfirmationModalOpen( false );
+							}
+						} }
+						role="presentation"
 					>
 						<div
 							className="clisyc-compact-modal-content clisyc-booking-modal"
-							onClick={ ( e ) => e.stopPropagation() }
+							role="dialog"
+							aria-modal="true"
 						>
 							<form
 								method="post"

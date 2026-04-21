@@ -361,11 +361,17 @@ const DateRangeBooking = ( {
 			{ isConfirmationOpen && (
 				<div
 					className="clisyc-compact-modal-overlay"
-					onClick={ () => setIsConfirmationOpen( false ) }
+					onClick={ ( e ) => {
+						if ( e.target === e.currentTarget ) {
+							setIsConfirmationOpen( false );
+						}
+					} }
+					role="presentation"
 				>
 					<div
 						className="clisyc-compact-modal-content"
-						onClick={ ( e ) => e.stopPropagation() }
+						role="dialog"
+						aria-modal="true"
 					>
 						<form
 							method="post"

@@ -289,6 +289,7 @@ const IconPickerModal = ( { isOpen, onClose, onSelect } ) => {
 								key={ iconClass }
 								className="clisyc-icon-picker-item"
 								tabIndex="0"
+								role="button"
 								onClick={ () => onSelect( iconClass ) }
 								onKeyDown={ ( e ) =>
 									e.key === 'Enter' && onSelect( iconClass )

@@ -83,9 +83,9 @@ export function SkeletonTable( { rows = 5, columns = 4 } ) {
 					<SkeletonPulse key={ i } height="16px" width="80%" />
 				) ) }
 			</div>
-			{ Array.from( { length: rows }, ( _, r ) => (
+			{ Array.from( { length: rows }, ( __, r ) => (
 				<div key={ r } className="clisyc-skeleton-table-row">
-					{ Array.from( { length: columns }, ( _, c ) => (
+					{ Array.from( { length: columns }, ( ___, c ) => (
 						<SkeletonPulse
 							key={ c }
 							height="14px"
@@ -121,9 +121,9 @@ export function SkeletonCalendar() {
 				) ) }
 			</div>
 			{ /* Grid cells */ }
-			{ Array.from( { length: 5 }, ( _, r ) => (
+			{ Array.from( { length: 5 }, ( __, r ) => (
 				<div key={ r } className="clisyc-skeleton-calendar-row">
-					{ Array.from( { length: 7 }, ( _, c ) => (
+					{ Array.from( { length: 7 }, ( ___, c ) => (
 						<div
 							key={ c }
 							className="clisyc-skeleton-calendar-cell"

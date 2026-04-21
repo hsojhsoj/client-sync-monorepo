@@ -149,6 +149,11 @@ const StepIndicator = ( { steps, currentStep, onStepClick } ) => {
 				const isCurrent = index === currentStep;
 				const isClickable = index < currentStep;
 
+				const handleStepActivate = () => {
+					if ( isClickable ) {
+						onStepClick( index );
+					}
+				};
 				return (
 					<React.Fragment key={ step.id }>
 						<div
@@ -157,9 +162,15 @@ const StepIndicator = ( { steps, currentStep, onStepClick } ) => {
 							} ${ isCurrent ? 'current' : '' } ${
 								isClickable ? 'clickable' : ''
 							}` }
-							onClick={ () =>
-								isClickable && onStepClick( index )
-							}
+							onClick={ handleStepActivate }
+							onKeyDown={ ( e ) => {
+								if ( e.key === 'Enter' || e.key === ' ' ) {
+									e.preventDefault();
+									handleStepActivate();
+								}
+							} }
+							role={ isClickable ? 'button' : undefined }
+							tabIndex={ isClickable ? 0 : -1 }
 						>
 							<div className="clisyc-wizard-step-number">
 								{ isCompleted ? <CheckIcon /> : index + 1 }
@@ -283,6 +294,14 @@ const DimensionStep = ( {
 							selectedItem?.id === item.id ? 'selected' : ''
 						}` }
 						onClick={ () => onSelect( item ) }
+						onKeyDown={ ( e ) => {
+							if ( e.key === 'Enter' || e.key === ' ' ) {
+								e.preventDefault();
+								onSelect( item );
+							}
+						} }
+						role="button"
+						tabIndex={ 0 }
 					>
 						<div
 							className="clisyc-wizard-dimension-color"
@@ -604,13 +623,31 @@ const DateStep = ( { selectedDate, onSelect, availableDates, isLoading } ) => {
 										}
                                         ${ isSelected ? 'selected' : '' }
                                         ${ isToday ? 'today' : '' }` }
-										onClick={ () =>
-											! isDisabled &&
-											handleDateClick(
-												date,
-												isCurrentMonth
-											)
+										onClick={ () => {
+											if ( ! isDisabled ) {
+												handleDateClick(
+													date,
+													isCurrentMonth
+												);
+											}
+										} }
+										onKeyDown={ ( e ) => {
+											if (
+												! isDisabled &&
+												( e.key === 'Enter' ||
+													e.key === ' ' )
+											) {
+												e.preventDefault();
+												handleDateClick(
+													date,
+													isCurrentMonth
+												);
+											}
+										} }
+										role={
+											isDisabled ? undefined : 'button'
 										}
+										tabIndex={ isDisabled ? -1 : 0 }
 									>
 										{ date.getDate() }
 									</div>
