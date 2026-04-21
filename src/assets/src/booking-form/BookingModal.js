@@ -142,8 +142,7 @@ const BookingModal = ( {
 
 				const first = focusableEls[ 0 ];
 				const last = focusableEls[ focusableEls.length - 1 ];
-				const activeEl =
-					modalRef.current.ownerDocument.activeElement;
+				const activeEl = modalRef.current.ownerDocument.activeElement;
 
 				if ( e.shiftKey ) {
 					if ( activeEl === first ) {
@@ -615,675 +614,732 @@ const BookingModal = ( {
 					<span className="dashicons dashicons-no-alt"></span>
 				</button>
 
-				{ /* Waitlist offer screen */ }
-				{ waitlistOffer && ! submitStatus ? (
-					<div className="clisyc-booking-modal-waitlist-offer">
-						<div
-							className="clisyc-waitlist-icon"
-							style={ {
-								fontSize: '2.5rem',
-								textAlign: 'center',
-								marginBottom: '0.75rem',
-							} }
-						>
-							⏳
-						</div>
-						<h2
-							style={ {
-								textAlign: 'center',
-								margin: '0 0 0.5rem',
-							} }
-						>
-							This Slot is Full
-						</h2>
-						<p
-							style={ {
-								textAlign: 'center',
-								color: '#6b7280',
-								margin: '0 0 1.25rem',
-							} }
-						>
-							Would you like to join the waitlist? You&apos;ll be
-							notified automatically if a spot opens up.
-						</p>
-						<div
-							style={ {
-								background: '#eff6ff',
-								borderRadius: '8px',
-								padding: '1rem',
-								textAlign: 'center',
-								marginBottom: '1.25rem',
-							} }
-						>
-							<div
-								style={ {
-									fontSize: '0.85rem',
-									color: '#6b7280',
-								} }
-							>
-								Your waitlist position
-							</div>
-							<div
-								style={ {
-									fontSize: '1.75rem',
-									fontWeight: '700',
-									color: '#1e40af',
-								} }
-							>
-								#{ waitlistOffer.position }
-							</div>
-						</div>
-						<div className="clisyc-booking-modal-actions">
-							<button
-								type="button"
-								className="clisyc-booking-modal-btn-cancel"
-								onClick={ () => {
-									setWaitlistOffer( null );
-									onClose();
-								} }
-							>
-								No Thanks
-							</button>
-							<button
-								type="button"
-								className="clisyc-booking-modal-btn-confirm"
-								onClick={ handleJoinWaitlist }
-								disabled={ isJoiningWaitlist }
-							>
-								{ isJoiningWaitlist ? (
-									<>
-										<span className="clisyc-btn-spinner"></span>{ ' ' }
-										Joining...
-									</>
-								) : (
-									'Join Waitlist'
-								) }
-							</button>
-						</div>
-					</div>
-				) : submitStatus === 'waitlist_success' ? (
-					<div className="clisyc-booking-modal-success">
-						<div className="clisyc-success-icon">✓</div>
-						<h2>You&apos;re on the Waitlist!</h2>
-						<p>
-							You&apos;re #{ waitlistOffer?.position } on the
-							waitlist. We&apos;ll notify you as soon as a spot
-							opens up.
-						</p>
-						<div
-							className="clisyc-booking-modal-actions"
-							style={ {
-								marginTop: '1.5rem',
-								justifyContent: 'center',
-							} }
-						>
-							<button
-								type="button"
-								className="clisyc-booking-modal-btn-confirm"
-								onClick={ onClose }
-							>
-								Got It
-							</button>
-						</div>
-					</div>
-				) : submitStatus === 'success' ? (
-					<div className="clisyc-booking-modal-success">
-						<div className="clisyc-success-icon">
-							{ paymentRequired ? '🛒' : '✓' }
-						</div>
-						<h2>
-							{ paymentRequired
-								? 'Proceeding to Checkout'
-								: 'Booking Confirmed!' }
-						</h2>
-						<p>
-							{ paymentRequired
-								? `Your ${
-										isDateRangeMode
-											? 'reservation'
-											: 'appointment'
-								  } slot is reserved. Complete payment to confirm your booking.`
-								: `Your ${
-										isDateRangeMode
-											? 'reservation'
-											: 'appointment'
-								  } has been successfully booked.` }
-						</p>
-						<p className="clisyc-redirect-notice">
-							{ paymentRequired
-								? 'Redirecting to checkout...'
-								: 'Redirecting you now...' }
-						</p>
-					</div>
-				) : (
-					<>
-						{ /* Header */ }
-						<div className="clisyc-booking-modal-header">
-							<h2
-								id="clisyc-booking-modal-title"
-								className="clisyc-booking-modal-title"
-							>
-								{ isDateRangeMode
-									? 'Confirm Your Reservation'
-									: 'Confirm Your Booking' }
-							</h2>
-						</div>
-
-						{ /* Booking summary */ }
-						<div className="clisyc-booking-modal-summary">
-							{ isDateRangeMode ? (
-								/* Date Range Summary */
-								<div className="clisyc-date-range-summary">
-									<div className="clisyc-summary-item-name">
-										{ selectedPrimaryItem.label }
-									</div>
-									<div className="clisyc-date-range-details">
-										<div className="clisyc-date-block">
-											<span className="clisyc-date-label">
-												Check-in
-											</span>
-											<span className="clisyc-date-value">
-												{ formatDate(
-													selectedDateRange.startDate
-												) }
-											</span>
-										</div>
-										<div className="clisyc-date-arrow">
-											→
-										</div>
-										<div className="clisyc-date-block">
-											<span className="clisyc-date-label">
-												Check-out
-											</span>
-											<span className="clisyc-date-value">
-												{ formatDate(
-													selectedDateRange.endDate
-												) }
-											</span>
-										</div>
-									</div>
-									<div className="clisyc-stay-summary">
-										<span className="clisyc-nights-count">
-											{ selectedDateRange.nights } night
-											{ selectedDateRange.nights !== 1
-												? 's'
-												: '' }
-										</span>
-									</div>
-								</div>
-							) : (
-								/* Time Slot Summary */
-								<div className="clisyc-slot-summary">
-									<div className="clisyc-booking-modal-datetime">
-										<div className="clisyc-booking-modal-date-icon">
-											<span className="dashicons dashicons-calendar-alt"></span>
-										</div>
-										<div className="clisyc-booking-modal-datetime-text">
-											<div className="clisyc-booking-modal-date">
-												{ selectedSlot.event.start.toLocaleDateString(
-													[],
-													{
-														weekday: 'long',
-														month: 'long',
-														day: 'numeric',
-														year: 'numeric',
-													}
-												) }
-											</div>
-											<div className="clisyc-booking-modal-time">
-												{ selectedSlot.event.start.toLocaleTimeString(
-													[],
-													{
-														hour: 'numeric',
-														minute: '2-digit',
-														hour12: true,
-													}
-												) }
-												{ selectedSlot.durationMinutes && (
-													<span className="clisyc-booking-modal-duration">
-														{ ' ' }
-														·{ ' ' }
-														{
-															selectedSlot.durationMinutes
-														}{ ' ' }
-														min
-													</span>
-												) }
-											</div>
-										</div>
-									</div>
-								</div>
-							) }
-
-							{ /* NEW: Invoice Table / Detailed Charges */ }
-							{ ( basket?.items?.length > 0 ||
-								isCalculatingPrice ) && (
+				{ ( () => {
+					// Top-level submitStatus cascade: waitlist offer ->
+					// waitlist success -> booking success -> default form.
+					if ( waitlistOffer && ! submitStatus ) {
+						return (
+							<div className="clisyc-booking-modal-waitlist-offer">
 								<div
-									className="clisyc-invoice-container"
+									className="clisyc-waitlist-icon"
 									style={ {
-										marginTop: '1rem',
-										borderTop: '1px solid #eee',
-										paddingTop: '1rem',
+										fontSize: '2.5rem',
+										textAlign: 'center',
+										marginBottom: '0.75rem',
 									} }
 								>
-									<h4>Charges</h4>
-
-									{ isCalculatingPrice ? (
-										<p className="clisyc-calculating">
-											<span className="spinner is-active"></span>{ ' ' }
-											Updating price...
-										</p>
-									) : (
-										<table
-											className="clisyc-invoice-table"
-											style={ {
-												width: '100%',
-												borderCollapse: 'collapse',
-											} }
-										>
-											<tbody>
-												{ basket.items.map(
-													( item, idx ) => (
-														<tr
-															key={ idx }
-															style={ {
-																borderBottom:
-																	'1px solid #f0f0f0',
-															} }
-														>
-															<td
-																style={ {
-																	padding:
-																		'6px 0',
-																} }
-															>
-																<strong>
-																	{
-																		item.label
-																	}
-																</strong>
-																{ item.type ===
-																	'fee' && (
-																	<small
-																		style={ {
-																			display:
-																				'block',
-																			color: '#666',
-																		} }
-																	>
-																		{
-																			item.meta
-																		}
-																	</small>
-																) }
-															</td>
-															<td
-																style={ {
-																	textAlign:
-																		'right',
-																	padding:
-																		'6px 0',
-																} }
-															>
-																{
-																	basket.currency
-																}
-																{ parseFloat(
-																	item.price
-																).toFixed( 2 ) }
-															</td>
-														</tr>
-													)
-												) }
-												<tr
-													className="clisyc-invoice-total"
-													style={ {
-														borderTop:
-															'2px solid #ddd',
-														fontSize: '1.1em',
-													} }
-												>
-													<td
-														style={ {
-															padding: '10px 0',
-															fontWeight: 'bold',
-														} }
-													>
-														Total Due
-													</td>
-													<td
-														style={ {
-															padding: '10px 0',
-															fontWeight: 'bold',
-															textAlign: 'right',
-															color: '#16a34a',
-														} }
-													>
-														{ basket.formatted }
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									) }
+									⏳
 								</div>
-							) }
-						</div>
-
-						{ /* Booking details (for slot mode) */ }
-						{ ! isDateRangeMode && (
-							<div className="clisyc-booking-modal-details">
-								{ filterOrder &&
-									filterOrder.map( ( slug ) => {
-										const dim =
-											availabilityDimensions?.[ slug ];
-										const jsKey = slug.replace(
-											'clisyc_',
-											''
-										);
-										const detailName =
-											slotDetails[ `${ jsKey }_name` ];
-										const detailColor =
-											slotDetails[ `${ jsKey }_color` ];
-
-										if ( ! detailName || ! dim ) {
-											return null;
-										}
-
-										return (
-											<div
-												key={ slug }
-												className="clisyc-booking-modal-detail-row"
-											>
-												{ detailColor && (
-													<span
-														className="clisyc-booking-modal-color-dot"
-														style={ {
-															backgroundColor:
-																detailColor,
-														} }
-													></span>
-												) }
-												<div className="clisyc-booking-modal-detail-content">
-													<span className="clisyc-booking-modal-detail-label">
-														{ dim.label }
-													</span>
-													<span className="clisyc-booking-modal-detail-value">
-														{ detailName }
-													</span>
-												</div>
-											</div>
-										);
-									} ) }
+								<h2
+									style={ {
+										textAlign: 'center',
+										margin: '0 0 0.5rem',
+									} }
+								>
+									This Slot is Full
+								</h2>
+								<p
+									style={ {
+										textAlign: 'center',
+										color: '#6b7280',
+										margin: '0 0 1.25rem',
+									} }
+								>
+									Would you like to join the waitlist?
+									You&apos;ll be notified automatically if a
+									spot opens up.
+								</p>
+								<div
+									style={ {
+										background: '#eff6ff',
+										borderRadius: '8px',
+										padding: '1rem',
+										textAlign: 'center',
+										marginBottom: '1.25rem',
+									} }
+								>
+									<div
+										style={ {
+											fontSize: '0.85rem',
+											color: '#6b7280',
+										} }
+									>
+										Your waitlist position
+									</div>
+									<div
+										style={ {
+											fontSize: '1.75rem',
+											fontWeight: '700',
+											color: '#1e40af',
+										} }
+									>
+										#{ waitlistOffer.position }
+									</div>
+								</div>
+								<div className="clisyc-booking-modal-actions">
+									<button
+										type="button"
+										className="clisyc-booking-modal-btn-cancel"
+										onClick={ () => {
+											setWaitlistOffer( null );
+											onClose();
+										} }
+									>
+										No Thanks
+									</button>
+									<button
+										type="button"
+										className="clisyc-booking-modal-btn-confirm"
+										onClick={ handleJoinWaitlist }
+										disabled={ isJoiningWaitlist }
+									>
+										{ isJoiningWaitlist ? (
+											<>
+												<span className="clisyc-btn-spinner"></span>{ ' ' }
+												Joining...
+											</>
+										) : (
+											'Join Waitlist'
+										) }
+									</button>
+								</div>
 							</div>
-						) }
-
-						{ /* Recurring series options (Pro only, slot mode only) */ }
-						{ ! isDateRangeMode && proRecurringEnabled && (
-							<RecurringOptions
-								isRecurring={ isRecurring }
-								onToggle={ setIsRecurring }
-								frequency={ recurringFrequency }
-								onFrequencyChange={ setRecurringFrequency }
-								count={ recurringCount }
-								onCountChange={ setRecurringCount }
-							/>
-						) }
-
-						{ /* Seat selection (Pro only, when venue is linked) */ }
-						{ effectiveVenueId > 0 && selectedSlot && (
-							<SeatMapPicker
-								venueId={ effectiveVenueId }
-								slotId={
-									selectedSlot.event?.extendedProps
-										?.slot_id || 0
-								}
-								selectedSeats={ selectedSeats }
-								onSeatsChange={ onSeatsChange }
-							/>
-						) }
-
-						{ /* Error message */ }
-						{ /* Error message — aria-live ensures screen readers announce dynamically */ }
-						<div
-							role="alert"
-							aria-live="assertive"
-							aria-atomic="true"
-						>
-							{ submitStatus === 'error' && (
-								<div className="clisyc-booking-modal-error">
-									<span className="dashicons dashicons-warning"></span>
-									{ errorMessage }
+						);
+					}
+					if ( submitStatus === 'waitlist_success' ) {
+						return (
+							<div className="clisyc-booking-modal-success">
+								<div className="clisyc-success-icon">✓</div>
+								<h2>You&apos;re on the Waitlist!</h2>
+								<p>
+									You&apos;re #{ waitlistOffer?.position } on
+									the waitlist. We&apos;ll notify you as soon
+									as a spot opens up.
+								</p>
+								<div
+									className="clisyc-booking-modal-actions"
+									style={ {
+										marginTop: '1.5rem',
+										justifyContent: 'center',
+									} }
+								>
+									<button
+										type="button"
+										className="clisyc-booking-modal-btn-confirm"
+										onClick={ onClose }
+									>
+										Got It
+									</button>
 								</div>
-							) }
-						</div>
-
-						{ /* Form fields */ }
-						<form
-							onSubmit={ handleSubmit }
-							className="clisyc-booking-modal-form"
-						>
-							{ /* Guest fields */ }
-							{ isGuest && (
-								<div className="clisyc-booking-modal-guest-fields">
-									<div className="clisyc-booking-modal-field">
-										<label htmlFor="guest_name">
-											Your Name
-										</label>
-										<input
-											type="text"
-											id="guest_name"
-											value={ guestName }
-											onChange={ ( e ) =>
-												setGuestName( e.target.value )
-											}
-											required
-											placeholder="Enter your name"
-										/>
-									</div>
-									<div className="clisyc-booking-modal-field">
-										<label htmlFor="guest_email">
-											Email Address
-										</label>
-										<input
-											type="email"
-											id="guest_email"
-											value={ guestEmail }
-											onChange={ ( e ) =>
-												setGuestEmail( e.target.value )
-											}
-											required
-											placeholder="you@example.com"
-										/>
-									</div>
+							</div>
+						);
+					}
+					if ( submitStatus === 'success' ) {
+						return (
+							<div className="clisyc-booking-modal-success">
+								<div className="clisyc-success-icon">
+									{ paymentRequired ? '🛒' : '✓' }
 								</div>
-							) }
+								<h2>
+									{ paymentRequired
+										? 'Proceeding to Checkout'
+										: 'Booking Confirmed!' }
+								</h2>
+								<p>
+									{ paymentRequired
+										? `Your ${
+												isDateRangeMode
+													? 'reservation'
+													: 'appointment'
+										  } slot is reserved. Complete payment to confirm your booking.`
+										: `Your ${
+												isDateRangeMode
+													? 'reservation'
+													: 'appointment'
+										  } has been successfully booked.` }
+								</p>
+								<p className="clisyc-redirect-notice">
+									{ paymentRequired
+										? 'Redirecting to checkout...'
+										: 'Redirecting you now...' }
+								</p>
+							</div>
+						);
+					}
+					return (
+						<>
+							{ /* Header */ }
+							<div className="clisyc-booking-modal-header">
+								<h2
+									id="clisyc-booking-modal-title"
+									className="clisyc-booking-modal-title"
+								>
+									{ isDateRangeMode
+										? 'Confirm Your Reservation'
+										: 'Confirm Your Booking' }
+								</h2>
+							</div>
 
-							{ /* Custom fields */ }
-							{ customFieldDefinitions &&
-								customFieldDefinitions.length > 0 && (
-									<div className="clisyc-booking-modal-custom-fields">
-										{ customFieldDefinitions.map(
-											( field ) => (
-												<div
-													key={ field.key }
-													className="clisyc-booking-modal-field"
-												>
-													<label
-														htmlFor={ `custom_${ field.key }` }
-													>
-														{ field.label }
-														{ field.required && (
-															<span className="required">
-																*
-															</span>
-														) }
-													</label>
-													{ field.type ===
-													'textarea' ? (
-														<textarea
-															id={ `custom_${ field.key }` }
-															value={
-																customFieldValues[
-																	field.key
-																] || ''
-															}
-															onChange={ ( e ) =>
-																handleCustomFieldChange(
-																	field.key,
-																	e.target
-																		.value
-																)
-															}
-															required={
-																field.required
-															}
-															placeholder={
-																field.placeholder ||
-																''
-															}
-															rows={ 3 }
-														/>
-													) : field.type ===
-													  'select' ? (
-														<select
-															id={ `custom_${ field.key }` }
-															value={
-																customFieldValues[
-																	field.key
-																] || ''
-															}
-															onChange={ ( e ) =>
-																handleCustomFieldChange(
-																	field.key,
-																	e.target
-																		.value
-																)
-															}
-															required={
-																field.required
-															}
-														>
-															<option value="">
-																Select...
-															</option>
-															{ field.options?.map(
-																( opt ) => (
-																	<option
-																		key={
-																			opt
-																		}
-																		value={
-																			opt
-																		}
-																	>
-																		{ opt }
-																	</option>
-																)
-															) }
-														</select>
-													) : (
-														<input
-															type={
-																field.type ||
-																'text'
-															}
-															id={ `custom_${ field.key }` }
-															value={
-																customFieldValues[
-																	field.key
-																] || ''
-															}
-															onChange={ ( e ) =>
-																handleCustomFieldChange(
-																	field.key,
-																	e.target
-																		.value
-																)
-															}
-															required={
-																field.required
-															}
-															placeholder={
-																field.placeholder ||
-																''
-															}
-														/>
+							{ /* Booking summary */ }
+							<div className="clisyc-booking-modal-summary">
+								{ isDateRangeMode ? (
+									/* Date Range Summary */
+									<div className="clisyc-date-range-summary">
+										<div className="clisyc-summary-item-name">
+											{ selectedPrimaryItem.label }
+										</div>
+										<div className="clisyc-date-range-details">
+											<div className="clisyc-date-block">
+												<span className="clisyc-date-label">
+													Check-in
+												</span>
+												<span className="clisyc-date-value">
+													{ formatDate(
+														selectedDateRange.startDate
+													) }
+												</span>
+											</div>
+											<div className="clisyc-date-arrow">
+												→
+											</div>
+											<div className="clisyc-date-block">
+												<span className="clisyc-date-label">
+													Check-out
+												</span>
+												<span className="clisyc-date-value">
+													{ formatDate(
+														selectedDateRange.endDate
+													) }
+												</span>
+											</div>
+										</div>
+										<div className="clisyc-stay-summary">
+											<span className="clisyc-nights-count">
+												{ selectedDateRange.nights }{ ' ' }
+												night
+												{ selectedDateRange.nights !== 1
+													? 's'
+													: '' }
+											</span>
+										</div>
+									</div>
+								) : (
+									/* Time Slot Summary */
+									<div className="clisyc-slot-summary">
+										<div className="clisyc-booking-modal-datetime">
+											<div className="clisyc-booking-modal-date-icon">
+												<span className="dashicons dashicons-calendar-alt"></span>
+											</div>
+											<div className="clisyc-booking-modal-datetime-text">
+												<div className="clisyc-booking-modal-date">
+													{ selectedSlot.event.start.toLocaleDateString(
+														[],
+														{
+															weekday: 'long',
+															month: 'long',
+															day: 'numeric',
+															year: 'numeric',
+														}
 													) }
 												</div>
-											)
+												<div className="clisyc-booking-modal-time">
+													{ selectedSlot.event.start.toLocaleTimeString(
+														[],
+														{
+															hour: 'numeric',
+															minute: '2-digit',
+															hour12: true,
+														}
+													) }
+													{ selectedSlot.durationMinutes && (
+														<span className="clisyc-booking-modal-duration">
+															{ ' ' }
+															·{ ' ' }
+															{
+																selectedSlot.durationMinutes
+															}{ ' ' }
+															min
+														</span>
+													) }
+												</div>
+											</div>
+										</div>
+									</div>
+								) }
+
+								{ /* NEW: Invoice Table / Detailed Charges */ }
+								{ ( basket?.items?.length > 0 ||
+									isCalculatingPrice ) && (
+									<div
+										className="clisyc-invoice-container"
+										style={ {
+											marginTop: '1rem',
+											borderTop: '1px solid #eee',
+											paddingTop: '1rem',
+										} }
+									>
+										<h4>Charges</h4>
+
+										{ isCalculatingPrice ? (
+											<p className="clisyc-calculating">
+												<span className="spinner is-active"></span>{ ' ' }
+												Updating price...
+											</p>
+										) : (
+											<table
+												className="clisyc-invoice-table"
+												style={ {
+													width: '100%',
+													borderCollapse: 'collapse',
+												} }
+											>
+												<tbody>
+													{ basket.items.map(
+														( item, idx ) => (
+															<tr
+																key={ idx }
+																style={ {
+																	borderBottom:
+																		'1px solid #f0f0f0',
+																} }
+															>
+																<td
+																	style={ {
+																		padding:
+																			'6px 0',
+																	} }
+																>
+																	<strong>
+																		{
+																			item.label
+																		}
+																	</strong>
+																	{ item.type ===
+																		'fee' && (
+																		<small
+																			style={ {
+																				display:
+																					'block',
+																				color: '#666',
+																			} }
+																		>
+																			{
+																				item.meta
+																			}
+																		</small>
+																	) }
+																</td>
+																<td
+																	style={ {
+																		textAlign:
+																			'right',
+																		padding:
+																			'6px 0',
+																	} }
+																>
+																	{
+																		basket.currency
+																	}
+																	{ parseFloat(
+																		item.price
+																	).toFixed(
+																		2
+																	) }
+																</td>
+															</tr>
+														)
+													) }
+													<tr
+														className="clisyc-invoice-total"
+														style={ {
+															borderTop:
+																'2px solid #ddd',
+															fontSize: '1.1em',
+														} }
+													>
+														<td
+															style={ {
+																padding:
+																	'10px 0',
+																fontWeight:
+																	'bold',
+															} }
+														>
+															Total Due
+														</td>
+														<td
+															style={ {
+																padding:
+																	'10px 0',
+																fontWeight:
+																	'bold',
+																textAlign:
+																	'right',
+																color: '#16a34a',
+															} }
+														>
+															{ basket.formatted }
+														</td>
+													</tr>
+												</tbody>
+											</table>
 										) }
 									</div>
 								) }
+							</div>
 
-							{ /* Notes field */ }
-							<div className="clisyc-booking-modal-field">
-								<label htmlFor="booking_notes">
-									{ isDateRangeMode
-										? 'Special Requests (optional)'
-										: 'Notes (optional)' }
-								</label>
-								<textarea
-									id="booking_notes"
-									value={ customFieldValues.notes || '' }
-									onChange={ ( e ) =>
-										handleCustomFieldChange(
-											'notes',
-											e.target.value
-										)
-									}
-									placeholder={
-										isDateRangeMode
-											? 'Any special requests for your stay...'
-											: 'Any special requests or information...'
-									}
-									rows={ 2 }
+							{ /* Booking details (for slot mode) */ }
+							{ ! isDateRangeMode && (
+								<div className="clisyc-booking-modal-details">
+									{ filterOrder &&
+										filterOrder.map( ( slug ) => {
+											const dim =
+												availabilityDimensions?.[
+													slug
+												];
+											const jsKey = slug.replace(
+												'clisyc_',
+												''
+											);
+											const detailName =
+												slotDetails[
+													`${ jsKey }_name`
+												];
+											const detailColor =
+												slotDetails[
+													`${ jsKey }_color`
+												];
+
+											if ( ! detailName || ! dim ) {
+												return null;
+											}
+
+											return (
+												<div
+													key={ slug }
+													className="clisyc-booking-modal-detail-row"
+												>
+													{ detailColor && (
+														<span
+															className="clisyc-booking-modal-color-dot"
+															style={ {
+																backgroundColor:
+																	detailColor,
+															} }
+														></span>
+													) }
+													<div className="clisyc-booking-modal-detail-content">
+														<span className="clisyc-booking-modal-detail-label">
+															{ dim.label }
+														</span>
+														<span className="clisyc-booking-modal-detail-value">
+															{ detailName }
+														</span>
+													</div>
+												</div>
+											);
+										} ) }
+								</div>
+							) }
+
+							{ /* Recurring series options (Pro only, slot mode only) */ }
+							{ ! isDateRangeMode && proRecurringEnabled && (
+								<RecurringOptions
+									isRecurring={ isRecurring }
+									onToggle={ setIsRecurring }
+									frequency={ recurringFrequency }
+									onFrequencyChange={ setRecurringFrequency }
+									count={ recurringCount }
+									onCountChange={ setRecurringCount }
 								/>
+							) }
+
+							{ /* Seat selection (Pro only, when venue is linked) */ }
+							{ effectiveVenueId > 0 && selectedSlot && (
+								<SeatMapPicker
+									venueId={ effectiveVenueId }
+									slotId={
+										selectedSlot.event?.extendedProps
+											?.slot_id || 0
+									}
+									selectedSeats={ selectedSeats }
+									onSeatsChange={ onSeatsChange }
+								/>
+							) }
+
+							{ /* Error message */ }
+							{ /* Error message — aria-live ensures screen readers announce dynamically */ }
+							<div
+								role="alert"
+								aria-live="assertive"
+								aria-atomic="true"
+							>
+								{ submitStatus === 'error' && (
+									<div className="clisyc-booking-modal-error">
+										<span className="dashicons dashicons-warning"></span>
+										{ errorMessage }
+									</div>
+								) }
 							</div>
 
-							{ /* Action buttons */ }
-							<div className="clisyc-booking-modal-actions">
-								<button
-									type="button"
-									className="clisyc-booking-modal-btn-cancel"
-									onClick={ onClose }
-									disabled={ isSubmitting }
-								>
-									Cancel
-								</button>
-								<button
-									type="submit"
-									className="clisyc-booking-modal-btn-confirm"
-									disabled={
-										isSubmitting ||
-										( isGuest &&
-											( ! guestEmail || ! guestName ) )
-									}
-								>
-									{ isSubmitting ? (
-										<>
-											<span className="clisyc-btn-spinner"></span>
-											{ isRecurring
-												? 'Validating Series...'
-												: paymentRequired
-												? 'Processing...'
-												: isDateRangeMode
-												? 'Reserving...'
-												: 'Booking...' }
-										</>
-									) : isRecurring ? (
-										`Book ${ recurringCount } Appointments`
-									) : paymentRequired ? (
-										'Proceed to Checkout'
-									) : isDateRangeMode ? (
-										'Confirm Reservation'
-									) : (
-										'Confirm Booking'
+							{ /* Form fields */ }
+							<form
+								onSubmit={ handleSubmit }
+								className="clisyc-booking-modal-form"
+							>
+								{ /* Guest fields */ }
+								{ isGuest && (
+									<div className="clisyc-booking-modal-guest-fields">
+										<div className="clisyc-booking-modal-field">
+											<label htmlFor="guest_name">
+												Your Name
+											</label>
+											<input
+												type="text"
+												id="guest_name"
+												value={ guestName }
+												onChange={ ( e ) =>
+													setGuestName(
+														e.target.value
+													)
+												}
+												required
+												placeholder="Enter your name"
+											/>
+										</div>
+										<div className="clisyc-booking-modal-field">
+											<label htmlFor="guest_email">
+												Email Address
+											</label>
+											<input
+												type="email"
+												id="guest_email"
+												value={ guestEmail }
+												onChange={ ( e ) =>
+													setGuestEmail(
+														e.target.value
+													)
+												}
+												required
+												placeholder="you@example.com"
+											/>
+										</div>
+									</div>
+								) }
+
+								{ /* Custom fields */ }
+								{ customFieldDefinitions &&
+									customFieldDefinitions.length > 0 && (
+										<div className="clisyc-booking-modal-custom-fields">
+											{ customFieldDefinitions.map(
+												( field ) => (
+													<div
+														key={ field.key }
+														className="clisyc-booking-modal-field"
+													>
+														<label
+															htmlFor={ `custom_${ field.key }` }
+														>
+															{ field.label }
+															{ field.required && (
+																<span className="required">
+																	*
+																</span>
+															) }
+														</label>
+														{ ( () => {
+															const fieldValue =
+																customFieldValues[
+																	field.key
+																] || '';
+															const onFieldChange =
+																( e ) =>
+																	handleCustomFieldChange(
+																		field.key,
+																		e.target
+																			.value
+																	);
+															if (
+																field.type ===
+																'textarea'
+															) {
+																return (
+																	<textarea
+																		id={ `custom_${ field.key }` }
+																		value={
+																			fieldValue
+																		}
+																		onChange={
+																			onFieldChange
+																		}
+																		required={
+																			field.required
+																		}
+																		placeholder={
+																			field.placeholder ||
+																			''
+																		}
+																		rows={
+																			3
+																		}
+																	/>
+																);
+															}
+															if (
+																field.type ===
+																'select'
+															) {
+																return (
+																	<select
+																		id={ `custom_${ field.key }` }
+																		value={
+																			fieldValue
+																		}
+																		onChange={
+																			onFieldChange
+																		}
+																		required={
+																			field.required
+																		}
+																	>
+																		<option value="">
+																			Select...
+																		</option>
+																		{ field.options?.map(
+																			(
+																				opt
+																			) => (
+																				<option
+																					key={
+																						opt
+																					}
+																					value={
+																						opt
+																					}
+																				>
+																					{
+																						opt
+																					}
+																				</option>
+																			)
+																		) }
+																	</select>
+																);
+															}
+															return (
+																<input
+																	type={
+																		field.type ||
+																		'text'
+																	}
+																	id={ `custom_${ field.key }` }
+																	value={
+																		fieldValue
+																	}
+																	onChange={
+																		onFieldChange
+																	}
+																	required={
+																		field.required
+																	}
+																	placeholder={
+																		field.placeholder ||
+																		''
+																	}
+																/>
+															);
+														} )() }
+													</div>
+												)
+											) }
+										</div>
 									) }
-								</button>
-							</div>
-						</form>
-					</>
-				) }
+
+								{ /* Notes field */ }
+								<div className="clisyc-booking-modal-field">
+									<label htmlFor="booking_notes">
+										{ isDateRangeMode
+											? 'Special Requests (optional)'
+											: 'Notes (optional)' }
+									</label>
+									<textarea
+										id="booking_notes"
+										value={ customFieldValues.notes || '' }
+										onChange={ ( e ) =>
+											handleCustomFieldChange(
+												'notes',
+												e.target.value
+											)
+										}
+										placeholder={
+											isDateRangeMode
+												? 'Any special requests for your stay...'
+												: 'Any special requests or information...'
+										}
+										rows={ 2 }
+									/>
+								</div>
+
+								{ /* Action buttons */ }
+								<div className="clisyc-booking-modal-actions">
+									<button
+										type="button"
+										className="clisyc-booking-modal-btn-cancel"
+										onClick={ onClose }
+										disabled={ isSubmitting }
+									>
+										Cancel
+									</button>
+									<button
+										type="submit"
+										className="clisyc-booking-modal-btn-confirm"
+										disabled={
+											isSubmitting ||
+											( isGuest &&
+												( ! guestEmail ||
+													! guestName ) )
+										}
+									>
+										{ ( () => {
+											if ( isSubmitting ) {
+												let submittingLabel;
+												if ( isRecurring ) {
+													submittingLabel =
+														'Validating Series...';
+												} else if ( paymentRequired ) {
+													submittingLabel =
+														'Processing...';
+												} else if ( isDateRangeMode ) {
+													submittingLabel =
+														'Reserving...';
+												} else {
+													submittingLabel =
+														'Booking...';
+												}
+												return (
+													<>
+														<span className="clisyc-btn-spinner"></span>
+														{ submittingLabel }
+													</>
+												);
+											}
+											if ( isRecurring ) {
+												return `Book ${ recurringCount } Appointments`;
+											}
+											if ( paymentRequired ) {
+												return 'Proceed to Checkout';
+											}
+											if ( isDateRangeMode ) {
+												return 'Confirm Reservation';
+											}
+											return 'Confirm Booking';
+										} )() }
+									</button>
+								</div>
+							</form>
+						</>
+					);
+				} )() }
 			</div>
 		</div>
 	);
