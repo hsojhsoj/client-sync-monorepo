@@ -185,14 +185,14 @@ describe( 'CalendarView', () => {
 		const calendarConfig = Calendar.mock.calls[ 0 ][ 1 ];
 
 		// FullCalendar fires datesSet when the view dates change
-		if ( calendarConfig.datesSet ) {
-			act( () => {
-				calendarConfig.datesSet( {
-					start: new Date( '2026-02-21' ),
-					end: new Date( '2026-02-28' ),
-					view: { type: 'timeGridWeek' },
-				} );
+		expect( calendarConfig.datesSet ).toBeInstanceOf( Function );
+		act( () => {
+			calendarConfig.datesSet( {
+				start: new Date( '2026-02-21' ),
+				end: new Date( '2026-02-28' ),
+				view: { type: 'timeGridWeek' },
 			} );
-		}
+		} );
+		expect( onDateChange ).toHaveBeenCalled();
 	} );
 } );

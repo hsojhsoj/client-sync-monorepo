@@ -351,7 +351,6 @@ const NodeEditor = () => {
 									}
 									placeholder="Enter node title..."
 									disabled={ isCreatingNode }
-									autoFocus
 								/>
 							</p>
 						</div>

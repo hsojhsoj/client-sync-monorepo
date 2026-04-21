@@ -5,12 +5,7 @@
  * UPDATED: Grouping logic changed to hour-based blocks rather than exact start times.
  * UPDATED: Added showBooked and showBlocked options, and slot counting for filters.
  */
-import React, {
-	useState,
-	useEffect,
-	useCallback,
-	useRef,
-} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import apiFetch from '@wordpress/api-fetch';
 
 const CompactTimeSlotGrid = ( {
@@ -878,7 +873,13 @@ const CompactTimeSlotGrid = ( {
 			{ isModalOpen && (
 				<div
 					className="clisyc-compact-modal-overlay"
-					onClick={ handleModalClose }
+					onClick={ ( e ) => {
+						// Close only when the click lands on the overlay itself,
+						// not on the dialog content bubbling up.
+						if ( e.target === e.currentTarget ) {
+							handleModalClose();
+						}
+					} }
 					role="presentation"
 				>
 					<div
@@ -887,7 +888,6 @@ const CompactTimeSlotGrid = ( {
 						role="dialog"
 						aria-modal="true"
 						aria-label={ `Select a time slot for ${ modalData.time }` }
-						onClick={ ( e ) => e.stopPropagation() }
 					>
 						<h3 id="clisyc-compact-modal-title">
 							Select an option for{ ' ' }

@@ -3,12 +3,7 @@
  * Tests for the SeatMapPicker interactive SVG seat selection component.
  */
 import React from 'react';
-import {
-	render,
-	screen,
-	waitFor,
-	fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import SeatMapPicker from './SeatMapPicker';
 
 import apiFetch from '@wordpress/api-fetch';

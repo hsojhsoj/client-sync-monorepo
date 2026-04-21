@@ -316,20 +316,17 @@ const ScheduleEditorApp = () => {
 						scheduleData.templates?.[ activeTemplateKey ]?.[ index ]
 							?.slots?.length > 0;
 					return (
-						<a
+						<button
 							key={ index }
-							href="#"
+							type="button"
 							className={ `nav-tab clisyc-day-tab ${
 								index === activeDayIndex ? 'nav-tab-active' : ''
 							} ${ hasSlots ? 'has-slots' : 'no-slots' }` }
-							onClick={ ( e ) => {
-								e.preventDefault();
-								handleDaySwitch( index );
-							} }
+							onClick={ () => handleDaySwitch( index ) }
 						>
 							<span className="clisyc-day-tab-indicator"></span>{ ' ' }
 							{ name }
-						</a>
+						</button>
 					);
 				} ) }
 			</nav>
