@@ -66,11 +66,7 @@ class Shortcodes {
 		( new \DependentMedia\ClientSync\Shortcodes\Membership_Plans_Shortcode() )->register();
 
 		// Dimension Grid — auto-lists dimension items with booking links.
-		// Disabled: the Dimension_Grid_Shortcode class file is not yet
-		// tracked in git (src/shared/includes/shortcodes/class-dimension-grid-shortcode.php),
-		// so enabling this crashes PHPUnit bootstrap and the plugin runtime
-		// with "Class ... not found". Re-enable when the class + view land.
-		// ( new \DependentMedia\ClientSync\Shortcodes\Dimension_Grid_Shortcode() )->register();
+		( new \DependentMedia\ClientSync\Shortcodes\Dimension_Grid_Shortcode() )->register();
 	}
 
 	/**

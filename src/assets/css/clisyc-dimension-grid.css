@@ -1,0 +1,204 @@
+/**
+ * File: src/assets/css/clisyc-dimension-grid.css
+ * Styles for the [clisyc_dimension_grid] frontend shortcode cards.
+ * Each card receives --card-accent via inline style for per-item coloring.
+ */
+
+/* ── Grid Layout ── */
+.clisyc-dimension-grid__list {
+	display: grid;
+	gap: 24px;
+	grid-template-columns: repeat(3, 1fr);
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+/* Column overrides */
+.clisyc-dimension-grid--cols-1 .clisyc-dimension-grid__list { grid-template-columns: 1fr; }
+.clisyc-dimension-grid--cols-2 .clisyc-dimension-grid__list { grid-template-columns: repeat(2, 1fr); }
+.clisyc-dimension-grid--cols-4 .clisyc-dimension-grid__list { grid-template-columns: repeat(4, 1fr); }
+.clisyc-dimension-grid--cols-5 .clisyc-dimension-grid__list { grid-template-columns: repeat(5, 1fr); }
+.clisyc-dimension-grid--cols-6 .clisyc-dimension-grid__list { grid-template-columns: repeat(6, 1fr); }
+
+@media (max-width: 960px) {
+	.clisyc-dimension-grid__list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+	.clisyc-dimension-grid__list { grid-template-columns: 1fr; }
+}
+
+/* ── Card ── */
+.clisyc-dimension-card {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 14px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.clisyc-dimension-card:hover {
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	transform: translateY(-3px);
+	border-color: var(--card-accent, var(--clisyc-accent-bg, #3b82f6));
+}
+
+/* ── Card Image ── */
+.clisyc-dimension-card__image {
+	position: relative;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+.clisyc-dimension-card__image a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.clisyc-dimension-card__image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.4s ease;
+}
+.clisyc-dimension-card:hover .clisyc-dimension-card__image img {
+	transform: scale(1.05);
+}
+
+/* Placeholder (no featured image) — tinted by card accent */
+.clisyc-dimension-card__placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--card-accent, #6366f1) 15%, white) 0%,
+		color-mix(in srgb, var(--card-accent, #6366f1) 25%, white) 100%
+	);
+}
+.clisyc-dimension-card__placeholder .dashicons,
+.clisyc-dimension-card__placeholder [class^="fa-"],
+.clisyc-dimension-card__placeholder [class*=" fa-"] {
+	font-size: 48px;
+	width: 48px;
+	height: 48px;
+	color: var(--card-accent, #6366f1);
+	opacity: 0.5;
+}
+
+/* ── Card Body ── */
+.clisyc-dimension-card__body {
+	padding: 1.25rem 1.5rem 1.5rem;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+/* ── Title ── */
+.clisyc-dimension-card__title {
+	font-size: var(--clisyc-font-size-lg, 1.125rem);
+	font-weight: 600;
+	margin: 0 0 0.5rem;
+	color: #1e293b;
+	line-height: 1.3;
+}
+.clisyc-dimension-card__title a {
+	color: inherit;
+	text-decoration: none;
+}
+.clisyc-dimension-card__title a:hover {
+	color: var(--card-accent, #3b82f6);
+}
+
+/* ── Meta (duration, price) ── */
+.clisyc-dimension-card__meta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-size: var(--clisyc-font-size-sm, 0.875rem);
+	color: #64748b;
+	margin-bottom: 0.25rem;
+}
+.clisyc-dimension-card__meta .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	color: #94a3b8;
+}
+.clisyc-dimension-card__price {
+	font-weight: 600;
+	color: #0f172a;
+}
+.clisyc-dimension-card__price .dashicons {
+	color: #10b981;
+}
+
+/* ── Excerpt ── */
+.clisyc-dimension-card__excerpt {
+	color: #64748b;
+	font-size: var(--clisyc-font-size-base, 0.9375rem);
+	line-height: 1.6;
+	margin: 0.75rem 0;
+	flex-grow: 1;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* ── CTA Button ── */
+.clisyc-dimension-card__action {
+	margin-top: auto;
+	padding-top: 1rem;
+}
+.clisyc-dimension-card__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.75rem 1.25rem;
+	background: var(--clisyc-accent-bg, #3b82f6);
+	color: var(--clisyc-accent-text, #fff);
+	border: 2px solid var(--clisyc-accent-bg, #3b82f6);
+	border-radius: 10px;
+	font-size: var(--clisyc-font-size-base, 14px);
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+}
+.clisyc-dimension-card__btn:hover {
+	background: var(--clisyc-accent-hover-bg, #2563eb);
+	border-color: var(--clisyc-accent-hover-bg, #2563eb);
+	color: var(--clisyc-accent-hover-text, #fff);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+}
+.clisyc-dimension-card__btn:active {
+	transform: translateY(0);
+}
+.clisyc-dimension-card__btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+	transition: transform 0.2s ease;
+}
+.clisyc-dimension-card:hover .clisyc-dimension-card__btn .dashicons {
+	transform: translateX(3px);
+}
+
+/* ── No Items Message ── */
+.clisyc-no-items {
+	text-align: center;
+	color: #64748b;
+	padding: 40px 20px;
+	font-size: var(--clisyc-font-size-base, 15px);
+}
