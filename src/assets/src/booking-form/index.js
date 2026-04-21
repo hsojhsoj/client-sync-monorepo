@@ -17,29 +17,31 @@ import './style.css';
 bootstrapApiFetch();
 
 function initReactApp() {
-    const rootEl = document.getElementById('clisyc-booking-form-react-root');
+	const rootEl = document.getElementById( 'clisyc-booking-form-react-root' );
 
-    if (rootEl) {
-        // Check for required data
-        if (!window.clisycBookingFormData) {
-            console.error('[Client Sync] Booking form data not found. The form may not work correctly.');
-        }
+	if ( rootEl ) {
+		// Check for required data
+		if ( ! window.clisycBookingFormData ) {
+			console.error(
+				'[Client Sync] Booking form data not found. The form may not work correctly.'
+			);
+		}
 
-        const root = createRoot(rootEl);
-        root.render(
-            <ErrorBoundary>
-                <BookingProvider>
-                    <App />
-                </BookingProvider>
-            </ErrorBoundary>
-        );
-    }
+		const root = createRoot( rootEl );
+		root.render(
+			<ErrorBoundary>
+				<BookingProvider>
+					<App />
+				</BookingProvider>
+			</ErrorBoundary>
+		);
+	}
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initReactApp);
+if ( document.readyState === 'loading' ) {
+	document.addEventListener( 'DOMContentLoaded', initReactApp );
 } else {
-    // DOM is already ready
-    setTimeout(initReactApp, 0);
+	// DOM is already ready
+	setTimeout( initReactApp, 0 );
 }

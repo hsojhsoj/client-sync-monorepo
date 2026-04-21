@@ -8,18 +8,18 @@ import App from './App';
 import './style.css';
 
 function initNodeEditor() {
-    const rootEl = document.getElementById('clisyc-node-editor-root');
+	const rootEl = document.getElementById( 'clisyc-node-editor-root' );
 
-    if (rootEl && !rootEl.getAttribute('data-clisyc-editor-initialized')) {
-        rootEl.setAttribute('data-clisyc-editor-initialized', 'true');
-        
-        const root = createRoot(rootEl);
-        root.render(<App />);
-    }
+	if ( rootEl && ! rootEl.getAttribute( 'data-clisyc-editor-initialized' ) ) {
+		rootEl.setAttribute( 'data-clisyc-editor-initialized', 'true' );
+
+		const root = createRoot( rootEl );
+		root.render( <App /> );
+	}
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNodeEditor);
+if ( document.readyState === 'loading' ) {
+	document.addEventListener( 'DOMContentLoaded', initNodeEditor );
 } else {
-    initNodeEditor();
+	initNodeEditor();
 }

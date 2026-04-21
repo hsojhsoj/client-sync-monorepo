@@ -5,7 +5,7 @@
  * appointment detail page. Uses the `data-qr-payload` attribute as
  * the encoded content.
  *
- * @package ClientSync
+ * @package
  */
 import qrcode from 'qrcode-generator';
 

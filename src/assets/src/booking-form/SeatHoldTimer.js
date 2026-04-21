@@ -8,13 +8,22 @@ import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 
-export default function SeatHoldTimer( { venueId, slotId, sessionToken, expiresIn, onExpired, onRefreshed } ) {
+export default function SeatHoldTimer( {
+	venueId,
+	slotId,
+	sessionToken,
+	expiresIn,
+	onExpired,
+	onRefreshed,
+} ) {
 	const [ secondsLeft, setSecondsLeft ] = useState( expiresIn || 300 );
 	const refreshedRef = useRef( false );
 	const intervalRef = useRef( null );
 
 	const refreshHolds = useCallback( async () => {
-		if ( refreshedRef.current ) return;
+		if ( refreshedRef.current ) {
+			return;
+		}
 		refreshedRef.current = true;
 
 		try {
@@ -31,7 +40,9 @@ export default function SeatHoldTimer( { venueId, slotId, sessionToken, expiresI
 			if ( result.expires_in ) {
 				setSecondsLeft( result.expires_in );
 				refreshedRef.current = false;
-				if ( onRefreshed ) onRefreshed( result.expires_in );
+				if ( onRefreshed ) {
+					onRefreshed( result.expires_in );
+				}
 			}
 		} catch ( err ) {
 			// Refresh failed — timer continues counting down.
@@ -46,7 +57,9 @@ export default function SeatHoldTimer( { venueId, slotId, sessionToken, expiresI
 
 				if ( next <= 0 ) {
 					clearInterval( intervalRef.current );
-					if ( onExpired ) onExpired();
+					if ( onExpired ) {
+						onExpired();
+					}
 					return 0;
 				}
 
@@ -75,10 +88,16 @@ export default function SeatHoldTimer( { venueId, slotId, sessionToken, expiresI
 	const isExpiring = secondsLeft <= 60;
 
 	return (
-		<div className={ `clisyc-hold-timer${ isExpiring ? ' clisyc-hold-timer--expiring' : '' }` }>
+		<div
+			className={ `clisyc-hold-timer${
+				isExpiring ? ' clisyc-hold-timer--expiring' : ''
+			}` }
+		>
 			<span>
 				{ __( 'Seats held for:', 'client-sync-pro' ) }{ ' ' }
-				<strong>{ minutes }:{ String( seconds ).padStart( 2, '0' ) }</strong>
+				<strong>
+					{ minutes }:{ String( seconds ).padStart( 2, '0' ) }
+				</strong>
 			</span>
 		</div>
 	);

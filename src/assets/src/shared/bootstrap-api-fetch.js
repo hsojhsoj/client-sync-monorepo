@@ -32,9 +32,15 @@ export function bootstrapApiFetch() {
 	alreadyBootstrapped = true;
 
 	const nonce =
-		( typeof window !== 'undefined' && window.clisycBookingFormData && window.clisycBookingFormData.restNonce ) ||
-		( typeof window !== 'undefined' && window.clisycHybridBookingData && window.clisycHybridBookingData.restNonce ) ||
-		( typeof window !== 'undefined' && window.clisycFacetedBookingData && window.clisycFacetedBookingData.restNonce ) ||
+		( typeof window !== 'undefined' &&
+			window.clisycBookingFormData &&
+			window.clisycBookingFormData.restNonce ) ||
+		( typeof window !== 'undefined' &&
+			window.clisycHybridBookingData &&
+			window.clisycHybridBookingData.restNonce ) ||
+		( typeof window !== 'undefined' &&
+			window.clisycFacetedBookingData &&
+			window.clisycFacetedBookingData.restNonce ) ||
 		'';
 
 	if ( ! nonce ) {

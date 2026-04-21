@@ -7,66 +7,78 @@
  * (e.g. actual API calls, FullCalendar rendering) are covered by Playwright E2E.
  */
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+	render,
+	screen,
+	fireEvent,
+	waitFor,
+	act,
+} from '@testing-library/react';
 
 // Suppress act() warnings from @wordpress/jest-console — the App component
 // fires async state updates on mount (fetch filter options) that trigger
 // React's act() warning in tests. This is expected behaviour.
 let consoleErrorSpy;
-beforeEach(() => {
-	consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation((...args) => {
-		const msg = typeof args[0] === 'string' ? args[0] : '';
-		if (
-			msg.includes('act(') ||
-			msg.includes('not wrapped in act') ||
-			msg.includes('An update to')
-		) {
-			return; // swallow act() warnings
-		}
-	});
-});
-afterEach(() => {
+beforeEach( () => {
+	consoleErrorSpy = jest
+		.spyOn( console, 'error' )
+		.mockImplementation( ( ...args ) => {
+			const msg = typeof args[ 0 ] === 'string' ? args[ 0 ] : '';
+			if (
+				msg.includes( 'act(' ) ||
+				msg.includes( 'not wrapped in act' ) ||
+				msg.includes( 'An update to' )
+			) {
+				// swallow act() warnings
+			}
+		} );
+} );
+afterEach( () => {
 	consoleErrorSpy.mockRestore();
-});
+} );
 
 // ── Mock child components ────────────────────────────────────
 // Mocking children keeps App tests focused and fast. Each child
 // has its own test suite.
-jest.mock('./CalendarView', () => {
-	const MockCalendarView = (props) => (
-		<div data-testid="calendar-view" data-timezone={props.timezone}>
+jest.mock( './CalendarView', () => {
+	const MockCalendarView = ( props ) => (
+		<div data-testid="calendar-view" data-timezone={ props.timezone }>
 			CalendarView
 		</div>
 	);
 	MockCalendarView.displayName = 'CalendarView';
 	return MockCalendarView;
-});
+} );
 
-jest.mock('./DateRangeCalendar', () => {
-	const MockDateRange = (props) => <div data-testid="date-range-calendar">DateRange</div>;
+jest.mock( './DateRangeCalendar', () => {
+	const MockDateRange = ( props ) => (
+		<div data-testid="date-range-calendar">DateRange</div>
+	);
 	MockDateRange.displayName = 'DateRangeCalendar';
 	return MockDateRange;
-});
+} );
 
-jest.mock('./BookingModal', () => {
-	const MockModal = (props) =>
+jest.mock( './BookingModal', () => {
+	const MockModal = ( props ) =>
 		props.isOpen ? (
 			<div data-testid="booking-modal" role="dialog">
 				BookingModal
-				<button onClick={props.onClose}>Close</button>
+				<button onClick={ props.onClose }>Close</button>
 			</div>
 		) : null;
 	MockModal.displayName = 'BookingModal';
 	return MockModal;
-});
+} );
 
-jest.mock('./FilterPanel', () => {
-	const MockFilterPanel = (props) => (
+jest.mock( './FilterPanel', () => {
+	const MockFilterPanel = ( props ) => (
 		<div data-testid="filter-panel">
 			FilterPanel
 			<button
 				data-testid="mock-filter-click"
-				onClick={() => props.onSelect && props.onSelect('clisyc_service', '42')}
+				onClick={ () =>
+					props.onSelect && props.onSelect( 'clisyc_service', '42' )
+				}
 			>
 				Filter
 			</button>
@@ -74,53 +86,53 @@ jest.mock('./FilterPanel', () => {
 	);
 	MockFilterPanel.displayName = 'FilterPanel';
 	return MockFilterPanel;
-});
+} );
 
-jest.mock('./CalendarLegend', () => {
+jest.mock( './CalendarLegend', () => {
 	const MockLegend = () => <div data-testid="calendar-legend">Legend</div>;
 	MockLegend.displayName = 'CalendarLegend';
 	return MockLegend;
-});
+} );
 
-jest.mock('./CalendarNotice', () => {
+jest.mock( './CalendarNotice', () => {
 	const MockNotice = () => null;
 	MockNotice.displayName = 'CalendarNotice';
 	return MockNotice;
-});
+} );
 
-jest.mock('./TimezoneMap', () => {
+jest.mock( './TimezoneMap', () => {
 	const MockTzMap = () => <div data-testid="timezone-map">TimezoneMap</div>;
 	MockTzMap.getTimezoneOffsetLabel = () => '+00:00';
 	MockTzMap.displayName = 'TimezoneMap';
 	return MockTzMap;
-});
+} );
 
-jest.mock('./components/AnalogClock', () => {
+jest.mock( './components/AnalogClock', () => {
 	const MockClock = () => <div data-testid="analog-clock">Clock</div>;
 	MockClock.displayName = 'AnalogClock';
 	return MockClock;
-});
+} );
 
-jest.mock('./components/EventTooltip', () => {
+jest.mock( './components/EventTooltip', () => {
 	const MockTooltip = () => null;
 	MockTooltip.displayName = 'EventTooltip';
 	return MockTooltip;
-});
+} );
 
-jest.mock('./components/MiniCalendar', () => {
+jest.mock( './components/MiniCalendar', () => {
 	const MockMini = () => <div data-testid="mini-calendar">MiniCalendar</div>;
 	MockMini.displayName = 'MiniCalendar';
 	return MockMini;
-});
+} );
 
-jest.mock('../shared/decode-html-entities', () => (val) => val);
+jest.mock( '../shared/decode-html-entities', () => ( val ) => val );
 
-jest.mock('@wordpress/api-fetch', () =>
-	jest.fn(() =>
-		Promise.resolve({
+jest.mock( '@wordpress/api-fetch', () =>
+	jest.fn( () =>
+		Promise.resolve( {
 			filters: {},
 			events: [],
-		})
+		} )
 	)
 );
 
@@ -128,7 +140,7 @@ jest.mock('@wordpress/api-fetch', () =>
 const defaultWindowData = {
 	restUrl: 'https://test.example.com/wp-json/clisyc/v1/',
 	restNonce: 'test-nonce',
-	filterOrder: ['clisyc_service'],
+	filterOrder: [ 'clisyc_service' ],
 	formNonce: 'form-nonce',
 	availabilityDimensions: {
 		clisyc_service: {
@@ -155,7 +167,7 @@ const defaultWindowData = {
 		startOfWeek: 0,
 		slotDuration: '00:30:00',
 		slotHeightPerHour: 80,
-		enabledViews: ['timeGridWeek'],
+		enabledViews: [ 'timeGridWeek' ],
 	},
 	colorSettings: {},
 	successPageUrl: '/booking-confirmed/',
@@ -173,94 +185,99 @@ const defaultWindowData = {
 let App;
 let BookingProvider;
 
-beforeAll(async () => {
+beforeAll( async () => {
 	window.clisycBookingFormData = { ...defaultWindowData };
 	// Dynamic imports so BookingContext.js reads window.clisycBookingFormData
 	// after it's been set above (bookingConfig is an IIFE frozen at module load).
-	BookingProvider = (await import('./BookingContext')).BookingProvider;
-	App = (await import('./App')).default;
-});
+	BookingProvider = ( await import( './BookingContext' ) ).BookingProvider;
+	App = ( await import( './App' ) ).default;
+} );
 
-afterAll(() => {
+afterAll( () => {
 	delete window.clisycBookingFormData;
-});
+} );
 
-beforeEach(() => {
+beforeEach( () => {
 	window.clisycBookingFormData = { ...defaultWindowData };
 	jest.clearAllMocks();
-});
+} );
 
 /**
  * Helper: render App and wait for the async filter fetch to complete
  * so the component exits its "Loading..." state.
+ * @param extraProps
  */
-async function renderApp(extraProps = {}) {
+async function renderApp( extraProps = {} ) {
 	let result;
-	await act(async () => {
+	await act( async () => {
 		result = render(
 			<BookingProvider>
-				<App {...extraProps} />
+				<App { ...extraProps } />
 			</BookingProvider>
 		);
 		// Allow the apiFetch promise to resolve and state to update
-		await new Promise((r) => setTimeout(r, 0));
-	});
+		await new Promise( ( r ) => setTimeout( r, 0 ) );
+	} );
 	return result;
 }
 
-describe('App — Rendering', () => {
-	it('renders the booking form app container', async () => {
+describe( 'App — Rendering', () => {
+	it( 'renders the booking form app container', async () => {
 		const { container } = await renderApp();
-		expect(container.querySelector('.clisyc-booking-form-app')).toBeInTheDocument();
-	});
+		expect(
+			container.querySelector( '.clisyc-booking-form-app' )
+		).toBeInTheDocument();
+	} );
 
-	it('renders the filter panel', async () => {
+	it( 'renders the filter panel', async () => {
 		await renderApp();
-		expect(screen.getByTestId('filter-panel')).toBeInTheDocument();
-	});
+		expect( screen.getByTestId( 'filter-panel' ) ).toBeInTheDocument();
+	} );
 
-	it('renders the calendar view after filters load', async () => {
+	it( 'renders the calendar view after filters load', async () => {
 		await renderApp();
-		expect(screen.getByTestId('calendar-view')).toBeInTheDocument();
-	});
+		expect( screen.getByTestId( 'calendar-view' ) ).toBeInTheDocument();
+	} );
 
-	it('renders the calendar legend', async () => {
+	it( 'renders the calendar legend', async () => {
 		await renderApp();
-		expect(screen.getByTestId('calendar-legend')).toBeInTheDocument();
-	});
+		expect( screen.getByTestId( 'calendar-legend' ) ).toBeInTheDocument();
+	} );
 
-	it('renders help text', async () => {
+	it( 'renders help text', async () => {
 		await renderApp();
 		expect(
-			screen.getByText(/click on an available time slot/i)
+			screen.getByText( /click on an available time slot/i )
 		).toBeInTheDocument();
-	});
-});
+	} );
+} );
 
 // Date-range mode tests live in App.date-range.test.js because
 // BookingContext.js freezes window.clisycBookingFormData at module load.
 
-describe('App — Timezone', () => {
-	it('passes default timezone to CalendarView', async () => {
+describe( 'App — Timezone', () => {
+	it( 'passes default timezone to CalendarView', async () => {
 		await renderApp();
-		const calendarView = screen.getByTestId('calendar-view');
-		expect(calendarView.getAttribute('data-timezone')).toBe('local');
-	});
-});
+		const calendarView = screen.getByTestId( 'calendar-view' );
+		expect( calendarView.getAttribute( 'data-timezone' ) ).toBe( 'local' );
+	} );
+} );
 
-describe('App — Sidebar', () => {
-	it('has a sidebar toggle button', async () => {
+describe( 'App — Sidebar', () => {
+	it( 'has a sidebar toggle button', async () => {
 		await renderApp();
-		const toggle = document.querySelector('.clisyc-sidebar-toggle');
-		if (toggle) {
-			expect(toggle).toBeInTheDocument();
+		const toggle = document.querySelector( '.clisyc-sidebar-toggle' );
+		if ( toggle ) {
+			expect( toggle ).toBeInTheDocument();
 		}
-	});
-});
+	} );
+} );
 
-describe('App — Booking Modal', () => {
-	it('does not show booking modal by default', async () => {
+describe( 'App — Booking Modal', () => {
+	it( 'does not show booking modal by default', async () => {
 		await renderApp();
-		expect(screen.queryByTestId('booking-modal')).not.toBeInTheDocument();
-	});
-});
+		expect(
+			screen.queryByTestId( 'booking-modal' )
+		).not.toBeInTheDocument();
+	} );
+} );

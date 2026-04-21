@@ -18,22 +18,26 @@ bootstrapApiFetch();
  * We find all of them and render a React app for each.
  */
 function initializeHybridBooking() {
-    // Find all container elements (supports multiple shortcodes on same page)
-    const containers = document.querySelectorAll('.clisyc-hybrid-booking-root');
+	// Find all container elements (supports multiple shortcodes on same page)
+	const containers = document.querySelectorAll(
+		'.clisyc-hybrid-booking-root'
+	);
 
-    if (containers.length === 0) {
-        // Fallback: try the old single-instance ID
-        const legacyContainer = document.getElementById('clisyc-hybrid-booking-root');
-        if (legacyContainer) {
-            renderInstance(legacyContainer);
-        }
-        return;
-    }
+	if ( containers.length === 0 ) {
+		// Fallback: try the old single-instance ID
+		const legacyContainer = document.getElementById(
+			'clisyc-hybrid-booking-root'
+		);
+		if ( legacyContainer ) {
+			renderInstance( legacyContainer );
+		}
+		return;
+	}
 
-    // Render a React app for each container
-    containers.forEach((container) => {
-        renderInstance(container);
-    });
+	// Render a React app for each container
+	containers.forEach( ( container ) => {
+		renderInstance( container );
+	} );
 }
 
 /**
@@ -41,28 +45,32 @@ function initializeHybridBooking() {
  *
  * @param {HTMLElement} container The container element to render into.
  */
-function renderInstance(container) {
-    // Read display options from data attribute
-    const dataAttr = container.getAttribute('data-display-options');
-    let displayOptions = {};
+function renderInstance( container ) {
+	// Read display options from data attribute
+	const dataAttr = container.getAttribute( 'data-display-options' );
+	let displayOptions = {};
 
-    if (dataAttr) {
-        try {
-            displayOptions = JSON.parse(dataAttr);
-        } catch (e) {
-            displayOptions = {};
-        }
-    }
+	if ( dataAttr ) {
+		try {
+			displayOptions = JSON.parse( dataAttr );
+		} catch ( e ) {
+			displayOptions = {};
+		}
+	}
 
-    // Create React root and render
-    const root = createRoot(container);
-    root.render(<ErrorBoundary><HybridApp displayOptions={displayOptions} /></ErrorBoundary>);
+	// Create React root and render
+	const root = createRoot( container );
+	root.render(
+		<ErrorBoundary>
+			<HybridApp displayOptions={ displayOptions } />
+		</ErrorBoundary>
+	);
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeHybridBooking);
+if ( document.readyState === 'loading' ) {
+	document.addEventListener( 'DOMContentLoaded', initializeHybridBooking );
 } else {
-    // DOM already loaded
-    initializeHybridBooking();
+	// DOM already loaded
+	initializeHybridBooking();
 }

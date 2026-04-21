@@ -9,100 +9,136 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 
-const FilterOrderModal = ({ isOpen, onClose, initialOrder, nodes, onUpdate }) => {
-    const [orderedItems, setOrderedItems] = useState([]);
-    const dragItem = useRef(null);
-    const dragOverItem = useRef(null);
+const FilterOrderModal = ( {
+	isOpen,
+	onClose,
+	initialOrder,
+	nodes,
+	onUpdate,
+} ) => {
+	const [ orderedItems, setOrderedItems ] = useState( [] );
+	const dragItem = useRef( null );
+	const dragOverItem = useRef( null );
 
-    useEffect(() => {
-        if (!isOpen) return;
+	useEffect( () => {
+		if ( ! isOpen ) {
+			return;
+		}
 
-        const enabledNodes = nodes.map(node => ({
-            slug: node.id,
-            label: node.data.label,
-            icon: node.data.icon,
-        }));
+		const enabledNodes = nodes.map( ( node ) => ( {
+			slug: node.id,
+			label: node.data.label,
+			icon: node.data.icon,
+		} ) );
 
-        const sorted = [...initialOrder]
-            .map(slug => enabledNodes.find(n => n.slug === slug))
-            .filter(Boolean);
+		const sorted = [ ...initialOrder ]
+			.map( ( slug ) => enabledNodes.find( ( n ) => n.slug === slug ) )
+			.filter( Boolean );
 
-        const unsorted = enabledNodes.filter(n => !initialOrder.includes(n.slug));
+		const unsorted = enabledNodes.filter(
+			( n ) => ! initialOrder.includes( n.slug )
+		);
 
-        setOrderedItems([...sorted, ...unsorted]);
-    }, [initialOrder, nodes, isOpen]);
+		setOrderedItems( [ ...sorted, ...unsorted ] );
+	}, [ initialOrder, nodes, isOpen ] );
 
-    if (!isOpen) {
-        return null;
-    }
+	if ( ! isOpen ) {
+		return null;
+	}
 
-    const handleDragStart = (e, index) => {
-        dragItem.current = index;
-        e.target.classList.add('is-dragging');
-    };
+	const handleDragStart = ( e, index ) => {
+		dragItem.current = index;
+		e.target.classList.add( 'is-dragging' );
+	};
 
-    const handleDragEnter = (e, index) => {
-        dragOverItem.current = index;
-        const listItems = e.target.closest('ul').children;
-        for (let item of listItems) {
-            item.classList.remove('drag-over');
-        }
-        e.target.closest('li').classList.add('drag-over');
-    };
-    
-    const handleDragEnd = (e) => {
-        e.target.classList.remove('is-dragging');
-        const listItems = e.target.closest('ul').children;
-        for (let item of listItems) {
-            item.classList.remove('drag-over');
-        }
+	const handleDragEnter = ( e, index ) => {
+		dragOverItem.current = index;
+		const listItems = e.target.closest( 'ul' ).children;
+		for ( const item of listItems ) {
+			item.classList.remove( 'drag-over' );
+		}
+		e.target.closest( 'li' ).classList.add( 'drag-over' );
+	};
 
-        if (dragItem.current !== null && dragOverItem.current !== null && dragItem.current !== dragOverItem.current) {
-            const newItems = [...orderedItems];
-            const draggedItemContent = newItems.splice(dragItem.current, 1)[0];
-            newItems.splice(dragOverItem.current, 0, draggedItemContent);
-            setOrderedItems(newItems);
-        }
+	const handleDragEnd = ( e ) => {
+		e.target.classList.remove( 'is-dragging' );
+		const listItems = e.target.closest( 'ul' ).children;
+		for ( const item of listItems ) {
+			item.classList.remove( 'drag-over' );
+		}
 
-        dragItem.current = null;
-        dragOverItem.current = null;
-    };
+		if (
+			dragItem.current !== null &&
+			dragOverItem.current !== null &&
+			dragItem.current !== dragOverItem.current
+		) {
+			const newItems = [ ...orderedItems ];
+			const draggedItemContent = newItems.splice(
+				dragItem.current,
+				1
+			)[ 0 ];
+			newItems.splice( dragOverItem.current, 0, draggedItemContent );
+			setOrderedItems( newItems );
+		}
 
-    const handleSave = () => {
-        onUpdate(orderedItems.map(item => item.slug));
-        onClose();
-    };
+		dragItem.current = null;
+		dragOverItem.current = null;
+	};
 
-    // *** REFACTORED: Updated all clisyc- CSS classes ***
-    return (
-        <div className="clisyc-node-modal-overlay">
-            <div className="clisyc-node-modal">
-                <h2>Edit Filter Order</h2>
-                <p>Drag and drop to reorder the filters for the frontend booking calendar.</p>
-                <ul className="clisyc-filter-order-modal-list">
-                    {orderedItems.map((item, index) => (
-                        <li
-                            key={item.slug}
-                            className="clisyc-filter-order-modal-item"
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, index)}
-                            onDragEnter={(e) => handleDragEnter(e, index)}
-                            onDragEnd={handleDragEnd}
-                            onDragOver={(e) => e.preventDefault()}
-                        >
-                            <span className="clisyc-drag-handle"></span>
-                            <span className={`clisyc-node-icon dashicons ${item.icon || 'dashicons-admin-generic'}`}></span>
-                            {item.label}
-                        </li>
-                    ))}
-                </ul>
-                <div className="clisyc-node-modal-actions">
-                    <button type="button" className="button" onClick={onClose}>Cancel</button>
-                    <button type="button" className="button button-primary" onClick={handleSave}>Save Order</button>
-                </div>
-            </div>
-        </div>
-    );
+	const handleSave = () => {
+		onUpdate( orderedItems.map( ( item ) => item.slug ) );
+		onClose();
+	};
+
+	// *** REFACTORED: Updated all clisyc- CSS classes ***
+	return (
+		<div className="clisyc-node-modal-overlay">
+			<div className="clisyc-node-modal">
+				<h2>Edit Filter Order</h2>
+				<p>
+					Drag and drop to reorder the filters for the frontend
+					booking calendar.
+				</p>
+				<ul className="clisyc-filter-order-modal-list">
+					{ orderedItems.map( ( item, index ) => (
+						<li
+							key={ item.slug }
+							className="clisyc-filter-order-modal-item"
+							draggable
+							onDragStart={ ( e ) => handleDragStart( e, index ) }
+							onDragEnter={ ( e ) => handleDragEnter( e, index ) }
+							onDragEnd={ handleDragEnd }
+							onDragOver={ ( e ) => e.preventDefault() }
+						>
+							<span className="clisyc-drag-handle"></span>
+							<span
+								className={ `clisyc-node-icon dashicons ${
+									item.icon || 'dashicons-admin-generic'
+								}` }
+							></span>
+							{ item.label }
+						</li>
+					) ) }
+				</ul>
+				<div className="clisyc-node-modal-actions">
+					<button
+						type="button"
+						className="button"
+						onClick={ onClose }
+					>
+						Cancel
+					</button>
+					<button
+						type="button"
+						className="button button-primary"
+						onClick={ handleSave }
+					>
+						Save Order
+					</button>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default FilterOrderModal;

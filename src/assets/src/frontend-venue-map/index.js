@@ -8,13 +8,13 @@
  * Reads `data-all-seats` and `data-selected-seats` JSON arrays
  * from the #clisyc-venue-map container element.
  *
- * @package ClientSync
+ * @package
  */
 
 /* Seat colour palette — matches booking-form SEAT_COLORS. */
 const COLORS = {
 	selected: { fill: '#3b82f6', stroke: '#1d4ed8' }, // Blue — "your seats"
-	other:    { fill: '#e5e7eb', stroke: '#9ca3af' },  // Grey — dimmed
+	other: { fill: '#e5e7eb', stroke: '#9ca3af' }, // Grey — dimmed
 };
 
 document.addEventListener( 'DOMContentLoaded', () => {
@@ -26,7 +26,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	let allSeatIds, selectedSeatIds;
 
 	try {
-		allSeatIds      = JSON.parse( container.dataset.allSeats || '[]' );
+		allSeatIds = JSON.parse( container.dataset.allSeats || '[]' );
 		selectedSeatIds = JSON.parse( container.dataset.selectedSeats || '[]' );
 	} catch ( e ) {
 		return;
@@ -54,7 +54,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const w = svg.getAttribute( 'width' ) || svg.getBBox().width;
 		const h = svg.getAttribute( 'height' ) || svg.getBBox().height;
 		if ( w && h ) {
-			svg.setAttribute( 'viewBox', `0 0 ${ parseFloat( w ) } ${ parseFloat( h ) }` );
+			svg.setAttribute(
+				'viewBox',
+				`0 0 ${ parseFloat( w ) } ${ parseFloat( h ) }`
+			);
 		}
 	}
 
@@ -65,7 +68,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	svg.style.height = 'auto';
 
 	// Create a <style> element for the pulse animation (keeps DOM clean).
-	const styleEl = document.createElementNS( 'http://www.w3.org/2000/svg', 'style' );
+	const styleEl = document.createElementNS(
+		'http://www.w3.org/2000/svg',
+		'style'
+	);
 	styleEl.textContent = `
 		@keyframes clisyc-seat-pulse {
 			0%, 100% { opacity: 1; }
@@ -85,18 +91,21 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}
 
 		const isSelected = selectedSet.has( id );
-		const colors     = isSelected ? COLORS.selected : COLORS.other;
+		const colors = isSelected ? COLORS.selected : COLORS.other;
 
-		el.style.fill        = colors.fill;
-		el.style.stroke      = colors.stroke;
+		el.style.fill = colors.fill;
+		el.style.stroke = colors.stroke;
 		el.style.strokeWidth = '1.5';
-		el.style.transition  = 'fill 0.2s ease, stroke 0.2s ease';
+		el.style.transition = 'fill 0.2s ease, stroke 0.2s ease';
 
 		if ( isSelected ) {
 			el.classList.add( 'clisyc-seat--selected' );
 
 			// Add an SVG <title> tooltip for accessibility.
-			const title = document.createElementNS( 'http://www.w3.org/2000/svg', 'title' );
+			const title = document.createElementNS(
+				'http://www.w3.org/2000/svg',
+				'title'
+			);
 			title.textContent = el.getAttribute( 'id' ).replace( /-/g, ' ' );
 			el.prepend( title );
 		}
