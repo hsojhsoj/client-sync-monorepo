@@ -1,9 +1,15 @@
 /**
- * E2E Tests — Frontend Booking Form
+ * E2E Tests — Frontend Booking Form (slot-mode)
  *
- * Tests the public-facing booking calendar rendered by [clisyc_appointment_form].
+ * Tests the public-facing booking calendar rendered by the slot-mode
+ * [clisyc_booking_form] / [clisyc_dimensions_faceted_booking] shortcode.
  * Covers: page load, React mount, filter panel, calendar rendering, timezone
  * selector, slot interaction, booking modal, and legend display.
+ *
+ * NOTE: Runs against `/booking-calendar-slot/` on the test site, which must
+ * host the slot-mode shortcode. `/booking-calendar/` is the hybrid booking
+ * form (different component tree, different selectors) and is exercised by
+ * journey/full-booking-journey.spec.js.
  */
 import { test, expect } from '@playwright/test';
 import {
@@ -13,7 +19,7 @@ import {
 	dismissModals,
 } from '../helpers/selectors.js';
 
-const BOOKING_PAGE = '/booking-calendar/';
+const BOOKING_PAGE = '/booking-calendar-slot/';
 
 test.describe('Booking Form — Page Load & Layout', () => {
 	test('renders the React booking app container', async ({ page }) => {

@@ -79,6 +79,17 @@ build.sh               # Master build/deploy/test script
 **Remote project path:** `~/projects/client-sync-monorepo`
 **WP plugins dir:** `/var/www/vhosts/testblankwp.dependentmedia.com/httpdocs/wp-content/plugins/`
 
+### Pages the Playwright E2E suite expects
+
+The nightly E2E (`.github/workflows/e2e-nightly.yml`) hits the test site at
+fixed URLs. Changing the shortcode on any of these pages will break the
+corresponding spec — keep them aligned with the specs.
+
+| URL | Shortcode | Exercised by |
+|---|---|---|
+| `/booking-calendar/` | `[clisyc_hybrid_booking]` | `tests/e2e/frontend-auth/user-booking.spec.js`, `tests/e2e/journey/full-booking-journey.spec.js` |
+| `/booking-calendar-slot/` | `[clisyc_booking_form]` (or `[clisyc_dimensions_faceted_booking]`) | `tests/e2e/frontend/booking-form.spec.js` |
+
 ### Method 1: Using build.sh deploy (recommended — runs everything)
 
 This is the built-in command in `build.sh`. Run it from the LOCAL machine:
