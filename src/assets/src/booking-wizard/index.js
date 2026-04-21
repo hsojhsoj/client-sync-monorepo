@@ -1195,8 +1195,14 @@ const BookingWizard = ( { config } ) => {
 	const [ selectedSeats, setSelectedSeats ] = useState( [] );
 	const [ resolvedVenueId, setResolvedVenueId ] = useState( 0 );
 
-	// Get data from config
-	const dimensions = config?.dimensions || [];
+	// Get data from config. dimensions is memoized so its identity is stable
+	// across renders when config.dimensions hasn't changed — otherwise
+	// downstream useMemo(steps) and useEffects would see a new array every
+	// render (react-hooks/exhaustive-deps).
+	const dimensions = useMemo(
+		() => config?.dimensions || [],
+		[ config?.dimensions ]
+	);
 	const dimensionData = config?.dimensionData || {};
 	const ajaxUrl = config?.ajaxUrl || '/wp-admin/admin-ajax.php';
 	const nonce = config?.nonce || '';
@@ -1274,6 +1280,11 @@ const BookingWizard = ( { config } ) => {
 				fetchAvailableDates();
 			}
 		}
+		// Only re-check when the user moves steps or changes a dimension
+		// selection. Including `dimensions`/`steps` (stable per config) or
+		// `fetchAvailableDates` (re-created on each render) would refetch
+		// on every render.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ currentStep, dimensionSelections ] );
 
 	const fetchAvailableDates = async () => {
@@ -1348,6 +1359,10 @@ const BookingWizard = ( { config } ) => {
 				fetchTimeSlots();
 			}
 		}
+		// Only fetch on date change or dimension selection change.
+		// `dimensions` identity is config-stable; `fetchTimeSlots` is
+		// re-created each render — including either would refetch constantly.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ selectedDate, dimensionSelections ] );
 
 	const fetchTimeSlots = async () => {

@@ -806,6 +806,12 @@ const CalendarView = ( {
 				calendarInstanceRef.current = null;
 			}
 		};
+		// FullCalendar init runs once on mount — subsequent prop changes
+		// are pushed into the calendar imperatively through its own API
+		// (setOption, refetchEvents, gotoDate) in other effects. Including
+		// every prop here would tear down and rebuild the calendar on every
+		// render, losing scroll position and mid-interaction state.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	return (

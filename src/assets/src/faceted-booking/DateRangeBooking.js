@@ -162,6 +162,10 @@ const DateRangeBooking = ( {
 				pickerInstanceRef.current.destroy();
 			}
 		};
+		// validateDateRange is a useCallback that reads the same bookedDates /
+		// stay / day inputs already listed here, so it doesn't add new deps
+		// — listing it would rebuild the picker on every render.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		bookedDates,
 		isLoadingDates,

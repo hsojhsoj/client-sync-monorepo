@@ -242,6 +242,9 @@ export default function SeatMapPicker( {
 				);
 				setLoading( false );
 			} );
+		// Intentionally excludes onSeatsChange: we only want to fetch when
+		// the venue/slot/session change, not on every parent re-render.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ venueId, slotId, sessionToken ] );
 
 	// Handle seat click.
@@ -340,11 +343,14 @@ export default function SeatMapPicker( {
 
 	// Render SVG with seat coloring + section dimming.
 	useEffect( () => {
-		if ( ! svgRef.current || ! svgString || ! layout ) {
+		// Capture ref value for stable use in the cleanup function
+		// (react-hooks/exhaustive-deps — ref.current can drift by unmount).
+		const svgHost = svgRef.current;
+		if ( ! svgHost || ! svgString || ! layout ) {
 			return;
 		}
 
-		svgRef.current.innerHTML = '';
+		svgHost.innerHTML = '';
 		const parser = new DOMParser();
 		const doc = parser.parseFromString( svgString, 'image/svg+xml' );
 		const svgEl = doc.querySelector( 'svg' );
@@ -419,7 +425,7 @@ export default function SeatMapPicker( {
 			}
 		}
 
-		svgRef.current.appendChild( svgEl );
+		svgHost.appendChild( svgEl );
 
 		// Attach click handler via event delegation.
 		const clickHandler = ( e ) => {
@@ -437,12 +443,14 @@ export default function SeatMapPicker( {
 			}
 		};
 
-		svgRef.current.addEventListener( 'click', clickHandler );
+		svgHost.addEventListener( 'click', clickHandler );
 		return () => {
-			if ( svgRef.current ) {
-				svgRef.current.removeEventListener( 'click', clickHandler );
-			}
+			svgHost.removeEventListener( 'click', clickHandler );
 		};
+		// getSeatVisualStatus depends on the same inputs already listed;
+		// excluding it avoids re-running the effect on every render caused
+		// by its function identity changing.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		svgString,
 		layout,
@@ -784,11 +792,14 @@ function OverviewSvgSelector( {
 
 	// Effect 1: Insert SVG into the DOM once. Starts sections in neutral grey.
 	useEffect( () => {
-		if ( ! containerRef.current || ! svgString ) {
+		// Capture ref value for stable use in cleanup
+		// (react-hooks/exhaustive-deps — containerRef.current can drift).
+		const host = containerRef.current;
+		if ( ! host || ! svgString ) {
 			return;
 		}
 
-		containerRef.current.innerHTML = '';
+		host.innerHTML = '';
 		svgInsertedRef.current = false;
 
 		const parser = new DOMParser();
@@ -821,7 +832,7 @@ function OverviewSvgSelector( {
 			el.setAttribute( 'data-section-id', section.id );
 		}
 
-		containerRef.current.appendChild( svgEl );
+		host.appendChild( svgEl );
 		svgInsertedRef.current = true;
 
 		// Click handler via event delegation.
@@ -832,14 +843,9 @@ function OverviewSvgSelector( {
 			}
 		};
 
-		containerRef.current.addEventListener( 'click', clickHandler );
+		host.addEventListener( 'click', clickHandler );
 		return () => {
-			if ( containerRef.current ) {
-				containerRef.current.removeEventListener(
-					'click',
-					clickHandler
-				);
-			}
+			host.removeEventListener( 'click', clickHandler );
 		};
 	}, [ svgString, sections, onSectionSelect ] );
 

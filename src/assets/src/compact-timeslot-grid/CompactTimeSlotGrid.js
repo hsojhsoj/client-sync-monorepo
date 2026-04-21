@@ -73,7 +73,7 @@ const CompactTimeSlotGrid = ( {
 		updateIndicator();
 		const interval = setInterval( updateIndicator, 60000 );
 		return () => clearInterval( interval );
-	}, [ gridStartHour, gridEndHour ] );
+	}, [ gridStartHour, gridEndHour, totalMinutes ] );
 
 	const getSlotStyle = ( start, end ) => {
 		const startMinutes = start.getHours() * 60 + start.getMinutes();

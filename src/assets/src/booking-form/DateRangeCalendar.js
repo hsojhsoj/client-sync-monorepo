@@ -287,6 +287,10 @@ const DateRangeCalendar = ( {
 				calendarInstanceRef.current = null;
 			}
 		};
+		// currentViewRange is consumed inside fetchBookedDates (wrapped in
+		// its own useCallback). Including it here would tear the calendar
+		// down on every view change — we intentionally reuse the instance.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		bookedDates,
 		minStay,

@@ -12,7 +12,7 @@ const MiniCalendar = React.memo( ( { currentDate, onDateSelect } ) => {
 		return new Date( d.getFullYear(), d.getMonth(), 1 );
 	} );
 
-	// Update display month when currentDate changes significantly
+	// Update display month when currentDate changes significantly.
 	useEffect( () => {
 		if ( currentDate ) {
 			const current = new Date( currentDate );
@@ -26,6 +26,10 @@ const MiniCalendar = React.memo( ( { currentDate, onDateSelect } ) => {
 				);
 			}
 		}
+		// Intentionally omits `displayMonth` — including it would loop
+		// because this effect calls setDisplayMonth based on displayMonth.
+		// The effect's job is to sync *from* currentDate *to* displayMonth.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ currentDate ] );
 
 	const goToPrevMonth = () => {
@@ -81,6 +85,9 @@ const MiniCalendar = React.memo( ( { currentDate, onDateSelect } ) => {
 	};
 
 	// Memoize calendar day generation to avoid recalculation on every render.
+	// generateCalendarDays is defined locally and only reads displayMonth, so
+	// displayMonth is the only dep that actually affects the output.
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const days = useMemo( () => generateCalendarDays(), [ displayMonth ] );
 
 	const today = useMemo( () => {

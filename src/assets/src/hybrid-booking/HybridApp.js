@@ -171,9 +171,13 @@ const HybridApp = ( { displayOptions: propDisplayOptions = {} } ) => {
 		[ isMobileView, nextAvailableDate, startOfWeek ]
 	);
 
-	// Regenerate date range when mobile view changes
+	// Regenerate date range when mobile view changes.
 	useEffect( () => {
 		generateDateRange( dateRange.start );
+		// Intentionally omits generateDateRange and dateRange.start:
+		// this effect should only trigger on layout mode flip, not on
+		// every regenerate (which would loop — it sets dateRange).
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ isMobileView ] );
 
 	// Pre-selected filters from [clisyc_dimension_grid] CTA links.
@@ -383,6 +387,12 @@ const HybridApp = ( { displayOptions: propDisplayOptions = {} } ) => {
 				}
 			}
 		},
+		// findFirstAvailableInRange would cycle identity on every render
+		// (it's a useCallback whose deps depend on state this callback
+		// itself can update). Memoizing it upstream wouldn't help; keeping
+		// the stable set of deps here is safe because the callback closes
+		// over the latest state via function scope.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[
 			hasCheckedAvailability,
 			selectedFilters,
