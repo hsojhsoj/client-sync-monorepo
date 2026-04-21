@@ -171,9 +171,13 @@ const defaultWindowData = {
 };
 
 let App;
+let BookingProvider;
 
 beforeAll(async () => {
 	window.clisycBookingFormData = { ...defaultWindowData };
+	// Dynamic imports so BookingContext.js reads window.clisycBookingFormData
+	// after it's been set above (bookingConfig is an IIFE frozen at module load).
+	BookingProvider = (await import('./BookingContext')).BookingProvider;
 	App = (await import('./App')).default;
 });
 
@@ -193,7 +197,11 @@ beforeEach(() => {
 async function renderApp(extraProps = {}) {
 	let result;
 	await act(async () => {
-		result = render(<App {...extraProps} />);
+		result = render(
+			<BookingProvider>
+				<App {...extraProps} />
+			</BookingProvider>
+		);
 		// Allow the apiFetch promise to resolve and state to update
 		await new Promise((r) => setTimeout(r, 0));
 	});
@@ -229,22 +237,8 @@ describe('App — Rendering', () => {
 	});
 });
 
-describe('App — Date Range Mode', () => {
-	it('shows date range help text when bookingMode is date_range', async () => {
-		window.clisycBookingFormData = {
-			...defaultWindowData,
-			bookingMode: 'date_range',
-		};
-
-		const { container } = await renderApp();
-		// In date_range mode, the app shows date range help text
-		expect(
-			screen.getByText(/select your check-in and check-out dates/i)
-		).toBeInTheDocument();
-		// And the container has the date-range-mode class
-		expect(container.querySelector('.clisyc-date-range-mode')).toBeInTheDocument();
-	});
-});
+// Date-range mode tests live in App.date-range.test.js because
+// BookingContext.js freezes window.clisycBookingFormData at module load.
 
 describe('App — Timezone', () => {
 	it('passes default timezone to CalendarView', async () => {
