@@ -252,7 +252,10 @@ const CompactTimeSlotGrid = ( {
 		}
 
 		// Save the currently focused element so we can restore it on close.
-		previousFocusRef.current = document.activeElement;
+		// Prefer the grid's ownerDocument over the global `document` so the
+		// focus trap works correctly in iframe / shadow DOM contexts.
+		previousFocusRef.current =
+			timeGutterRef.current?.ownerDocument?.activeElement || null;
 
 		setModalData( { time: validSlots[ 0 ].timeText, slots: validSlots } );
 		setIsModalOpen( true );
@@ -340,12 +343,13 @@ const CompactTimeSlotGrid = ( {
 					e.preventDefault();
 					return;
 				}
+				const activeEl = modalEl.ownerDocument.activeElement;
 				if ( e.shiftKey ) {
-					if ( document.activeElement === firstFocusable ) {
+					if ( activeEl === firstFocusable ) {
 						e.preventDefault();
 						lastFocusable.focus();
 					}
-				} else if ( document.activeElement === lastFocusable ) {
+				} else if ( activeEl === lastFocusable ) {
 					e.preventDefault();
 					firstFocusable.focus();
 				}

@@ -142,13 +142,15 @@ const BookingModal = ( {
 
 				const first = focusableEls[ 0 ];
 				const last = focusableEls[ focusableEls.length - 1 ];
+				const activeEl =
+					modalRef.current.ownerDocument.activeElement;
 
 				if ( e.shiftKey ) {
-					if ( document.activeElement === first ) {
+					if ( activeEl === first ) {
 						e.preventDefault();
 						last.focus();
 					}
-				} else if ( document.activeElement === last ) {
+				} else if ( activeEl === last ) {
 					e.preventDefault();
 					first.focus();
 				}
