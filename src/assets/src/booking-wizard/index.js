@@ -114,22 +114,6 @@ const UserIcon = () => (
 	</svg>
 );
 
-const GridIcon = () => (
-	<svg
-		width="20"
-		height="20"
-		viewBox="0 0 20 20"
-		fill="none"
-		stroke="currentColor"
-		strokeWidth="1.5"
-	>
-		<rect x="3" y="3" width="6" height="6" rx="1" />
-		<rect x="11" y="3" width="6" height="6" rx="1" />
-		<rect x="3" y="11" width="6" height="6" rx="1" />
-		<rect x="11" y="11" width="6" height="6" rx="1" />
-	</svg>
-);
-
 const SpinnerIcon = () => (
 	<svg
 		width="20"
@@ -360,10 +344,9 @@ const DateStep = ( { selectedDate, onSelect, availableDates, isLoading } ) => {
 	} );
 
 	// Compute available months and their range from the availableDates array.
-	const { availableMonths, minMonth, maxMonth } = useMemo( () => {
+	const { minMonth, maxMonth } = useMemo( () => {
 		if ( ! availableDates || availableDates.length === 0 ) {
 			return {
-				availableMonths: new Set(),
 				minMonth: null,
 				maxMonth: null,
 			};
@@ -375,7 +358,6 @@ const DateStep = ( { selectedDate, onSelect, availableDates, isLoading } ) => {
 		} );
 		const sorted = Array.from( months ).sort();
 		return {
-			availableMonths: months,
 			minMonth: sorted[ 0 ],
 			maxMonth: sorted[ sorted.length - 1 ],
 		};
@@ -1022,7 +1004,6 @@ const SuccessScreen = ( {
 	dimensions,
 	selections,
 	date,
-	time,
 	details,
 	confirmationNumber,
 } ) => {
@@ -1185,8 +1166,6 @@ const BookingWizard = ( { config } ) => {
 	const calendarNonce = config?.calendarNonce || '';
 	const currentUser = config?.currentUser || null;
 	const noDimensionsConfigured = config?.noDimensionsConfigured || false;
-	const settingsUrl =
-		config?.settingsUrl || '/wp-admin/admin.php?page=clisyc-dimensions';
 
 	// Show message if no dimensions are configured
 	if ( noDimensionsConfigured || dimensions.length === 0 ) {

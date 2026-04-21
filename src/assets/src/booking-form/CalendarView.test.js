@@ -7,7 +7,7 @@
  * the internal calendar rendering (which FullCalendar handles).
  */
 import React from 'react';
-import { render, screen, act } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 
 // ── FullCalendar mocks ──────────────────────────────────────
 // FullCalendar's Calendar class is instantiated imperatively, so we mock it

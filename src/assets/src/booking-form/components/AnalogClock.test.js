@@ -65,7 +65,6 @@ describe( 'AnalogClock', () => {
 	it( 'updates every second', () => {
 		const { container } = render( <AnalogClock /> );
 		const hourHand = container.querySelector( '.clisyc-clock-hand-hour' );
-		const initialTransform = hourHand.style.transform;
 
 		// Advance time by 61 seconds to ensure minutes change.
 		act( () => {

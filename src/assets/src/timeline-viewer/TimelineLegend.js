@@ -6,11 +6,7 @@
  */
 import React from 'react';
 
-const TimelineLegend = ( {
-	dimensionTypes = [],
-	colorSettings = {},
-	l10n = {},
-} ) => {
+const TimelineLegend = ( { dimensionTypes = [], l10n = {} } ) => {
 	// Status indicators - 5 types
 	const statusIndicators = [
 		{

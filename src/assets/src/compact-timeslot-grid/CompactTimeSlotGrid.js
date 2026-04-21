@@ -10,16 +10,13 @@ import React, {
 	useEffect,
 	useCallback,
 	useRef,
-	useMemo,
 } from 'react';
 import apiFetch from '@wordpress/api-fetch';
 
 const CompactTimeSlotGrid = ( {
 	selectedFilters,
-	restUrl,
 	restNonce,
 	onSlotSelect,
-	onSlotDeselect,
 	onSlotCountsUpdate,
 	selectedSlot,
 	dateRange,
@@ -646,14 +643,6 @@ const CompactTimeSlotGrid = ( {
 																new Date(
 																	slot.start
 																);
-															const slotEnd =
-																new Date(
-																	slot.end
-																);
-															const durationMinutes =
-																( slotEnd -
-																	slotStart ) /
-																( 1000 * 60 );
 
 															if (
 																slotStart.getHours() <

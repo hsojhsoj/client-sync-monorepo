@@ -7,7 +7,6 @@ import {
 	render,
 	screen,
 	waitFor,
-	act,
 	fireEvent,
 } from '@testing-library/react';
 import SeatMapPicker from './SeatMapPicker';

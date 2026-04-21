@@ -22,7 +22,6 @@ const DateRangeCalendar = ( {
 	onDateRangeSelect,
 	minStay = 1,
 	maxStay = 365,
-	bufferDays = 0,
 	pricePerNight = 0,
 	currencySymbol = '$',
 } ) => {

@@ -7,13 +7,7 @@
  * (e.g. actual API calls, FullCalendar rendering) are covered by Playwright E2E.
  */
 import React from 'react';
-import {
-	render,
-	screen,
-	fireEvent,
-	waitFor,
-	act,
-} from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 
 // Suppress act() warnings from @wordpress/jest-console — the App component
 // fires async state updates on mount (fetch filter options) that trigger
@@ -51,7 +45,7 @@ jest.mock( './CalendarView', () => {
 } );
 
 jest.mock( './DateRangeCalendar', () => {
-	const MockDateRange = ( props ) => (
+	const MockDateRange = () => (
 		<div data-testid="date-range-calendar">DateRange</div>
 	);
 	MockDateRange.displayName = 'DateRangeCalendar';

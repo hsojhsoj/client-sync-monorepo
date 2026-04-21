@@ -37,11 +37,8 @@ import apiFetch from '@wordpress/api-fetch';
 
 const CalendarView = ( {
 	selectedFilters,
-	restUrl,
 	restNonce,
-	primaryDimKey,
 	onSlotSelect,
-	onSlotDeselect,
 	timezone,
 	selectedSlotId,
 	showBooked = false, // Whether to show booked slots
@@ -54,7 +51,7 @@ const CalendarView = ( {
 	const calendarRef = useRef( null );
 	const calendarInstanceRef = useRef( null );
 	const [ isLoading, setIsLoading ] = useState( false );
-	const [ loadedSlotCount, setLoadedSlotCount ] = useState( 0 );
+	const [ , setLoadedSlotCount ] = useState( 0 );
 
 	// Track whether we've already reported the first available date
 	// This prevents reporting on every refetch (e.g., when filters change)
@@ -71,7 +68,6 @@ const CalendarView = ( {
 
 	const {
 		calendarOptions = {},
-		l10n = {},
 		availabilityDimensions = {},
 		filterOrder = [],
 		nextAvailableDate,
@@ -148,8 +144,6 @@ const CalendarView = ( {
 			}
 		}
 	}, [ selectedSlotId ] );
-
-	const showFilters = Object.keys( availabilityDimensions ).length > 0;
 
 	/**
 	 * FIXED (2026-01-07): Do a broader search before declaring "no availability"

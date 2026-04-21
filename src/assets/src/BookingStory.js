@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-const BookingStory = ( { nodes, edges, filterOrder } ) => {
+const BookingStory = ( { nodes, filterOrder } ) => {
 	const primaryDimension = nodes.find(
 		( node ) => node.data.isPrimary && node.type === 'dimension'
 	);

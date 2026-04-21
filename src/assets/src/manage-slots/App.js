@@ -24,13 +24,11 @@ import '../shared/skeleton-loader.css';
 const clisycManageSlotsData = window.clisycManageSlotsData || { l10n: {} };
 // FIX: Added editUrlBase and addNewApptUrlBase to destructuring
 const {
-	restUrl,
 	get_nonce,
 	save_nonce,
 	ajax_url,
 	l10n,
 	editUrlBase,
-	addNewApptUrlBase,
 } = clisycManageSlotsData;
 
 const ManageSlotsApp = () => {

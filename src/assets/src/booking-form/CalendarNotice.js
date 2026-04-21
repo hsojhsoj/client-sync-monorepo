@@ -7,7 +7,7 @@
  *
  * @package
  */
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import apiFetch from '@wordpress/api-fetch';
 
 const CalendarNotice = ( {

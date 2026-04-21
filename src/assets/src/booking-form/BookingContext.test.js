@@ -4,7 +4,6 @@
  */
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { BookingProvider, useBooking, ActionTypes } from './BookingContext';
 
 // Mock window.clisycBookingFormData

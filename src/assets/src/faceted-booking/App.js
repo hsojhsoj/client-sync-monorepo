@@ -29,7 +29,6 @@ import FacetedFilterPanel from './FacetedFilterPanel';
 import TimeSlotGrid from './TimeSlotGrid';
 import DateRangeBooking from './DateRangeBooking';
 import apiFetch from '@wordpress/api-fetch';
-import { SkeletonFilters, SkeletonCard } from '../shared/SkeletonLoader';
 import '../shared/skeleton-loader.css';
 
 const App = () => {
@@ -55,13 +54,11 @@ const App = () => {
 	const [ formErrors, setFormErrors ] = useState( [] );
 
 	const {
-		restUrl,
 		restNonce,
 		filterOrder,
 		formNonce,
 		l10n,
 		paymentRequired,
-		siteTimezone,
 		isGuest, // From PHP: whether user is logged in
 		calendarOptions,
 	} = window.clisycFacetedBookingData;

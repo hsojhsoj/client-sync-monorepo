@@ -16,7 +16,7 @@
  * UPDATED: Added Detailed Invoice Breakdown with inline styles.
  * UPDATED: Added recurring series support (Pro only).
  */
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import apiFetch from '@wordpress/api-fetch';
 import RecurringOptions from './RecurringOptions';
 import SeatMapPicker from './SeatMapPicker';
@@ -34,7 +34,6 @@ const BookingModal = ( {
 	customFieldDefinitions,
 	successPageUrl,
 	bookingMode = 'slot',
-	currencySymbol = '$',
 	basket,
 	isCalculatingPrice,
 	selectedSeats = [],

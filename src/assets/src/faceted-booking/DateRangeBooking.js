@@ -31,7 +31,6 @@ const DateRangeBooking = ( {
 	const itemTitle = primaryItem?.label || 'Property';
 	const minStay = primaryItem?.min_stay || 1;
 	const maxStay = primaryItem?.max_stay || 0;
-	const bufferDays = primaryItem?.buffer_days || 0;
 	const allowedCheckinDays = primaryItem?.checkin_days || [
 		0, 1, 2, 3, 4, 5, 6,
 	];

@@ -3,7 +3,7 @@
  * Tests for the MiniCalendar component.
  */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MiniCalendar from './MiniCalendar';
 

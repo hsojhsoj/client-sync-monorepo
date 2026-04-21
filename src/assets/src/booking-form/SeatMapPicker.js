@@ -43,23 +43,6 @@ const SEAT_COLORS = {
 	disabled: { fill: '#e5e7eb', stroke: '#9ca3af' },
 };
 
-/** Category → color map for section headers and overview SVG. */
-const SECTION_CATEGORY_COLORS = {
-	vip: { fill: '#ede9fe', stroke: '#7c3aed' },
-	premium: { fill: '#fef3c7', stroke: '#d97706' },
-	standard: { fill: '#d1fae5', stroke: '#065f46' },
-	general: { fill: '#d1fae5', stroke: '#065f46' },
-};
-
-function getSectionColors( category ) {
-	return (
-		SECTION_CATEGORY_COLORS[ category ] || {
-			fill: '#e0f2fe',
-			stroke: '#0284c7',
-		}
-	);
-}
-
 /**
  * Heatmap colour scale based on fill percentage.
  * Green → lime → amber → orange → red as section fills up.
