@@ -33,6 +33,15 @@ module.exports = {
 			'error',
 			{ definedTags: [ 'subpackage' ] },
 		],
+		// WordPress REST API responses + `window.clisyc*` config globals
+		// come from PHP, which uses snake_case by convention (e.g.
+		// `wc_integration_enabled`, `get_nonce`, `buffer_days`). Allow
+		// snake_case in destructuring and on property access while still
+		// requiring camelCase for locally-declared identifiers.
+		camelcase: [
+			'error',
+			{ properties: 'never', ignoreDestructuring: true },
+		],
 	},
 	overrides: [
 		...( defaultConfig.overrides || [] ),

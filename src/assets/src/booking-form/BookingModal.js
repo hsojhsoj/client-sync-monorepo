@@ -57,9 +57,9 @@ const BookingModal = ( {
 	const {
 		availabilityDimensions,
 		filterOrder,
-		wc_integration_enabled,
-		stripe_integration_enabled,
-		waitlist_enabled,
+		wc_integration_enabled: wcIntegrationEnabled,
+		stripe_integration_enabled: stripeIntegrationEnabled,
+		waitlist_enabled: waitlistEnabled,
 		proRecurringEnabled,
 		restRootUrl,
 		restNonce,
@@ -89,7 +89,7 @@ const BookingModal = ( {
 
 	// Determine if payment is required (WooCommerce or Stripe integration enabled)
 	const paymentRequired = Boolean(
-		wc_integration_enabled || stripe_integration_enabled
+		wcIntegrationEnabled || stripeIntegrationEnabled
 	);
 
 	// Reset state when modal opens + move focus into modal
@@ -460,7 +460,7 @@ const BookingModal = ( {
 				if (
 					result.data?.code === 'slot_unavailable' &&
 					result.data?.waitlist_available &&
-					waitlist_enabled
+					waitlistEnabled
 				) {
 					setWaitlistOffer( {
 						slot_id: result.data.slot_id,

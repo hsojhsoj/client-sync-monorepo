@@ -24,9 +24,9 @@ import '../shared/skeleton-loader.css';
 const clisycManageSlotsData = window.clisycManageSlotsData || { l10n: {} };
 // FIX: Added editUrlBase and addNewApptUrlBase to destructuring
 const {
-	get_nonce,
-	save_nonce,
-	ajax_url,
+	get_nonce: getNonce,
+	save_nonce: saveNonce,
+	ajax_url: ajaxUrl,
 	l10n,
 	editUrlBase,
 } = clisycManageSlotsData;
@@ -193,9 +193,9 @@ const ManageSlotsApp = () => {
 				} ) );
 
 			window.jQuery
-				.post( ajax_url, {
+				.post( ajaxUrl, {
 					action: 'clisyc_save_available_slots',
-					security: save_nonce,
+					security: saveNonce,
 					slots: eventsToSave,
 					viewStart: calendar.view.activeStart.toISOString(),
 					viewEnd: calendar.view.activeEnd.toISOString(),
@@ -360,7 +360,7 @@ const ManageSlotsApp = () => {
 					setIsLoading( true );
 					isInitialLoad.current = true;
 					apiFetch( {
-						path: `/clisyc/v1/slots?start=${ fetchInfo.start.toISOString() }&end=${ fetchInfo.end.toISOString() }&context=admin_editable&_wpnonce=${ get_nonce }`,
+						path: `/clisyc/v1/slots?start=${ fetchInfo.start.toISOString() }&end=${ fetchInfo.end.toISOString() }&context=admin_editable&_wpnonce=${ getNonce }`,
 					} )
 						.then( ( data ) => {
 							if ( data.events ) {
