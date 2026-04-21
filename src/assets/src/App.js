@@ -468,9 +468,9 @@ const NodeEditor = () => {
 									<p>
 										<em>
 											With only one dimension registered,
-											the Relationship Graph isn't useful
-											as there are no hierarchies to
-											display.
+											the Relationship Graph isn&apos;t
+											useful as there are no hierarchies
+											to display.
 										</em>
 									</p>
 									<p>
@@ -482,11 +482,11 @@ const NodeEditor = () => {
 									</p>
 									<p>
 										<strong>Note:</strong> Only dimensions
-										marked as "Frontend Visible" in System
-										Setup will appear here and enable
-										hierarchy configuration. Ensure at least
-										two are visible if you expect to see the
-										graph.
+										marked as &quot;Frontend Visible&quot;
+										in System Setup will appear here and
+										enable hierarchy configuration. Ensure
+										at least two are visible if you expect
+										to see the graph.
 									</p>
 								</div>
 							);

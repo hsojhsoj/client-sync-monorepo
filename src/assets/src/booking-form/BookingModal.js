@@ -642,7 +642,7 @@ const BookingModal = ( {
 								margin: '0 0 1.25rem',
 							} }
 						>
-							Would you like to join the waitlist? You'll be
+							Would you like to join the waitlist? You&apos;ll be
 							notified automatically if a spot opens up.
 						</p>
 						<div
@@ -703,10 +703,11 @@ const BookingModal = ( {
 				) : submitStatus === 'waitlist_success' ? (
 					<div className="clisyc-booking-modal-success">
 						<div className="clisyc-success-icon">✓</div>
-						<h2>You're on the Waitlist!</h2>
+						<h2>You&apos;re on the Waitlist!</h2>
 						<p>
-							You're #{ waitlistOffer?.position } on the waitlist.
-							We'll notify you as soon as a spot opens up.
+							You&apos;re #{ waitlistOffer?.position } on the
+							waitlist. We&apos;ll notify you as soon as a spot
+							opens up.
 						</p>
 						<div
 							className="clisyc-booking-modal-actions"

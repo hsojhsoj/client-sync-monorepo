@@ -48,8 +48,8 @@ const BookingStory = ( { nodes, edges, filterOrder } ) => {
 	return (
 		<div className="clisyc-booking-story-container">
 			<p>
-				Based on your current settings, a customer's booking process
-				will be:
+				Based on your current settings, a customer&apos;s booking
+				process will be:
 			</p>
 			{ sortedDimensions.length > 0 ? (
 				<ol>
