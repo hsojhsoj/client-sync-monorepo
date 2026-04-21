@@ -1167,43 +1167,6 @@ const BookingWizard = ( { config } ) => {
 	const currentUser = config?.currentUser || null;
 	const noDimensionsConfigured = config?.noDimensionsConfigured || false;
 
-	// Show message if no dimensions are configured
-	if ( noDimensionsConfigured || dimensions.length === 0 ) {
-		return (
-			<div className="clisyc-booking-wizard">
-				<div className="clisyc-wizard-no-dimensions">
-					<div className="clisyc-wizard-no-dimensions-icon">
-						<svg
-							width="48"
-							height="48"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="1.5"
-						>
-							<circle cx="12" cy="12" r="10" />
-							<line x1="12" y1="8" x2="12" y2="12" />
-							<line x1="12" y1="16" x2="12.01" y2="16" />
-						</svg>
-					</div>
-					<h3 className="clisyc-wizard-no-dimensions-title">
-						Setup Required
-					</h3>
-					<p className="clisyc-wizard-no-dimensions-message">
-						The booking wizard requires at least one dimension (such
-						as Service, Practitioner, or Room) to be configured and
-						enabled.
-					</p>
-					<p className="clisyc-wizard-no-dimensions-instructions">
-						Please go to <strong>Client Sync → Dimensions</strong>{ ' ' }
-						in the WordPress admin to set up your booking
-						dimensions.
-					</p>
-				</div>
-			</div>
-		);
-	}
-
 	// Build dynamic steps based on configured dimensions
 	const steps = useMemo( () => {
 		const dynamicSteps = dimensions.map( ( dim ) => ( {
@@ -1435,6 +1398,44 @@ const BookingWizard = ( { config } ) => {
 	const handleSeatsChange = useCallback( ( seats ) => {
 		setSelectedSeats( seats );
 	}, [] );
+
+	// Early return moved BELOW all hooks so hook order is stable across
+	// the no-dimensions and configured renders (react-hooks/rules-of-hooks).
+	if ( noDimensionsConfigured || dimensions.length === 0 ) {
+		return (
+			<div className="clisyc-booking-wizard">
+				<div className="clisyc-wizard-no-dimensions">
+					<div className="clisyc-wizard-no-dimensions-icon">
+						<svg
+							width="48"
+							height="48"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="1.5"
+						>
+							<circle cx="12" cy="12" r="10" />
+							<line x1="12" y1="8" x2="12" y2="12" />
+							<line x1="12" y1="16" x2="12.01" y2="16" />
+						</svg>
+					</div>
+					<h3 className="clisyc-wizard-no-dimensions-title">
+						Setup Required
+					</h3>
+					<p className="clisyc-wizard-no-dimensions-message">
+						The booking wizard requires at least one dimension (such
+						as Service, Practitioner, or Room) to be configured and
+						enabled.
+					</p>
+					<p className="clisyc-wizard-no-dimensions-instructions">
+						Please go to <strong>Client Sync → Dimensions</strong>{ ' ' }
+						in the WordPress admin to set up your booking
+						dimensions.
+					</p>
+				</div>
+			</div>
+		);
+	}
 
 	const handleDimensionSelect = ( dimensionKey, item ) => {
 		setDimensionSelections( ( prev ) => ( {

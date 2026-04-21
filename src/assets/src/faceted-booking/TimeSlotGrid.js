@@ -67,16 +67,6 @@ const TimeSlotGrid = React.memo(
 			return availableSlots;
 		}, [ availableSlots, bookedSlots, showBookedSlots ] );
 
-		if ( isLoading ) {
-			return (
-				<div className="clisyc-compact-grid-loading">
-					<SkeletonCard lines={ 4 } />
-					<SkeletonCard lines={ 3 } />
-					<SkeletonCard lines={ 2 } />
-				</div>
-			);
-		}
-
 		const getFullSlotDescription = useCallback(
 			( slot ) => {
 				const details = slot.extendedProps.serviceDetails || {};
@@ -137,6 +127,18 @@ const TimeSlotGrid = React.memo(
 				}, {} ),
 			[ displaySlots ]
 		);
+
+		// Early returns come AFTER all hooks so the hook order is stable
+		// across loading / loaded renders (react-hooks/rules-of-hooks).
+		if ( isLoading ) {
+			return (
+				<div className="clisyc-compact-grid-loading">
+					<SkeletonCard lines={ 4 } />
+					<SkeletonCard lines={ 3 } />
+					<SkeletonCard lines={ 2 } />
+				</div>
+			);
+		}
 
 		// Render header with timezone and controls
 		const renderHeader = () => (
