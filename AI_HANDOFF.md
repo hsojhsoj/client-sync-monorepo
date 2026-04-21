@@ -580,7 +580,7 @@ ssh testblan@44.240.240.195 'cd ~/projects/client-sync-monorepo && ./build.sh te
 ssh testblan@44.240.240.195 'cd ~/projects/client-sync-monorepo && ./build.sh test-all'
 ```
 
-**Important:** There is no PHP or Composer installed on the local Mac. Tests can ONLY run on the remote server. The test environment requires a MySQL database (already configured in `build.sh`).
+**Important:** PHP and Composer are installed locally (`/usr/local/bin/{php,composer}`, currently PHP 8.5.3 + Composer 2.9.x) and can do lightweight things like `php -l` syntax checks, `composer validate`, and `composer install --ignore-platform-reqs`. The full PHPUnit suite, however, needs a MySQL database + WordPress test framework, which only exists on the remote server — so run `./build.sh test` via SSH for actual test execution. Some pinned dependencies cap at PHP 8.4, so pass `--ignore-platform-reqs` when running composer locally on 8.5.
 
 ### Jest (JavaScript — can run locally)
 
