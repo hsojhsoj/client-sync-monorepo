@@ -33,8 +33,8 @@ header( 'Content-Type: application/json' );
 // exists and the release has been signed, drop in the exact bytes produced by
 // the signing script. DO NOT re-encode or reformat $signed_payload — the
 // signature is over the exact bytes that go here.
-$signed_payload = '{"version":"1.6.3","zip_sha256":"58688af3fe01431e29c06141c8f93d2949248a0756bf3306ad3488fe1ffedf54","released_at":"2026-04-20T07:31:52Z"}';
-$signature      = 'NEF25nDyvqNWHUhPJ9oMgQ+TnRimYvmrQuNaHR/RMtNReckuVMabaWqCzewSTzEYvfy9MZhWz5i1LcaAfaVaBQ==';
+$signed_payload = '{"version":"1.6.3","zip_sha256":"c5ab45b4a686806e0591b8c8bcdda1106cb33720ca147e682079cef6692641ce","released_at":"2026-09-25T16:31:55Z"}';
+$signature      = 'gtSfNm+iUJlOVmT7gjy9heSoFzkgtGIWvkbDR2p5SSEoiP7lHVJoVPfMbHnw8Xw5xLyyUWhO0z2+X8v1eOTWDw==';
 
 $update_info = [
 	'name'           => 'Client Sync Pro',

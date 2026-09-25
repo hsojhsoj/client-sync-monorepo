@@ -513,9 +513,11 @@ case "$COMMAND" in
             if ( $count !== 1 ) { fwrite( STDERR, "Could not locate \$signature assignment\n" ); exit( 1 ); }
 
             // Also confirm the outer version is consistent.
+            // ${1} not $1: a version starts with a digit, so "$1" . "1.6.3"
+            // reads as group $11 and wipes the key (bit us re-signing 1.6.3).
             $src = preg_replace(
                 "/(\x27version\x27[[:space:]]*=>[[:space:]]*\x27)[^\x27]+(\x27)/",
-                "$1" . $version . "$2",
+                "\${1}" . $version . "\${2}",
                 $src, 1, $count
             );
             if ( $count !== 1 ) { fwrite( STDERR, "Could not locate outer version key\n" ); exit( 1 ); }
