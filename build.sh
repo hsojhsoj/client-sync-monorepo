@@ -582,20 +582,41 @@ case "$COMMAND" in
             }
         ' "$UPDATE_INFO" "$PRO_VERSION" || exit 1
 
-        echo "[publish-pro] step: upload zip to build server /tmp"
-        scp -q "$PRO_ZIP" testblan@44.240.240.195:/tmp/client-sync-pro.zip
+        # The signature covers one exact set of zip bytes. Re-running
+        # `build.sh zip` after signing produces a different zip (new timestamps)
+        # that signature-checking sites reject — that is how 1.6.3 shipped with
+        # a zip that does not match its own signed_payload.
+        echo "[publish-pro] step: verify the zip is the one that was signed"
+        php -r '
+            if ( ! preg_match( "/^\\\$signed_payload\s*=\s*\x27([^\x27]*)\x27;/m", file_get_contents( $argv[1] ), $m ) ) {
+                fwrite( STDERR, "Could not parse signed_payload from update-info.php\n" ); exit( 1 );
+            }
+            $want = json_decode( $m[1] )->zip_sha256 ?? "";
+            $have = hash_file( "sha256", $argv[2] );
+            if ( ! hash_equals( strtolower( $want ), $have ) ) {
+                fwrite( STDERR, "zip sha256 $have does not match signed zip_sha256 $want — re-run ./build.sh sign on THIS zip\n" ); exit( 1 );
+            }
+        ' "$UPDATE_INFO" "$PRO_ZIP" || exit 1
 
-        echo "[publish-pro] step: upload update-info.php to update-server vhost"
-        scp -q -i ~/.ssh/pass_dm "$UPDATE_INFO" \
-            updates.dependentmedia.com_43485@44.240.240.195:httpdocs/plugin-updates/client-sync-pro/update-info.php.new
+        # pass.dependentmedia.com now lives under the dependentmedia.com
+        # subscription on server-02 (owner dm-nest). The old
+        # updates.dependentmedia.com_43485 user and httpdocs path are gone.
+        UPD_HOST="server-02-root"
+        UPD_DIR="/var/www/vhosts/dependentmedia.com/pass.dependentmedia.com/plugin-updates/client-sync-pro"
+
+        echo "[publish-pro] step: upload zip + update-info.php to server-02 /tmp"
+        scp -q "$PRO_ZIP" "$UPD_HOST:/tmp/client-sync-pro.zip"
+        scp -q "$UPDATE_INFO" "$UPD_HOST:/tmp/client-sync-pro-update-info.php"
 
         echo "[publish-pro] step: atomic swap on update-server vhost"
-        ssh -q -i ~/.ssh/pass_dm updates.dependentmedia.com_43485@44.240.240.195 "
+        ssh -q "$UPD_HOST" "
             set -e
-            cd httpdocs/plugin-updates/client-sync-pro/
-            cp /tmp/client-sync-pro.zip client-sync-pro.zip.new
+            cd $UPD_DIR
+            install -o dm-nest -g psacln -m 644 /tmp/client-sync-pro.zip client-sync-pro.zip.new
+            install -o dm-nest -g psacln -m 644 /tmp/client-sync-pro-update-info.php update-info.php.new
             mv -f client-sync-pro.zip.new client-sync-pro.zip
             mv -f update-info.php.new update-info.php
+            rm -f /tmp/client-sync-pro.zip /tmp/client-sync-pro-update-info.php
         " || { echo "❌ ERROR: [publish-pro] remote swap failed"; exit 1; }
 
         echo "[publish-pro] step: verify endpoint"
@@ -615,6 +636,15 @@ case "$COMMAND" in
         ' "$ENDPOINT_JSON" "$PRO_VERSION" || exit 1
 
         echo "✅ [publish-pro] done — Pro $PRO_VERSION live at pass.dependentmedia.com"
+
+        # Same zip into the WHMCS Client Area download (dm-ops/plugins).
+        DOWNLOAD_SYNC="${DM_DOWNLOAD_SYNC:-/Users/joshuajordan/Projects/Code/dm-ops/plugins/dm-download-sync.sh}"
+        if [ ! -x "$DOWNLOAD_SYNC" ]; then
+            echo "❌ ERROR: [publish-pro] update server is live on $PRO_VERSION, but $DOWNLOAD_SYNC is missing — the WHMCS Client Area was NOT updated"
+            exit 1
+        fi
+        echo "[publish-pro] step: update the WHMCS Client Area download"
+        "$DOWNLOAD_SYNC" client-sync-pro || { echo "❌ ERROR: [publish-pro] Client Area sync failed — update server is live, Client Area is not"; exit 1; }
         ;;
 
     publish-free)
