@@ -449,4 +449,59 @@ class AuditLoggerTest extends WP_UnitTestCase {
 		$this->assertCount( 1, $logs );
 		$this->assertSame( 'create', $logs[0]['action'] );
 	}
+
+	/**
+	 * @test
+	 * WordPress fires profile_update with a WP_User as $old_user_data. The
+	 * callback used to require an array, so every user update fataled while
+	 * audit logging was on (HIPAA guest bookings returned HTTP 500).
+	 */
+	public function it_logs_profile_update_fired_with_wp_user_old_data() {
+		$client_id = $this->create_client_with_appointment();
+		$this->logger->register_hooks();
+
+		do_action( 'profile_update', $client_id, get_userdata( $client_id ), [] );
+
+		$logs = $this->logger->get_logs_for_object( Audit_Logger::OBJECT_CLIENT, $client_id );
+		$this->assertCount( 1, $logs );
+		$this->assertSame( 'edit', $logs[0]['action'] );
+		$this->assertSame( 'profile_update', json_decode( $logs[0]['meta_data'], true )['context'] );
+	}
+
+	/**
+	 * @test
+	 * wp_update_user() (the guest booking path) should succeed and be logged
+	 * with the audit hooks registered.
+	 */
+	public function it_logs_wp_update_user_with_hooks_registered() {
+		$client_id = $this->create_client_with_appointment();
+		$this->logger->register_hooks();
+
+		$result = wp_update_user( [ 'ID' => $client_id, 'first_name' => 'Guest' ] );
+
+		$this->assertSame( $client_id, $result );
+		$logs = $this->logger->get_logs_for_object( Audit_Logger::OBJECT_CLIENT, $client_id );
+		$this->assertCount( 1, $logs );
+	}
+
+	/**
+	 * Create a subscriber who owns one published appointment, so the
+	 * client profile callbacks treat them as holding PHI.
+	 *
+	 * @return int The client's user ID.
+	 */
+	private function create_client_with_appointment(): int {
+		if ( ! post_type_exists( Constants::POST_TYPE_APPOINTMENT ) ) {
+			register_post_type( Constants::POST_TYPE_APPOINTMENT, [ 'public' => false ] );
+		}
+
+		$client_id = $this->factory()->user->create( [ 'role' => 'subscriber' ] );
+		$this->factory()->post->create( [
+			'post_type'   => Constants::POST_TYPE_APPOINTMENT,
+			'post_status' => 'publish',
+			'post_author' => $client_id,
+		] );
+
+		return $client_id;
+	}
 }
