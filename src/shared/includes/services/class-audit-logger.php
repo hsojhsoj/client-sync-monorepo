@@ -435,10 +435,13 @@ class Audit_Logger {
     /**
      * Log client profile edit.
      *
-     * @param int   $user_id       The user ID.
-     * @param array $old_user_data The old user data.
+     * $old_user_data is untyped: wp_insert_user() passes a WP_User, and a
+     * union type would need PHP 8.0 (the plugin supports 7.4).
+     *
+     * @param int                 $user_id       The user ID.
+     * @param \WP_User|array|null $old_user_data The user's data before the update (unused).
      */
-    public function log_client_profile_edit( int $user_id, array $old_user_data ) {
+    public function log_client_profile_edit( int $user_id, $old_user_data = null ) {
         // Only log if user has appointments
         if ( ! $this->user_has_appointments( $user_id ) ) {
             return;
